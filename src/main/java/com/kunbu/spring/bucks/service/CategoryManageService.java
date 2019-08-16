@@ -14,6 +14,16 @@ import java.util.Map;
 public interface CategoryManageService {
 
     /**
+     * 保存商品类目树
+     *
+     * @param saveDTO
+     * @author kunbu
+     * @time 2019/8/16 16:29
+     * @return
+     **/
+    ServiceResult<CategoryEntity> saveCategoryTree(CategoryDTO saveDTO, String operatorId);
+
+    /**
      * 保存商品类目
      *
      * @param saveDTO
@@ -21,7 +31,7 @@ public interface CategoryManageService {
      * @time 2019/8/16 16:29
      * @return
      **/
-    ServiceResult<CategoryEntity> saveCategory(CategoryDTO saveDTO);
+    ServiceResult<CategoryEntity> saveCategory(CategoryDTO saveDTO, String operatorId);
 
     /**
      * 获取商品类目树

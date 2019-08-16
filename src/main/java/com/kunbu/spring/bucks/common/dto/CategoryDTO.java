@@ -1,6 +1,7 @@
 package com.kunbu.spring.bucks.common.dto;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @program: bucks
@@ -11,10 +12,12 @@ import java.io.Serializable;
 public class CategoryDTO implements Serializable {
 
     private String categoryId;
+    private Integer categoryCode;
     private String categoryName;
     private String parentId;
-    private Byte level;
-    private String operatorId;
+    private int level;
+
+    private List<CategoryDTO> subs;
 
     public String getCategoryId() {
         return categoryId;
@@ -22,6 +25,14 @@ public class CategoryDTO implements Serializable {
 
     public void setCategoryId(String categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public Integer getCategoryCode() {
+        return categoryCode;
+    }
+
+    public void setCategoryCode(Integer categoryCode) {
+        this.categoryCode = categoryCode;
     }
 
     public String getCategoryName() {
@@ -40,30 +51,31 @@ public class CategoryDTO implements Serializable {
         this.parentId = parentId;
     }
 
-    public Byte getLevel() {
+    public int getLevel() {
         return level;
     }
 
-    public void setLevel(Byte level) {
+    public void setLevel(int level) {
         this.level = level;
     }
 
-    public String getOperatorId() {
-        return operatorId;
+    public List<CategoryDTO> getSubs() {
+        return subs;
     }
 
-    public void setOperatorId(String operatorId) {
-        this.operatorId = operatorId;
+    public void setSubs(List<CategoryDTO> subs) {
+        this.subs = subs;
     }
 
     @Override
     public String toString() {
         return "CategoryDTO{" +
                 "categoryId='" + categoryId + '\'' +
+                ", categoryCode=" + categoryCode +
                 ", categoryName='" + categoryName + '\'' +
                 ", parentId='" + parentId + '\'' +
                 ", level=" + level +
-                ", operatorId='" + operatorId + '\'' +
+                ", subs=" + subs +
                 '}';
     }
 }

@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 @Mapper
@@ -18,11 +19,15 @@ public interface CategoryMapper {
 
     CategoryEntity selectByPrimaryKey(String id);
 
+    CategoryEntity selectOneUse(String state);
+
     CategoryEntity selectByCategoryName(@Param("categoryName") String categoryName, @Param("state") String state);
 
     int updateByPrimaryKeySelective(CategoryEntity record);
 
     int updateByPrimaryKey(CategoryEntity record);
+
+    int discardCategoryTree(Map<String, Object> params);
 
     List<CategoryEntity> selectAll(String state);
 }

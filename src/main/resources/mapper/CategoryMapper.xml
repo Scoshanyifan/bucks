@@ -21,6 +21,14 @@
     where id = #{id,jdbcType=VARCHAR}
   </select>
 
+  <select id="selectOneUse" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from category
+    where `state` = #{state}
+    limit 1
+  </select>
+
   <select id="selectAll" parameterType="java.lang.String" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
@@ -36,6 +44,14 @@
     where `state` = #{state}
     AND category_name = #{categoryName}
   </select>
+
+  <update id="discardCategoryTree" parameterMap="java.util.Map">
+    update category
+    set `state` = #{setState},
+      modify_time = #{modifyTime},
+      operator_id = #{operatorId}
+    where `state` = #{queryState}
+  </update>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from category

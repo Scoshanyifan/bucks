@@ -8,6 +8,8 @@ import java.io.Serializable;
  */
 public class CategoryEntity extends BaseEntity implements Serializable {
 
+    private Integer categoryCode;
+
     private String categoryName;
 
     private String parentId;
@@ -20,6 +22,8 @@ public class CategoryEntity extends BaseEntity implements Serializable {
     private String state;
 
     private String operatorId;
+
+    private Integer version;
 
     private static final long serialVersionUID = 1L;
 
@@ -63,14 +67,32 @@ public class CategoryEntity extends BaseEntity implements Serializable {
         this.operatorId = operatorId;
     }
 
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+    public Integer getCategoryCode() {
+        return categoryCode;
+    }
+
+    public void setCategoryCode(Integer categoryCode) {
+        this.categoryCode = categoryCode;
+    }
+
     @Override
     public String toString() {
         return "CategoryEntity{" +
-                "categoryName='" + categoryName + '\'' +
+                "categoryCode=" + categoryCode +
+                ", categoryName='" + categoryName + '\'' +
                 ", parentId='" + parentId + '\'' +
                 ", level=" + level +
                 ", state='" + state + '\'' +
                 ", operatorId='" + operatorId + '\'' +
+                ", version=" + version +
                 "} " + super.toString();
     }
 }
