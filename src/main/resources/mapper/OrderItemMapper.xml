@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kunbu.spring.bucks.dao.OrderItemMapper">
+  <resultMap id="BaseResultMap" type="com.kunbu.spring.bucks.common.entity.OrderItemEntity">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="good_id" jdbcType="VARCHAR" property="goodId" />
+    <result column="good_name" jdbcType="VARCHAR" property="goodName" />
+    <result column="number" jdbcType="BIGINT" property="number" />
+    <result column="unit_id" jdbcType="VARCHAR" property="unitId" />
+    <result column="price" jdbcType="BIGINT" property="price" />
+    <result column="total_price" jdbcType="BIGINT" property="totalPrice" />
+    <result column="ext" jdbcType="VARCHAR" property="ext" />
+    <result column="state" jdbcType="VARCHAR" property="state" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, order_id, user_id, good_id, good_name, `number`, unit_id, price, total_price, 
+    ext, `state`, create_time, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from order_item
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from order_item
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.kunbu.spring.bucks.common.entity.OrderItemEntity">
+    insert into order_item (id, order_id, user_id, 
+      good_id, good_name, `number`, 
+      unit_id, price, total_price, 
+      ext, `state`, create_time, 
+      modify_time)
+    values (#{id,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, 
+      #{goodId,jdbcType=VARCHAR}, #{goodName,jdbcType=VARCHAR}, #{number,jdbcType=BIGINT}, 
+      #{unitId,jdbcType=VARCHAR}, #{price,jdbcType=BIGINT}, #{totalPrice,jdbcType=BIGINT}, 
+      #{ext,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kunbu.spring.bucks.common.entity.OrderItemEntity">
+    insert into order_item
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="goodId != null">
+        good_id,
+      </if>
+      <if test="goodName != null">
+        good_name,
+      </if>
+      <if test="number != null">
+        `number`,
+      </if>
+      <if test="unitId != null">
+        unit_id,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="totalPrice != null">
+        total_price,
+      </if>
+      <if test="ext != null">
+        ext,
+      </if>
+      <if test="state != null">
+        `state`,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="goodId != null">
+        #{goodId,jdbcType=VARCHAR},
+      </if>
+      <if test="goodName != null">
+        #{goodName,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null">
+        #{number,jdbcType=BIGINT},
+      </if>
+      <if test="unitId != null">
+        #{unitId,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=BIGINT},
+      </if>
+      <if test="totalPrice != null">
+        #{totalPrice,jdbcType=BIGINT},
+      </if>
+      <if test="ext != null">
+        #{ext,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kunbu.spring.bucks.common.entity.OrderItemEntity">
+    update order_item
+    <set>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="goodId != null">
+        good_id = #{goodId,jdbcType=VARCHAR},
+      </if>
+      <if test="goodName != null">
+        good_name = #{goodName,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null">
+        `number` = #{number,jdbcType=BIGINT},
+      </if>
+      <if test="unitId != null">
+        unit_id = #{unitId,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=BIGINT},
+      </if>
+      <if test="totalPrice != null">
+        total_price = #{totalPrice,jdbcType=BIGINT},
+      </if>
+      <if test="ext != null">
+        ext = #{ext,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        `state` = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kunbu.spring.bucks.common.entity.OrderItemEntity">
+    update order_item
+    set order_id = #{orderId,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=VARCHAR},
+      good_id = #{goodId,jdbcType=VARCHAR},
+      good_name = #{goodName,jdbcType=VARCHAR},
+      `number` = #{number,jdbcType=BIGINT},
+      unit_id = #{unitId,jdbcType=VARCHAR},
+      price = #{price,jdbcType=BIGINT},
+      total_price = #{totalPrice,jdbcType=BIGINT},
+      ext = #{ext,jdbcType=VARCHAR},
+      `state` = #{state,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
