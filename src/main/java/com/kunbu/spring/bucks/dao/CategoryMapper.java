@@ -15,6 +15,8 @@ public interface CategoryMapper {
 
     int insert(CategoryEntity record);
 
+    int insertBatch(List<CategoryEntity> list);
+
     int insertSelective(CategoryEntity record);
 
     CategoryEntity selectByPrimaryKey(String id);

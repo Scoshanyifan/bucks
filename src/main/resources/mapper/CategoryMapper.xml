@@ -3,19 +3,21 @@
 <mapper namespace="com.kunbu.spring.bucks.dao.CategoryMapper">
   <resultMap id="BaseResultMap" type="com.kunbu.spring.bucks.common.entity.CategoryEntity">
     <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="category_code" jdbcType="INTEGER" property="categoryCode" />
     <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
     <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
     <result column="level" jdbcType="TINYINT" property="level" />
     <result column="state" jdbcType="VARCHAR" property="state" />
     <result column="operator_id" jdbcType="VARCHAR" property="operatorId" />
+    <result column="version" jdbcType="INTEGER" property="version" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, category_name, parent_id, `level`, `state`, operator_id, create_time, modify_time
+    id, category_code, category_name, parent_id, `level`, `state`, operator_id, version, create_time, modify_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from category
     where id = #{id,jdbcType=VARCHAR}
@@ -58,18 +60,36 @@
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.kunbu.spring.bucks.common.entity.CategoryEntity">
-    insert into category (id, category_name, parent_id, 
-      `level`, `state`, operator_id, 
-      create_time, modify_time)
-    values (#{id,jdbcType=VARCHAR}, #{categoryName,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, 
-      #{level,jdbcType=TINYINT}, #{state,jdbcType=VARCHAR}, #{operatorId,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP})
+    insert into category (id, category_code, category_name,
+      parent_id, `level`, `state`,
+      operator_id, version, create_time,
+      modify_time)
+    values (#{id,jdbcType=VARCHAR}, #{categoryCode,jdbcType=INTEGER}, #{categoryName,jdbcType=VARCHAR},
+      #{parentId,jdbcType=VARCHAR}, #{level,jdbcType=TINYINT}, #{state,jdbcType=VARCHAR},
+      #{operatorId,jdbcType=VARCHAR}, #{version,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
+      #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertBatch" parameterType="java.util.List">
+    insert into category (id, category_code, category_name,
+      parent_id, `level`, `state`,
+      operator_id, version, create_time,
+      modify_time)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+        (#{item.id,jdbcType=VARCHAR}, #{item.categoryCode,jdbcType=INTEGER}, #{item.categoryName,jdbcType=VARCHAR},
+        #{item.parentId,jdbcType=VARCHAR}, #{item.level,jdbcType=TINYINT}, #{item.state,jdbcType=VARCHAR},
+        #{item.operatorId,jdbcType=VARCHAR}, #{item.version,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP},
+        #{item.modifyTime,jdbcType=TIMESTAMP})
+    </foreach>
   </insert>
   <insert id="insertSelective" parameterType="com.kunbu.spring.bucks.common.entity.CategoryEntity">
     insert into category
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
+      </if>
+      <if test="categoryCode != null">
+        category_code,
       </if>
       <if test="categoryName != null">
         category_name,
@@ -86,6 +106,9 @@
       <if test="operatorId != null">
         operator_id,
       </if>
+      <if test="version != null">
+        version,
+      </if>
       <if test="createTime != null">
         create_time,
       </if>
@@ -96,6 +119,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryCode != null">
+        #{categoryCode,jdbcType=INTEGER},
       </if>
       <if test="categoryName != null">
         #{categoryName,jdbcType=VARCHAR},
@@ -112,6 +138,9 @@
       <if test="operatorId != null">
         #{operatorId,jdbcType=VARCHAR},
       </if>
+      <if test="version != null">
+        #{version,jdbcType=INTEGER},
+      </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -123,6 +152,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.kunbu.spring.bucks.common.entity.CategoryEntity">
     update category
     <set>
+      <if test="categoryCode != null">
+        category_code = #{categoryCode,jdbcType=INTEGER},
+      </if>
       <if test="categoryName != null">
         category_name = #{categoryName,jdbcType=VARCHAR},
       </if>
@@ -138,6 +170,9 @@
       <if test="operatorId != null">
         operator_id = #{operatorId,jdbcType=VARCHAR},
       </if>
+      <if test="version != null">
+        version = #{version,jdbcType=INTEGER},
+      </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -149,11 +184,13 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.kunbu.spring.bucks.common.entity.CategoryEntity">
     update category
-    set category_name = #{categoryName,jdbcType=VARCHAR},
+    set category_code = #{categoryCode,jdbcType=INTEGER},
+      category_name = #{categoryName,jdbcType=VARCHAR},
       parent_id = #{parentId,jdbcType=VARCHAR},
       `level` = #{level,jdbcType=TINYINT},
       `state` = #{state,jdbcType=VARCHAR},
       operator_id = #{operatorId,jdbcType=VARCHAR},
+      version = #{version,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}

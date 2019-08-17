@@ -14,17 +14,17 @@ import java.util.Map;
 public interface CategoryManageService {
 
     /**
-     * 保存商品类目树
+     * 保存整颗类目树
      *
-     * @param saveDTO
+     * @param root
      * @author kunbu
      * @time 2019/8/16 16:29
      * @return
      **/
-    ServiceResult<CategoryEntity> saveCategoryTree(CategoryDTO saveDTO, String operatorId);
+    ServiceResult<CategoryEntity> saveCategoryTree(CategoryDTO root, String operatorId);
 
     /**
-     * 保存商品类目
+     * 保存单个类目
      *
      * @param saveDTO
      * @author kunbu

@@ -16,8 +16,30 @@ public class CategoryDTO implements Serializable {
     private String categoryName;
     private String parentId;
     private int level;
-
     private List<CategoryDTO> subs;
+
+    /** 根节点，不做业务操作 */
+    private boolean root;
+
+    public CategoryDTO() {}
+
+    public static CategoryDTO of(String categoryId, String categoryName, Integer categoryCode, String parentId, int level) {
+        CategoryDTO cate = new CategoryDTO();
+        cate.setParentId(parentId);
+        cate.setCategoryName(categoryName);
+        cate.setLevel(level);
+        cate.setCategoryCode(categoryCode);
+        cate.setCategoryId(categoryId);
+        return cate;
+    }
+
+    public boolean isRoot() {
+        return root;
+    }
+
+    public void setRoot(boolean root) {
+        this.root = root;
+    }
 
     public String getCategoryId() {
         return categoryId;
@@ -75,6 +97,7 @@ public class CategoryDTO implements Serializable {
                 ", categoryName='" + categoryName + '\'' +
                 ", parentId='" + parentId + '\'' +
                 ", level=" + level +
+                ", root=" + root +
                 ", subs=" + subs +
                 '}';
     }

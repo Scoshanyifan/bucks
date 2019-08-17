@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @program: bucks
@@ -40,19 +41,23 @@ public class CategoryManageServiceImpl implements CategoryManageService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public ServiceResult<CategoryEntity> saveCategoryTree(CategoryDTO saveDTO, String operatorId) {
+    public ServiceResult<CategoryEntity> saveCategoryTree(CategoryDTO root, String operatorId) {
         Set<String> cateNameSet = Sets.newHashSet();
         Set<Integer> cateCodeSet = Sets.newHashSet();
         List<CategoryDTO> cateDTOList = Lists.newArrayList();
-        String checkResult = checkCategoryTree(saveDTO, cateNameSet, cateCodeSet, cateDTOList, null, 1);
+        //因为有根节点，所以从0开始
+        String checkResult = checkCategoryTree(root, cateNameSet, cateCodeSet, cateDTOList, null, 0);
         if (checkResult != null) {
             String msg = String.format(CategoryErrorEnum.CATEGORY_SAVE_ERROR.getMsg(), checkResult);
             return ServiceResult.ERROR(msg);
         }
+        logger.info(">>> saveCategoryTree, cateCodeSet:{}", cateCodeSet);
+        logger.info(">>> saveCategoryTree, cateNameSet:{}", cateNameSet);
         try {
             Date nowTime = new Date();
-            //TODO 将原先类目树version+1留存
+            //将原先类目树留存
             CategoryEntity oneUse = categoryMapper.selectOneUse(CommonStateEnum.USE.name());
+            //默认version=1
             Integer version = 1;
             if (oneUse != null) {
                 version = oneUse.getVersion();
@@ -62,9 +67,9 @@ public class CategoryManageServiceImpl implements CategoryManageService {
                 params.put("modifyTime", nowTime);
                 params.put("operatorId", operatorId);
                 int discardCount = categoryMapper.discardCategoryTree(params);
-                logger.info(">>> discard count:{}", discardCount);
+                logger.info(">>> saveCategoryTree, discardCount:{}", discardCount);
             }
-            //TODO 将新类目树保存
+            //保存新类目树，并且version+1
             List<CategoryEntity> entityList = Lists.newArrayListWithCapacity(cateDTOList.size());
             Integer newVersion = version + 1;
             cateDTOList.stream().forEach(x -> {
@@ -81,7 +86,8 @@ public class CategoryManageServiceImpl implements CategoryManageService {
                 entity.setModifyTime(nowTime);
                 entityList.add(entity);
             });
-
+            int batchInsertRes = categoryMapper.insertBatch(entityList);
+            logger.info(">>> saveCategoryTree, batchInsertRes:{}", batchInsertRes);
             return ServiceResult.SUCCESS;
         } catch (Exception e) {
             logger.error(">>> saveCategoryTree error.", e);
@@ -89,36 +95,51 @@ public class CategoryManageServiceImpl implements CategoryManageService {
         }
     }
 
-    private String checkCategoryTree(
-            CategoryDTO dto,
-            Set<String> cateNameSet,
-            Set<Integer> cateCodeSet,
-            List<CategoryDTO> cateDTOList,
-            String parentId,
-            int level) {
-        cateDTOList.add(dto);
+    /**
+     * 检查类目树，并做一些初始化操作
+     *
+     * @param dto
+     * @param cateNameSet
+     * @param cateCodeSet
+     * @param cateDTOList
+     * @param parentId
+     * @param level
+     * @author kunbu
+     * @time 2019/8/17 10:28
+     * @return
+     **/
+    private static String checkCategoryTree(CategoryDTO dto, Set<String> cateNameSet, Set<Integer> cateCodeSet,
+                                            List<CategoryDTO> cateDTOList, String parentId, int level) {
 
-        boolean checkName = cateNameSet.add(dto.getCategoryName());
-        boolean checkCode = cateCodeSet.add(dto.getCategoryCode());
-        if (!checkName) {
-            return dto.getCategoryName();
+        String categoryId = null;
+        //非根节点进行检查和保存
+        if (!dto.isRoot()) {
+            boolean checkName = cateNameSet.add(dto.getCategoryName());
+            boolean checkCode = cateCodeSet.add(dto.getCategoryCode());
+            if (!checkName) {
+                return "name: " + dto.getCategoryName();
+            }
+            if (!checkCode) {
+                return "code:" + dto.getCategoryCode().toString();
+            }
+            if (dto.getLevel() != level) {
+                return "level: " + level;
+            }
+            //处理id
+            categoryId = IDGenerateUtil.uniqueID();
+            dto.setCategoryId(categoryId);
+            dto.setParentId(parentId);
+            //保存在list中方便之后db
+            cateDTOList.add(dto);
         }
-        if (!checkCode) {
-            return dto.getCategoryCode().toString();
-        }
-        if (dto.getLevel() != level) {
-            return "level";
-        }
-        //填入id
-        String categoryId = IDGenerateUtil.uniqueID();
-        dto.setCategoryId(categoryId);
-        dto.setParentId(parentId);
+        //下一级
+        level++;
 
         String checkResult = null;
         List<CategoryDTO> subs = dto.getSubs();
         if (CollectionUtils.isNotEmpty(subs)) {
             for (CategoryDTO sub : subs) {
-                checkResult = checkCategoryTree(sub, cateNameSet, cateCodeSet, cateDTOList, categoryId, level++);
+                checkResult = checkCategoryTree(sub, cateNameSet, cateCodeSet, cateDTOList, categoryId, level);
                 if (checkResult != null) {
                     break;
                 }
@@ -174,8 +195,23 @@ public class CategoryManageServiceImpl implements CategoryManageService {
         List<CategoryEntity> all = categoryMapper.selectAll(CommonStateEnum.USE.name());
         Map<String, Object> tree = Maps.newHashMap();
         if (CollectionUtils.isNotEmpty(all)) {
-
-
+            Map<Byte, List<CategoryEntity>> level2cateMap = all.stream().collect(Collectors.groupingBy(CategoryEntity::getLevel));
+            Set<Byte> levels = level2cateMap.keySet();
+            logger.info(">>> levels:{}", levels);
+            //设置根节点
+            CategoryDTO root = new CategoryDTO();
+            root.setRoot(true);
+            root.setLevel(0);
+            root.setSubs(Lists.newArrayList());
+            //TODO
+            for (Byte level : levels) {
+                List<CategoryEntity> cateList = level2cateMap.get(level);
+                List<CategoryDTO> cateDTOList = Lists.newArrayListWithCapacity(cateList.size());
+                cateList.stream().forEach(x -> {
+                    CategoryDTO cateDTO = CategoryDTO.of(x.getId(), x.getCategoryName(), x.getCategoryCode(), x.getParentId(), x.getLevel());
+                    cateDTOList.add(cateDTO);
+                });
+            }
         }
         return ServiceResult.SUCCESS;
     }
