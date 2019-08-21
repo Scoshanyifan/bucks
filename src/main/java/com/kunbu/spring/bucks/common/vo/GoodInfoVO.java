@@ -15,8 +15,11 @@ public class GoodInfoVO implements Serializable {
 
     private String goodId;
     private String goodName;
-    private String decription;
+    private String description;
+    private String categoryId;
     private String categoryName;
+    //前台类目
+    private String categoryShow;
     private String stateInfo;
 
 }

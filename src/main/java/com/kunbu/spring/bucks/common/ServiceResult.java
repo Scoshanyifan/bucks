@@ -41,7 +41,11 @@ public class ServiceResult<T> implements Serializable {
         return result;
     }
 
-    public Object getData() {
+    public boolean ok() {
+        return code == CODE_SUCCESS;
+    }
+
+    public T getData() {
         return data;
     }
 

@@ -41,10 +41,10 @@ public interface CategoryManageService {
      * @time 2019/8/16 16:28
      * @return
      **/
-    ServiceResult<Map<String, Object>> getCategoryTree(String categoryId);
+    ServiceResult<CategoryDTO> getCategoryTree(String categoryId);
 
     /**
-     * 获取商品类目描述（cache）
+     * 获取商品类目名称（全部）
      *
      * @author kunbu
      * @time 2019/8/16 16:28
