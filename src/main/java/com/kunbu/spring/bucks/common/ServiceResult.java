@@ -1,5 +1,7 @@
 package com.kunbu.spring.bucks.common;
 
+import com.kunbu.spring.bucks.error.MicroServiceError;
+
 import java.io.Serializable;
 
 /**
@@ -17,6 +19,8 @@ public class ServiceResult<T> implements Serializable {
 
     private T data;
     private int code;
+    private MicroServiceError serviceError;
+    @Deprecated
     private String msg;
 
     private ServiceResult() {}
@@ -34,11 +38,27 @@ public class ServiceResult<T> implements Serializable {
         return result;
     }
 
+    @Deprecated
     public static ServiceResult ERROR(String msg) {
         ServiceResult result = new ServiceResult();
         result.setCode(CODE_ERROR);
         result.setMsg(msg);
         return result;
+    }
+
+    public static ServiceResult ERROR(MicroServiceError serviceError) {
+        ServiceResult result = new ServiceResult();
+        result.setCode(CODE_ERROR);
+        result.setServiceError(serviceError);
+        return result;
+    }
+
+    public MicroServiceError getServiceError() {
+        return serviceError;
+    }
+
+    public void setServiceError(MicroServiceError serviceError) {
+        this.serviceError = serviceError;
     }
 
     public boolean ok() {
@@ -61,10 +81,12 @@ public class ServiceResult<T> implements Serializable {
         this.code = code;
     }
 
+    @Deprecated
     public String getMsg() {
         return msg;
     }
 
+    @Deprecated
     public void setMsg(String msg) {
         this.msg = msg;
     }

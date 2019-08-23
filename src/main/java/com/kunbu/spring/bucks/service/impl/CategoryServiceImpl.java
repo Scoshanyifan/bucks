@@ -8,8 +8,8 @@ import com.kunbu.spring.bucks.common.dto.CategoryDTO;
 import com.kunbu.spring.bucks.common.entity.CategoryEntity;
 import com.kunbu.spring.bucks.constant.CommonStateEnum;
 import com.kunbu.spring.bucks.dao.CategoryMapper;
-import com.kunbu.spring.bucks.error.CategoryErrorEnum;
-import com.kunbu.spring.bucks.service.CategoryManageService;
+import com.kunbu.spring.bucks.error.bis.CategoryErrorEnum;
+import com.kunbu.spring.bucks.service.CategoryService;
 import com.kunbu.spring.bucks.utils.IDGenerateUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -32,9 +32,9 @@ import java.util.stream.Collectors;
  * @create: 2019-08-16 16:29
  **/
 @Service
-public class CategoryManageServiceImpl implements CategoryManageService {
+public class CategoryServiceImpl implements CategoryService {
 
-    private static final Logger logger = LoggerFactory.getLogger(CategoryManageServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(CategoryServiceImpl.class);
 
     @Autowired
     private CategoryMapper categoryMapper;
@@ -45,7 +45,7 @@ public class CategoryManageServiceImpl implements CategoryManageService {
         Set<String> cateNameSet = Sets.newHashSet();
         Set<Integer> cateCodeSet = Sets.newHashSet();
         List<CategoryDTO> cateDTOList = Lists.newArrayList();
-        //因为有根节点，所以从0开始（实际节点：1->n）
+        //检查类木属，因为有根节点，所以从0开始（实际节点：1 -> n）
         String checkResult = checkCategoryTree(root, cateNameSet, cateCodeSet, cateDTOList, null, 0);
         if (checkResult != null) {
             String msg = String.format(CategoryErrorEnum.CATEGORY_SAVE_ERROR.getMsg(), checkResult);
@@ -125,7 +125,7 @@ public class CategoryManageServiceImpl implements CategoryManageService {
                 return "level: " + level;
             }
             //处理id
-            categoryId = IDGenerateUtil.uniqueID();
+            categoryId = IDGenerateUtil.DBUniqueID();
             dto.setCategoryId(categoryId);
             dto.setParentId(parentId);
             //保存在list中方便之后db
@@ -170,7 +170,7 @@ public class CategoryManageServiceImpl implements CategoryManageService {
         } else {
             //新增
             CategoryEntity category = new CategoryEntity();
-            category.setId(IDGenerateUtil.uniqueID());
+            category.setId(IDGenerateUtil.DBUniqueID());
             category.setCategoryName(categoryName);
             category.setParentId(saveDTO.getParentId());
             category.setLevel((byte) saveDTO.getLevel());
@@ -206,6 +206,7 @@ public class CategoryManageServiceImpl implements CategoryManageService {
             for (int i = 1; i< level2cateMap.size(); i++) {
                 List<CategoryDTO> cateListOne = level2cateMap.get(i);
                 if (i == 1) {
+                    //根节点插入level one
                     root.setSubs(cateListOne);
                 }
                 List<CategoryDTO> cateListNext = level2cateMap.get(i + 1);

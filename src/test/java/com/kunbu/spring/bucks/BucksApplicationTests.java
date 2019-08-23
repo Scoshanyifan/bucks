@@ -83,7 +83,7 @@ public class BucksApplicationTests {
         }
         level++;
         //填入id
-        String categoryId = IDGenerateUtil.uniqueID();
+        String categoryId = IDGenerateUtil.DBUniqueID();
         dto.setCategoryId(categoryId);
         dto.setParentId(parentId);
 

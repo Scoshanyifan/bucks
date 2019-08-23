@@ -1,11 +1,13 @@
-package com.kunbu.spring.bucks.error;
+package com.kunbu.spring.bucks.error.bis;
+
+import com.kunbu.spring.bucks.error.MicroServiceError;
 
 /**
  * @author: KunBu
  * @time: 2019/8/16 17:31
  * @description:
  */
-public enum CategoryErrorEnum {
+public enum CategoryErrorEnum implements MicroServiceError {
 
     //
     CATEGORY_NAME_EXIST("商品类目名已存在"),
@@ -21,6 +23,16 @@ public enum CategoryErrorEnum {
     }
 
     public String getMsg() {
+        return msg;
+    }
+
+    @Override
+    public String getServiceErrorCode() {
+        return name();
+    }
+
+    @Override
+    public String getServieErrorMsg() {
         return msg;
     }
 }

@@ -13,7 +13,15 @@ public class IDGenerateUtil {
     private static final String SPLITTER_MIDDLE = "-";
     private static final String WHITE_CHAR = "";
 
-    public static String uniqueID() {
+    /**
+     * DB主键id
+     *
+     * @param
+     * @author kunbu
+     * @time 2019/8/23 14:27
+     * @return
+     **/
+    public static String DBUniqueID() {
         return UUID.randomUUID().toString().replace(SPLITTER_MIDDLE, WHITE_CHAR);
     }
 

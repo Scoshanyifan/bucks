@@ -6,11 +6,12 @@ import com.kunbu.spring.bucks.common.param.GoodQueryParam;
 import com.kunbu.spring.bucks.common.vo.GoodInfoVO;
 
 /**
+ * 商品微服务层
  * @author: KunBu
  * @time: 2019/8/16 15:19
  * @description:
  */
-public interface GoodManageService {
+public interface GoodService {
 
     /**
      * 查询商品
