@@ -37,12 +37,11 @@ public interface CategoryService {
     /**
      * 获取商品类目树
      *
-     * @param categoryId
      * @author kunbu
      * @time 2019/8/16 16:28
      * @return
      **/
-    ServiceResult<CategoryDTO> getCategoryTree(String categoryId);
+    ServiceResult<CategoryDTO> getCategoryTree();
 
     /**
      * 获取商品类目名称（全部）
@@ -51,5 +50,5 @@ public interface CategoryService {
      * @time 2019/8/16 16:28
      * @return
      **/
-    ServiceResult<Map<String, String>> getCategoryMap();
+    ServiceResult<Map<String, String>> getCategoryMap(boolean ifCache);
 }

@@ -7,9 +7,13 @@ import com.kunbu.spring.bucks.common.ServiceResult;
 import com.kunbu.spring.bucks.common.dto.CategoryDTO;
 import com.kunbu.spring.bucks.common.entity.CategoryEntity;
 import com.kunbu.spring.bucks.constant.CommonStateEnum;
+import com.kunbu.spring.bucks.constant.cons.CacheConstant;
 import com.kunbu.spring.bucks.dao.CategoryMapper;
 import com.kunbu.spring.bucks.error.bis.CategoryErrorEnum;
+import com.kunbu.spring.bucks.redis.CacheResult;
+import com.kunbu.spring.bucks.redis.RedisManager;
 import com.kunbu.spring.bucks.service.CategoryService;
+import com.kunbu.spring.bucks.utils.ExecutorUtil;
 import com.kunbu.spring.bucks.utils.IDGenerateUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -19,10 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -38,6 +39,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     private CategoryMapper categoryMapper;
+
+    @Autowired
+    private RedisManager redisManager;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -88,6 +92,8 @@ public class CategoryServiceImpl implements CategoryService {
             });
             int batchInsertRes = categoryMapper.insertBatch(entityList);
             logger.info(">>> saveCategoryTree, batchInsertRes:{}", batchInsertRes);
+            // update cache
+            ExecutorUtil.addTask(() -> updateCache4CategoryMap());
             return ServiceResult.SUCCESS;
         } catch (Exception e) {
             logger.error(">>> saveCategoryTree error.", e);
@@ -180,11 +186,13 @@ public class CategoryServiceImpl implements CategoryService {
             category.setModifyTime(nowTime);
             categoryMapper.insertSelective(category);
         }
+        // update cache
+        ExecutorUtil.addTask(() -> updateCache4CategoryMap());
         return ServiceResult.SUCCESS;
     }
 
     @Override
-    public ServiceResult<CategoryDTO> getCategoryTree(String categoryId) {
+    public ServiceResult<CategoryDTO> getCategoryTree() {
         //设置根节点
         CategoryDTO root = new CategoryDTO();
         root.setRoot(true);
@@ -223,17 +231,33 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public ServiceResult<Map<String, String>> getCategoryMap() {
+    public ServiceResult<Map<String, String>> getCategoryMap(boolean ifCache) {
+        if (ifCache) {
+            return ServiceResult.SUCCESS(getCategoryMapDB());
+        } else {
+            CacheResult<HashMap<String, String>> cacheResult = redisManager.getObject(CacheConstant.CACHE_KEY_CATEGORY_MAP);
+            if (cacheResult.isSucc()) {
+                return ServiceResult.SUCCESS(cacheResult.getModule());
+            } else {
+                return ServiceResult.SUCCESS(getCategoryMapDB());
+            }
+        }
+    }
+
+    private Map<String, String> getCategoryMapDB() {
         Map<String, String> cateId2NameMap = Maps.newHashMap();
         List<CategoryEntity> all = categoryMapper.selectAll(CommonStateEnum.USE.name());
         if (CollectionUtils.isNotEmpty(all)) {
             all.stream().forEach(x -> cateId2NameMap.put(x.getId(), x.getCategoryName()));
         }
-        return ServiceResult.SUCCESS(cateId2NameMap);
+        return cateId2NameMap;
     }
 
-    private void updateCahe4CategoryMap() {
-
-        //TODO
+    private void updateCache4CategoryMap() {
+        HashMap<String, String> categoryMap = (HashMap<String, String>) getCategoryMapDB();
+        CacheResult<HashMap<String, String>> updateResult = redisManager.put(CacheConstant.CACHE_KEY_CATEGORY_MAP, categoryMap);
+        if (!updateResult.isSucc()) {
+            logger.error(">>> updateCache4CategoryMap failure");
+        }
     }
 }
