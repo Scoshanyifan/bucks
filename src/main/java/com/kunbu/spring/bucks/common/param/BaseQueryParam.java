@@ -1,25 +1,17 @@
 package com.kunbu.spring.bucks.common.param;
 
+import java.io.Serializable;
+
 /**
  * @program: bucks
- * @description: 查询基类
+ * @description:
  * @author: kunbu
- * @create: 2019-08-16 15:32
+ * @create: 2019-08-27 16:30
  **/
-public abstract class BaseQueryParam {
+public abstract class BaseQueryParam implements Serializable {
 
-    private String state;
-    private String exceptState;
-    private int pageNum;
-    private int pageSize;
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
+    private int pageNum = 1;
+    private int pageSize = 10;
 
     public int getPageNum() {
         return pageNum;
@@ -37,20 +29,10 @@ public abstract class BaseQueryParam {
         this.pageSize = pageSize;
     }
 
-    public String getExceptState() {
-        return exceptState;
-    }
-
-    public void setExceptState(String exceptState) {
-        this.exceptState = exceptState;
-    }
-
     @Override
     public String toString() {
         return "BaseQueryParam{" +
-                "state='" + state + '\'' +
-                ", exceptState='" + exceptState + '\'' +
-                ", pageNum=" + pageNum +
+                "pageNum=" + pageNum +
                 ", pageSize=" + pageSize +
                 '}';
     }

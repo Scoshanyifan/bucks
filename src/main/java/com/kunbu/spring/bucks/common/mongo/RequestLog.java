@@ -1,6 +1,8 @@
 package com.kunbu.spring.bucks.common.mongo;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.IndexDirection;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
@@ -12,9 +14,12 @@ import java.util.Date;
  * @author: kunbu
  * @create: 2019-08-26 17:10
  **/
-@Document
-public class RequestLog implements Serializable {
 
+@Document("requestlog") //映射到数据库的一个集合（collection为集合名称）
+public class RequestLog implements Serializable {
+    /**
+     * 标记id字段
+     **/
     @Id
     private String id;
 
@@ -32,6 +37,11 @@ public class RequestLog implements Serializable {
     private String userAgent;
 
     private Long costTime;
+
+    /**
+     * //创建单字段索引（默认ASCENDING 升序、DESCENDING 降序）
+     **/
+    @Indexed(direction = IndexDirection.DESCENDING)
     private Date createTime;
 
     public String getId() {

@@ -1,127 +1,173 @@
 package com.kunbu.spring.bucks.redis;
 
-import org.apache.commons.lang3.StringUtils;
+import com.kunbu.spring.bucks.redis.cache.CacheManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.Set;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
+/**
+ *
+ *
+ * @author kunbu
+ * @time 2019/8/27 13:16
+ * @return
+ **/
 @Component
-public class RedisManager implements CacheManager{
+public class RedisManager implements CacheManager {
     
     @Autowired
     private RedisTemplate<String, Object>           redisTemplate;
     @Autowired
     private StringRedisTemplate                     stringRedisTemplate;
 
-    @Override
-    public <T> CacheResult<T> put(String key, Serializable value) {
+    //================================ string ==================================
 
-        return put(key, value, -1L);
+    @Override
+    public String getString(String key) {
+        return key == null ? null : stringRedisTemplate.opsForValue().get(key);
     }
 
     @Override
-    public <T> CacheResult<T> put(String key, Serializable value, long expire) {
-        if (StringUtils.isBlank(key)) {
-            return null;
+    public Object getObject(String key) {
+        return key == null ? null : redisTemplate.opsForValue().get(key);
+    }
+
+    @Override
+    public boolean set(String key, Serializable value) {
+        return set(key, value, -1L);
+    }
+
+    @Override
+    public boolean set(String key, Serializable value, long expire) {
+        if (key == null) {
+            return false;
         }
-        //数据不过期
-        if (expire < 0) {
-            if (value instanceof String) {
-                stringRedisTemplate.opsForValue().set(key, (String) value);
-            } else {
-                redisTemplate.opsForValue().set(key, value);
-            }
-        } else {
+        //设置过期时间
+        if (expire > 0) {
             if (value instanceof String) {
                 stringRedisTemplate.opsForValue().set(key, (String) value, expire, TimeUnit.SECONDS);
             } else {
                 redisTemplate.opsForValue().set(key, value, expire, TimeUnit.SECONDS);
             }
-        }
-        return CacheResult.of(true);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public <T extends Serializable> CacheResult<T> getObject(String key) {
-        if (redisTemplate.opsForValue() != null) {
-            T value = (T) redisTemplate.opsForValue().get(key);
-            return CacheResult.of(true, value);
         } else {
-            return CacheResult.of(false);
+            if (value instanceof String) {
+                stringRedisTemplate.opsForValue().set(key, (String) value);
+            } else {
+                redisTemplate.opsForValue().set(key, value);
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean existKey(String key) {
+        if (key == null) {
+            return false;
+        } else {
+            return redisTemplate.hasKey(key);
         }
     }
 
     @Override
-    public CacheResult<String> getString(String key) {
-        String value = stringRedisTemplate.opsForValue().get(key);
-        return CacheResult.of(true, value);
+    public boolean delKey(String key) {
+        if (key != null) {
+            return redisTemplate.delete(key);
+        } else {
+            return false;
+        }
     }
 
     @Override
-    public void expire(String key, long expire) {
-        redisTemplate.expire(key, expire, TimeUnit.SECONDS);
+    public long delKeys(String[] keys) {
+        if (keys != null && keys.length > 0) {
+            return redisTemplate.delete(Arrays.asList(keys));
+        } else {
+            return 0;
+        }
     }
 
     @Override
-    public void expireAt(String key, Date expireDate) {
-        redisTemplate.expireAt(key, expireDate);
+    public boolean expire(String key, long expire) {
+        if (expire > 0) {
+            redisTemplate.expire(key, expire, TimeUnit.SECONDS);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
-    public void del(String key) {
-        redisTemplate.delete(key);
-    }
-
-    @Override
-    public long incPv(String namespace, String key) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public Long getPv(String namespace, String key) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Long getAndDelPv(String namespace, String key) {
-        // TODO Auto-generated method stub
-        return null;
+    public long getExpire(String key) {
+        Long expire = redisTemplate.getExpire(key, TimeUnit.SECONDS);
+        if (expire == null) {
+            return 0;
+        }
+        return expire.longValue();
     }
 
     @Override
     public long incr(String key) {
-        return redisTemplate.opsForValue().increment(key, 1);
+        return incr(key, 1L);
     }
 
     @Override
-    public void hput(String key, String hashKey, Long value) {
-        if (StringUtils.isNotBlank(key)) {
+    public long incr(String key, long delta) {
+        if (key == null) {
+            throw new RuntimeException("key cant be null");
+        }
+        if (delta <= 0) {
+            throw new RuntimeException("delta must be positive");
+        }
+        return redisTemplate.opsForValue().increment(key, delta);
+    }
+
+    @Override
+    public long decr(String key, long delta) {
+        if (key == null) {
+            throw new RuntimeException("key cant be null");
+        }
+        if (delta <= 0) {
+            throw new RuntimeException("delta must be positive");
+        }
+        return redisTemplate.opsForValue().decrement(key, delta);
+    }
+
+    //================================ map ===================================
+
+    @Override
+    public boolean hput(String key, String hashKey, Object value) {
+        if (key != null && hashKey != null && value != null) {
             redisTemplate.opsForHash().put(key, hashKey, value);
+            return true;
+        } else {
+            return false;
         }
     }
 
     @Override
-    public void hdel(String key, Object... hashKeys) {
-        if (StringUtils.isNotBlank(key)) {
-            redisTemplate.opsForHash().delete(key, hashKeys);
+    public long hdel(String key, Object... hashKeys) {
+        if (hashKeys != null && hashKeys.length > 0) {
+            return redisTemplate.opsForHash().delete(key, hashKeys);
+        } else {
+            return -1L;
         }
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public <T> CacheResult<T> hget(String key, String hashKey) {
-        T value = (T) redisTemplate.opsForHash().get(key, hashKey);
-        return CacheResult.of(true, value);
+    public Object hget(String key, String hashKey) {
+        if (key != null && hashKey != null) {
+            return redisTemplate.opsForHash().get(key, hashKey);
+        } else {
+            return null;
+        }
     }
+
+    //============================== atomic ===================================
 
     @Override
     public boolean setnx(String key, Long value) {
@@ -136,44 +182,6 @@ public class RedisManager implements CacheManager{
     @Override
     public String getSet(String key, String value) {
         return (String) redisTemplate.opsForValue().getAndSet(key, value);
-    }
-
-    @Override
-    public Set<String> keys(String keyPattern) {
-        return redisTemplate.keys(keyPattern);
-    }
-
-    @Override
-    public long getExpire(String key) {
-        Long expire = redisTemplate.getExpire(key);
-        if (expire == null) {
-            return 0;
-        }
-        return expire.longValue();
-    }
-
-    @Override
-    public boolean isMemberOfSet(String setName, Serializable value) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public long addToSet(String setName, Serializable... values) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public long delFromSet(String setName, Serializable value) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public long sizeOfSet(String setName) {
-        // TODO Auto-generated method stub
-        return 0;
     }
 
 }

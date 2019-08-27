@@ -1,25 +1,81 @@
 package com.kunbu.spring.bucks;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.kunbu.spring.bucks.common.dto.CategoryDTO;
+import com.kunbu.spring.bucks.common.mongo.RequestLog;
+import com.kunbu.spring.bucks.common.param.RequestLogQueryParam;
+import com.kunbu.spring.bucks.mongodb.RequestLogMongo;
+import com.kunbu.spring.bucks.redis.RedisManager;
 import com.kunbu.spring.bucks.utils.IDGenerateUtil;
 import org.apache.commons.collections4.CollectionUtils;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-//@RunWith(SpringRunner.class)
-//@SpringBootTest
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class BucksApplicationTests {
 
-//    @Test
-    public void contextLoads() {
+    private static final Logger logger = LoggerFactory.getLogger(BucksApplicationTests.class);
+
+    @Autowired
+    private RedisManager redisManager;
+
+    @Autowired
+    private RequestLogMongo requestLogMongo;
+
+    @Test
+    public void testRedis() {
+
+        boolean setValue = redisManager.set("name", "kunbu");
+        String strResult = redisManager.getString("name");
+        logger.info(">>> setValue:{}, strResult:{}, objResult:{}", setValue, strResult);
+        boolean incrValue = redisManager.setnx("incrNum", 2L);
+        long incrResult = redisManager.incr("incrNum");
+        logger.info(">>> incrValue:{}, incrResult:{}", incrValue, incrResult);
+    }
+
+    @Test
+    public void testMongo() {
+
+        RequestLog log = new RequestLog();
+        log.setDescription("mongodb");
+        log.setCreateTime(new Date());
+        RequestLog result = requestLogMongo.save(log);
+        logger.info(">>> log id:{}", result.getId());
+
+        RequestLogQueryParam param = new RequestLogQueryParam();
+        long nowTime = System.currentTimeMillis();
+        // 时区问题，spring帮完美做了转换
+        param.setStartTime(new Date(nowTime - 1000L * 60 * 10));
+        param.setEndTime(new Date());
+        PageInfo pageInfo = requestLogMongo.list(param);
+        logger.info(pageInfo.toString());
     }
 
     public static void main(String[] args) {
+        CategoryDTO parse = getCategoryTree();
+
+        Set<String> cateNameSet = Sets.newHashSet();
+        Set<Integer> cateCodeSet = Sets.newHashSet();
+        List<CategoryDTO> cateDTOList = Lists.newArrayList();
+        String checkResult = checkCategoryTree(parse, cateNameSet, cateCodeSet, cateDTOList, null, 1);
+        System.out.println("checkResult: " + checkResult);
+    }
+
+    private static CategoryDTO getCategoryTree() {
         CategoryDTO l1 = newCategoryDTO(1);
         List<CategoryDTO> l2List = Lists.newArrayList();
         l1.setSubs(l2List);
@@ -39,12 +95,7 @@ public class BucksApplicationTests {
         System.out.println("jsonstr:" + jsonStr);
         CategoryDTO parse = JSONObject.parseObject(jsonStr, CategoryDTO.class);
         System.out.println(parse);
-
-        Set<String> cateNameSet = Sets.newHashSet();
-        Set<Integer> cateCodeSet = Sets.newHashSet();
-        List<CategoryDTO> cateDTOList = Lists.newArrayList();
-        String checkResult = checkCategoryTree(parse, cateNameSet, cateCodeSet, cateDTOList, null, 1);
-        System.out.println("checkResult: " + checkResult);
+        return parse;
     }
 
     private static CategoryDTO newCategoryDTO(int level) {

@@ -9,7 +9,7 @@ import java.util.List;
  * @author: kunbu
  * @create: 2019-08-16 15:26
  **/
-public class GoodQueryParam extends BaseQueryParam implements Serializable {
+public class GoodQueryParam extends BaseDbQueryParam implements Serializable {
 
     private String goodNameLike;
     private String categoryId;

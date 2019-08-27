@@ -40,7 +40,7 @@ public class MongoConfig {
     }
     
     /**
-     * 配置自定义mongo中document和代码中模型的转换
+     * 配置自定义mongo中document和代码中模型的转换（参考Spring全家桶）
      * 
      * @param        
      * @author kunbu

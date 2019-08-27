@@ -47,7 +47,7 @@ public class GoodManageImpl implements GoodManage {
         List<GoodInfoVO> goodPageList = goodPage.getList();
         if (CollectionUtils.isNotEmpty(goodPageList)) {
             Map<String, String> cateId2NameMap = Maps.newHashMap();
-            ServiceResult<Map<String, String>> categoryMapResult = categoryService.getCategoryMap();
+            ServiceResult<Map<String, String>> categoryMapResult = categoryService.getCategoryMap(true);
             if (categoryMapResult.ok()) {
                 cateId2NameMap = categoryMapResult.getData();
             } else {

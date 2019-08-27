@@ -10,7 +10,6 @@ import com.kunbu.spring.bucks.constant.CommonStateEnum;
 import com.kunbu.spring.bucks.constant.cons.CacheConstant;
 import com.kunbu.spring.bucks.dao.CategoryMapper;
 import com.kunbu.spring.bucks.error.bis.CategoryErrorEnum;
-import com.kunbu.spring.bucks.redis.CacheResult;
 import com.kunbu.spring.bucks.redis.RedisManager;
 import com.kunbu.spring.bucks.service.CategoryService;
 import com.kunbu.spring.bucks.utils.ExecutorUtil;
@@ -232,12 +231,13 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public ServiceResult<Map<String, String>> getCategoryMap(boolean ifCache) {
-        if (ifCache) {
+        //非缓存直接走DB
+        if (!ifCache) {
             return ServiceResult.SUCCESS(getCategoryMapDB());
         } else {
-            CacheResult<HashMap<String, String>> cacheResult = redisManager.getObject(CacheConstant.CACHE_KEY_CATEGORY_MAP);
-            if (cacheResult.isSucc()) {
-                return ServiceResult.SUCCESS(cacheResult.getModule());
+            HashMap<String, String> categoryMap = (HashMap<String, String>) redisManager.getObject(CacheConstant.CACHE_KEY_CATEGORY_MAP);
+            if (categoryMap != null) {
+                return ServiceResult.SUCCESS(categoryMap);
             } else {
                 return ServiceResult.SUCCESS(getCategoryMapDB());
             }
@@ -255,8 +255,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     private void updateCache4CategoryMap() {
         HashMap<String, String> categoryMap = (HashMap<String, String>) getCategoryMapDB();
-        CacheResult<HashMap<String, String>> updateResult = redisManager.put(CacheConstant.CACHE_KEY_CATEGORY_MAP, categoryMap);
-        if (!updateResult.isSucc()) {
+        boolean updateResult = redisManager.set(CacheConstant.CACHE_KEY_CATEGORY_MAP, categoryMap);
+        if (!updateResult) {
             logger.error(">>> updateCache4CategoryMap failure");
         }
     }
