@@ -253,11 +253,24 @@ public class CategoryServiceImpl implements CategoryService {
         return cateId2NameMap;
     }
 
+    /**
+     * 先更新数据库，再删除缓存
+     *
+     * @param
+     * @author kunbu
+     * @time 2019/8/28 17:32
+     * @return
+     **/
     private void updateCache4CategoryMap() {
-        HashMap<String, String> categoryMap = (HashMap<String, String>) getCategoryMapDB();
-        boolean updateResult = redisManager.set(CacheConstant.CACHE_KEY_CATEGORY_MAP, categoryMap);
-        if (!updateResult) {
+        boolean delResult = redisManager.delKey(CacheConstant.CACHE_KEY_CATEGORY_MAP);
+        if (!delResult) {
             logger.error(">>> updateCache4CategoryMap failure");
         }
+
+//        HashMap<String, String> categoryMap = (HashMap<String, String>) getCategoryMapDB();
+//        boolean updateResult = redisManager.set(CacheConstant.CACHE_KEY_CATEGORY_MAP, categoryMap);
+//        if (!updateResult) {
+//            logger.error(">>> updateCache4CategoryMap failure");
+//        }
     }
 }
