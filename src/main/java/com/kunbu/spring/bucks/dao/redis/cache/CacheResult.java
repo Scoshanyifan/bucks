@@ -1,4 +1,4 @@
-package com.kunbu.spring.bucks.redis.cache;
+package com.kunbu.spring.bucks.dao.redis.cache;
 
 public class CacheResult<T> {
 

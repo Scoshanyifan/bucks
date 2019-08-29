@@ -1,4 +1,4 @@
-package com.kunbu.spring.bucks.mongodb;
+package com.kunbu.spring.bucks.dao.mongodb;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.mongodb.core.query.Criteria;

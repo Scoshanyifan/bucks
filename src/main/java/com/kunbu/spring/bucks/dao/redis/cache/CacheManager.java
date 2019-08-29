@@ -1,8 +1,14 @@
-package com.kunbu.spring.bucks.redis.cache;
+package com.kunbu.spring.bucks.dao.redis.cache;
 
 import java.io.Serializable;
 
-
+/**
+ * 缓存管理类
+ *
+ * @author kunbu
+ * @time 2019/8/29 10:28
+ * @return
+ **/
 public interface CacheManager {
 
     /**
@@ -30,6 +36,7 @@ public interface CacheManager {
      *
      * @param key
      * @param value
+     * @return
      */
     boolean set(String key, Serializable value);
 
@@ -39,6 +46,7 @@ public interface CacheManager {
      * @param key
      * @param value
      * @param expire seconds
+     *               @return
      */
     boolean set(String key, Serializable value, long expire);
 

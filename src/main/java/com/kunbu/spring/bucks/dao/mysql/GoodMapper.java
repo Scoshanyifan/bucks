@@ -1,4 +1,4 @@
-package com.kunbu.spring.bucks.dao;
+package com.kunbu.spring.bucks.dao.mysql;
 
 import com.kunbu.spring.bucks.common.entity.GoodEntity;
 import com.kunbu.spring.bucks.common.param.GoodQueryParam;

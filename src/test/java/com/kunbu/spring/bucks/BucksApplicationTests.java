@@ -7,8 +7,8 @@ import com.google.common.collect.Sets;
 import com.kunbu.spring.bucks.common.dto.CategoryDTO;
 import com.kunbu.spring.bucks.common.mongo.RequestLog;
 import com.kunbu.spring.bucks.common.param.RequestLogQueryParam;
-import com.kunbu.spring.bucks.mongodb.RequestLogMongo;
-import com.kunbu.spring.bucks.redis.RedisManager;
+import com.kunbu.spring.bucks.dao.mongodb.RequestLogMongo;
+import com.kunbu.spring.bucks.dao.redis.RedisManager;
 import com.kunbu.spring.bucks.utils.IDGenerateUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
@@ -58,7 +58,7 @@ public class BucksApplicationTests {
 
         RequestLogQueryParam param = new RequestLogQueryParam();
         long nowTime = System.currentTimeMillis();
-        // 时区问题，spring帮完美做了转换
+        // 时区问题，spring帮我们做了转换
         param.setStartTime(new Date(nowTime - 1000L * 60 * 10));
         param.setEndTime(new Date());
         PageInfo pageInfo = requestLogMongo.list(param);

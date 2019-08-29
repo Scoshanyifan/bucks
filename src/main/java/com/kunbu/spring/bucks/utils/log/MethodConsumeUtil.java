@@ -1,6 +1,6 @@
 package com.kunbu.spring.bucks.utils.log;
 
-import com.kunbu.spring.bucks.constant.cons.CommonConstant;
+import com.kunbu.spring.bucks.constant.CommonConstant;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;

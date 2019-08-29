@@ -1,7 +1,8 @@
-package com.kunbu.spring.bucks.redis;
+package com.kunbu.spring.bucks.dao.redis;
 
-import com.kunbu.spring.bucks.redis.cache.CacheManager;
+import com.kunbu.spring.bucks.dao.redis.cache.CacheManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
@@ -11,7 +12,7 @@ import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 /**
- *
+ * redis缓存管理器
  *
  * @author kunbu
  * @time 2019/8/27 13:16
@@ -19,11 +20,37 @@ import java.util.concurrent.TimeUnit;
  **/
 @Component
 public class RedisManager implements CacheManager {
-    
+
+    /**
+     * template封装了opsForXXX操作类，用于支持hash, list, string, set, zset
+     *
+     **/
     @Autowired
     private RedisTemplate<String, Object>           redisTemplate;
     @Autowired
     private StringRedisTemplate                     stringRedisTemplate;
+
+    //================================ bit(execute) ================================
+
+    /**
+     * opsForXXX底层就是使用execute
+     **/
+    public Boolean setBit(String key, Integer index, Boolean tag) {
+        RedisCallback<Boolean> action = connection -> connection.setBit(key.getBytes(), index, tag);
+        return redisTemplate.execute(action);
+    }
+
+    public Boolean getBit(String key, Integer index) {
+        return redisTemplate.execute((RedisCallback<Boolean>) con -> con.getBit(key.getBytes(), index));
+    }
+
+    public Long bitCount(String key) {
+        return redisTemplate.execute((RedisCallback<Long>) con -> con.bitCount(key.getBytes()));
+    }
+
+    public Long bitCount(String key, int start, int end) {
+        return redisTemplate.execute((RedisCallback<Long>) con -> con.bitCount(key.getBytes(), start, end));
+    }
 
     //================================ string ==================================
 

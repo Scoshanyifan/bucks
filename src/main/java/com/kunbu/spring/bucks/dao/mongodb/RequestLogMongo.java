@@ -1,4 +1,4 @@
-package com.kunbu.spring.bucks.mongodb;
+package com.kunbu.spring.bucks.dao.mongodb;
 
 import com.github.pagehelper.PageInfo;
 import com.kunbu.spring.bucks.common.mongo.RequestLog;
@@ -67,6 +67,7 @@ public class RequestLogMongo {
         Criteria costTime = MongoUtil.longCompare("costTime", param.getCostTimeMin(), param.getCostTimeMax());
         MongoUtil.addCriteria(costTime, query);
 
+        // 时区问题，spring帮我们做了转换
         Criteria createTime = MongoUtil.dateCompare("createTime", param.getStartTime(), param.getEndTime());
         MongoUtil.addCriteria(createTime, query);
 

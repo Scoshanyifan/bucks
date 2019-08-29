@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kunbu.spring.bucks.dao.PayOrderMapper">
+<mapper namespace="com.kunbu.spring.bucks.dao.mysql.PayOrderMapper">
   <resultMap id="BaseResultMap" type="com.kunbu.spring.bucks.common.entity.PayOrderEntity">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="order_id" jdbcType="VARCHAR" property="orderId" />

@@ -1,4 +1,4 @@
-package com.kunbu.spring.bucks.constant;
+package com.kunbu.spring.bucks.constant.state;
 
 /**
  * @author: KunBu
