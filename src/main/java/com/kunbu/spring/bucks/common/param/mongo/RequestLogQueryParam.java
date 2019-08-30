@@ -1,4 +1,6 @@
-package com.kunbu.spring.bucks.common.param;
+package com.kunbu.spring.bucks.common.param.mongo;
+
+import com.kunbu.spring.bucks.common.param.BaseQueryParam;
 
 import java.util.Date;
 

@@ -1,7 +1,6 @@
 package com.kunbu.spring.bucks.utils;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.kunbu.spring.bucks.utils.log.LoggerUtil;
 import org.slf4j.Logger;
 
 import java.util.concurrent.*;

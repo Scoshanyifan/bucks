@@ -1,7 +1,7 @@
 package com.kunbu.spring.bucks.dao.mysql;
 
-import com.kunbu.spring.bucks.common.entity.GoodEntity;
-import com.kunbu.spring.bucks.common.param.GoodQueryParam;
+import com.kunbu.spring.bucks.common.entity.mysql.GoodEntity;
+import com.kunbu.spring.bucks.common.param.mysql.GoodQueryParam;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 

@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 public class RedisManager implements CacheManager {
 
     /**
-     * template封装了opsForXXX操作类，用于支持hash, list, string, set, zset
+     * template封装了opsForXXX操作类，用于支持hash, listRequestLog, string, set, zset
      *
      **/
     @Autowired
@@ -30,10 +30,17 @@ public class RedisManager implements CacheManager {
     @Autowired
     private StringRedisTemplate                     stringRedisTemplate;
 
-    //================================ bit(execute) ================================
+    //================================ bit(opsForXXX底层就是使用execute) ================================
 
     /**
-     * opsForXXX底层就是使用execute
+     * 位图操作
+     *
+     * @param key
+     * @param index  2^32
+     * @param tag 0 or 1
+     * @author kunbu
+     * @time 2019/8/30 13:21
+     * @return
      **/
     public Boolean setBit(String key, Integer index, Boolean tag) {
         RedisCallback<Boolean> action = connection -> connection.setBit(key.getBytes(), index, tag);

@@ -1,11 +1,10 @@
-package com.kunbu.spring.bucks.utils.log;
+package com.kunbu.spring.bucks.utils.aop;
 
 import com.alibaba.fastjson.JSONObject;
-import com.kunbu.spring.bucks.annotation.ApiNote;
-import com.kunbu.spring.bucks.common.mongo.RequestLog;
+import com.kunbu.spring.bucks.common.entity.mongo.RequestLog;
 import com.kunbu.spring.bucks.constant.CommonConstant;
 import com.kunbu.spring.bucks.constant.HttpConstant;
-import com.kunbu.spring.bucks.dao.mongodb.RequestLogMongo;
+import com.kunbu.spring.bucks.dao.mongodb.LogMongoDB;
 import com.kunbu.spring.bucks.utils.IpUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -21,7 +20,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.Method;
 import java.util.Date;
 
 /**
@@ -37,7 +35,7 @@ public class RequestLogUtil {
     private static final Logger logger = LoggerFactory.getLogger(RequestLogUtil.class);
 
     @Autowired
-    private RequestLogMongo requestLogMongo;
+    private LogMongoDB logMongoDB;
 
     /**
      * * com.kunbu.spring.controller..*.*(..) 表示controller包以及其下子包中的类，类中的所有方法
@@ -78,7 +76,7 @@ public class RequestLogUtil {
                 log.setMethodName(signature.getName());
                 log.setParameterJson(JSONObject.toJSONString(request.getParameterMap()));
                 log.setCostTime(timeCost);
-                fillUpApiNote(log, joinPoint);
+//                fillUpApiNote(log, joinPoint);
 
                 log.setUserAgent(request.getHeader(HttpConstant.HTTP_HEADER_USER_AGENT));
                 log.setUrl(request.getRequestURL().toString());
@@ -95,7 +93,7 @@ public class RequestLogUtil {
                     log.setUserId(null);
                 }
                 logger.info(">>> RequestLogUtil responseResult:{}", JSONObject.toJSONString(result));
-                requestLogMongo.save(log);
+                logMongoDB.saveRequestLog(log);
             } catch (Exception e) {
                 logger.error(">>> RequestLogUtil aop handle error:", e);
             }
@@ -103,25 +101,5 @@ public class RequestLogUtil {
         return result;
     }
 
-    /**
-     * 接口说明
-     *
-     * @param log
-     * @param joinPoint
-     * @author kunbu
-     * @time 2019/8/26 17:41
-     * @return
-     **/
-    private void fillUpApiNote(RequestLog log, ProceedingJoinPoint joinPoint) {
-        Method[] ms = joinPoint.getTarget().getClass().getDeclaredMethods();
-        for (Method method : ms) {
-            if (method.getName().equals(joinPoint.getSignature().getName())) {
-                ApiNote apiNote = method.getAnnotation(ApiNote.class);
-                if (apiNote != null) {
-                    log.setDescription(apiNote.value());
-                }
-            }
-        }
-    }
 
 }

@@ -5,8 +5,8 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.kunbu.spring.bucks.common.ServiceResult;
 import com.kunbu.spring.bucks.common.dto.CategoryDTO;
-import com.kunbu.spring.bucks.common.entity.CategoryEntity;
-import com.kunbu.spring.bucks.constant.state.CommonStateEnum;
+import com.kunbu.spring.bucks.common.entity.mysql.CategoryEntity;
+import com.kunbu.spring.bucks.constant.biz.CommonStateEnum;
 import com.kunbu.spring.bucks.constant.CacheConstant;
 import com.kunbu.spring.bucks.dao.mysql.CategoryMapper;
 import com.kunbu.spring.bucks.error.bis.CategoryErrorEnum;
@@ -207,7 +207,7 @@ public class CategoryServiceImpl implements CategoryService {
                 cateDTO.setSubs(Lists.newArrayList());
                 cateDTOAll.add(cateDTO);
             });
-            // level -> list
+            // level -> listRequestLog
             Map<Integer, List<CategoryDTO>> level2cateMap = cateDTOAll.stream().collect(Collectors.groupingBy(CategoryDTO::getLevel));
             logger.info(">>> levels:{}", level2cateMap.keySet());
             for (int i = 1; i< level2cateMap.size(); i++) {

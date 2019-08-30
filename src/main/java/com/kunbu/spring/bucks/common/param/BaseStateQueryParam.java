@@ -6,7 +6,7 @@ package com.kunbu.spring.bucks.common.param;
  * @author: kunbu
  * @create: 2019-08-16 15:32
  **/
-public abstract class BaseDbQueryParam extends BaseQueryParam {
+public abstract class BaseStateQueryParam extends BaseQueryParam {
 
     private String state;
     private String exceptState;
@@ -29,8 +29,8 @@ public abstract class BaseDbQueryParam extends BaseQueryParam {
 
     @Override
     public String toString() {
-        return "BaseDbQueryParam{" +
-                "state='" + state + '\'' +
+        return "BaseStateQueryParam{" +
+                "biz='" + state + '\'' +
                 ", exceptState='" + exceptState + '\'' +
                 "} " + super.toString();
     }

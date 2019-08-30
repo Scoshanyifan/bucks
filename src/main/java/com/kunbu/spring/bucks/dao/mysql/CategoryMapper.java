@@ -1,6 +1,6 @@
 package com.kunbu.spring.bucks.dao.mysql;
 
-import com.kunbu.spring.bucks.common.entity.CategoryEntity;
+import com.kunbu.spring.bucks.common.entity.mysql.CategoryEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -23,7 +23,7 @@ public interface CategoryMapper {
 
     CategoryEntity selectOneUse(String state);
 
-    CategoryEntity selectByCategoryName(@Param("categoryName") String categoryName, @Param("state") String state);
+    CategoryEntity selectByCategoryName(@Param("categoryName") String categoryName, @Param("biz") String state);
 
     int updateByPrimaryKeySelective(CategoryEntity record);
 

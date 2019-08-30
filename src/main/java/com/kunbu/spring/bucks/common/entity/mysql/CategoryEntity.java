@@ -1,4 +1,6 @@
-package com.kunbu.spring.bucks.common.entity;
+package com.kunbu.spring.bucks.common.entity.mysql;
+
+import com.kunbu.spring.bucks.common.entity.BaseEntity;
 
 import java.io.Serializable;
 
@@ -90,7 +92,7 @@ public class CategoryEntity extends BaseEntity implements Serializable {
                 ", categoryName='" + categoryName + '\'' +
                 ", parentId='" + parentId + '\'' +
                 ", level=" + level +
-                ", state='" + state + '\'' +
+                ", biz='" + state + '\'' +
                 ", operatorId='" + operatorId + '\'' +
                 ", version=" + version +
                 "} " + super.toString();

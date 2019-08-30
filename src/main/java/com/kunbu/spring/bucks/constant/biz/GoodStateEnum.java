@@ -1,4 +1,4 @@
-package com.kunbu.spring.bucks.constant.state;
+package com.kunbu.spring.bucks.constant.biz;
 
 import org.apache.commons.lang3.StringUtils;
 

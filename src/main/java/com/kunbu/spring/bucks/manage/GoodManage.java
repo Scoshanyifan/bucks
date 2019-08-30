@@ -1,7 +1,7 @@
 package com.kunbu.spring.bucks.manage;
 
 import com.kunbu.spring.bucks.common.ApiResult;
-import com.kunbu.spring.bucks.common.param.GoodQueryParam;
+import com.kunbu.spring.bucks.common.param.mysql.GoodQueryParam;
 
 /**
  * @author: KunBu

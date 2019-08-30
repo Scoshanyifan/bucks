@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kunbu.spring.bucks.dao.mysql.GoodMapper">
-  <resultMap id="BaseResultMap" type="com.kunbu.spring.bucks.common.entity.GoodEntity">
+  <resultMap id="BaseResultMap" type="com.kunbu.spring.bucks.common.entity.mysql.GoodEntity">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="good_name" jdbcType="VARCHAR" property="goodName" />
     <result column="description" jdbcType="VARCHAR" property="description" />
@@ -26,7 +26,7 @@
     where id = #{id,jdbcType=VARCHAR}
   </select>
 
-  <select id="queryByCondition" parameterType="com.kunbu.spring.bucks.common.param.GoodQueryParam" resultMap="BaseResultMap">
+  <select id="queryByCondition" parameterType="com.kunbu.spring.bucks.common.param.mysql.GoodQueryParam" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from good
@@ -57,7 +57,7 @@
     delete from good
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.kunbu.spring.bucks.common.entity.GoodEntity">
+  <insert id="insert" parameterType="com.kunbu.spring.bucks.common.entity.mysql.GoodEntity">
     insert into good (id, good_name, description, 
       main_url, category_id, price, 
       actual_price, currency, `state`, 
@@ -69,7 +69,7 @@
       #{operatorId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.kunbu.spring.bucks.common.entity.GoodEntity">
+  <insert id="insertSelective" parameterType="com.kunbu.spring.bucks.common.entity.mysql.GoodEntity">
     insert into good
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -148,7 +148,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.kunbu.spring.bucks.common.entity.GoodEntity">
+  <update id="updateByPrimaryKeySelective" parameterType="com.kunbu.spring.bucks.common.entity.mysql.GoodEntity">
     update good
     <set>
       <if test="goodName != null">
@@ -187,7 +187,7 @@
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.kunbu.spring.bucks.common.entity.GoodEntity">
+  <update id="updateByPrimaryKey" parameterType="com.kunbu.spring.bucks.common.entity.mysql.GoodEntity">
     update good
     set good_name = #{goodName,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},

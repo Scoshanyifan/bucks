@@ -1,4 +1,6 @@
-package com.kunbu.spring.bucks.common.param;
+package com.kunbu.spring.bucks.common.param.mysql;
+
+import com.kunbu.spring.bucks.common.param.BaseStateQueryParam;
 
 import java.io.Serializable;
 import java.util.List;
@@ -9,7 +11,7 @@ import java.util.List;
  * @author: kunbu
  * @create: 2019-08-16 15:26
  **/
-public class GoodQueryParam extends BaseDbQueryParam implements Serializable {
+public class GoodQueryParam extends BaseStateQueryParam implements Serializable {
 
     private String goodNameLike;
     private String categoryId;

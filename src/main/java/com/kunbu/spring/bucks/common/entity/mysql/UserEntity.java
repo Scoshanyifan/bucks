@@ -1,4 +1,6 @@
-package com.kunbu.spring.bucks.common.entity;
+package com.kunbu.spring.bucks.common.entity.mysql;
+
+import com.kunbu.spring.bucks.common.entity.BaseEntity;
 
 import java.io.Serializable;
 
@@ -78,7 +80,7 @@ public class UserEntity extends BaseEntity implements Serializable {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", userType='" + userType + '\'' +
-                ", state='" + state + '\'' +
+                ", biz='" + state + '\'' +
                 "} " + super.toString();
     }
 }

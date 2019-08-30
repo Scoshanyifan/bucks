@@ -1,4 +1,6 @@
-package com.kunbu.spring.bucks.common.entity;
+package com.kunbu.spring.bucks.common.entity.mysql;
+
+import com.kunbu.spring.bucks.common.entity.BaseEntity;
 
 import java.io.Serializable;
 
@@ -113,7 +115,7 @@ public class GoodEntity extends BaseEntity implements Serializable {
                 ", price=" + price +
                 ", actualPrice=" + actualPrice +
                 ", currency='" + currency + '\'' +
-                ", state='" + state + '\'' +
+                ", biz='" + state + '\'' +
                 ", operatorId='" + operatorId + '\'' +
                 "} " + super.toString();
     }

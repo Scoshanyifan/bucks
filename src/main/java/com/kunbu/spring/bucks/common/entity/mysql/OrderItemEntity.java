@@ -1,4 +1,6 @@
-package com.kunbu.spring.bucks.common.entity;
+package com.kunbu.spring.bucks.common.entity.mysql;
+
+import com.kunbu.spring.bucks.common.entity.BaseEntity;
 
 import java.io.Serializable;
 
@@ -125,7 +127,7 @@ public class OrderItemEntity extends BaseEntity implements Serializable {
                 ", price=" + price +
                 ", totalPrice=" + totalPrice +
                 ", ext='" + ext + '\'' +
-                ", state='" + state + '\'' +
+                ", biz='" + state + '\'' +
                 "} " + super.toString();
     }
 }

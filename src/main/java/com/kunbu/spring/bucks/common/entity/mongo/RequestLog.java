@@ -1,4 +1,4 @@
-package com.kunbu.spring.bucks.common.mongo;
+package com.kunbu.spring.bucks.common.entity.mongo;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.IndexDirection;

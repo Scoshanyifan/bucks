@@ -2,7 +2,7 @@ package com.kunbu.spring.bucks.service;
 
 import com.kunbu.spring.bucks.common.ServiceResult;
 import com.kunbu.spring.bucks.common.dto.CategoryDTO;
-import com.kunbu.spring.bucks.common.entity.CategoryEntity;
+import com.kunbu.spring.bucks.common.entity.mysql.CategoryEntity;
 
 import java.util.Map;
 

@@ -1,5 +1,6 @@
-package com.kunbu.spring.bucks.utils.log;
+package com.kunbu.spring.bucks.utils;
 
+import com.kunbu.spring.bucks.constant.other.LogTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +21,7 @@ public class LoggerUtil {
      * @return
      **/
     public static Logger getExecutorLogger() {
-        return LoggerFactory.getLogger(LogEnum.EXECUTOR.getName());
+        return LoggerFactory.getLogger(LogTypeEnum.EXECUTOR.getName());
     }
 
     /**
@@ -32,6 +33,6 @@ public class LoggerUtil {
      * @return
      **/
     public static Logger getMethodConsumeLogger() {
-        return LoggerFactory.getLogger(LogEnum.METHOD_CONSUME.getName());
+        return LoggerFactory.getLogger(LogTypeEnum.METHOD_CONSUME.getName());
     }
 }

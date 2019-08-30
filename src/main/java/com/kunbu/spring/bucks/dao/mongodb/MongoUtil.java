@@ -1,6 +1,5 @@
 package com.kunbu.spring.bucks.dao.mongodb;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
@@ -21,7 +20,7 @@ public class MongoUtil {
     }
 
     public static Criteria strRegex(String name, String regex) {
-        if (StringUtils.isNoneBlank(name, regex)) {
+        if (name != null && regex != null) {
             return Criteria.where(name).regex(regex);
         } else {
             return null;
@@ -29,7 +28,15 @@ public class MongoUtil {
     }
 
     public static Criteria strIs(String name, String value) {
-        if (StringUtils.isNoneBlank(name, value)) {
+        if (name != null && value != null) {
+            return Criteria.where(name).is(value);
+        } else {
+            return null;
+        }
+    }
+
+    public static Criteria objectIs(String name, Object value) {
+        if (name != null && value != null) {
             return Criteria.where(name).is(value);
         } else {
             return null;

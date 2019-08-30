@@ -2,7 +2,7 @@ package com.kunbu.spring.bucks.service;
 
 import com.github.pagehelper.PageInfo;
 import com.kunbu.spring.bucks.common.ServiceResult;
-import com.kunbu.spring.bucks.common.param.GoodQueryParam;
+import com.kunbu.spring.bucks.common.param.mysql.GoodQueryParam;
 import com.kunbu.spring.bucks.common.vo.GoodInfoVO;
 
 /**

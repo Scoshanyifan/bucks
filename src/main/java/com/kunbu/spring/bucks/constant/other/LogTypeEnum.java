@@ -1,11 +1,11 @@
-package com.kunbu.spring.bucks.utils.log;
+package com.kunbu.spring.bucks.constant.other;
 
 /**
  * @author: KunBu
  * @time: 2019/8/7 11:02
  * @description: 日志类型
  */
-public enum LogEnum {
+public enum LogTypeEnum {
 
     //
     EXECUTOR("Executor"),
@@ -13,7 +13,7 @@ public enum LogEnum {
 
     ;
 
-    LogEnum(String name){
+    LogTypeEnum(String name){
         this.name = name;
     }
 

@@ -1,4 +1,6 @@
-package com.kunbu.spring.bucks.common.entity;
+package com.kunbu.spring.bucks.common.entity.mysql;
+
+import com.kunbu.spring.bucks.common.entity.BaseEntity;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -113,7 +115,7 @@ public class PayOrderEntity extends BaseEntity implements Serializable {
                 ", outTradeNo='" + outTradeNo + '\'' +
                 ", amount=" + amount +
                 ", payTime=" + payTime +
-                ", state='" + state + '\'' +
+                ", biz='" + state + '\'' +
                 "} " + super.toString();
     }
 }

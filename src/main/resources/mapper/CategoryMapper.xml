@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kunbu.spring.bucks.dao.mysql.CategoryMapper">
-  <resultMap id="BaseResultMap" type="com.kunbu.spring.bucks.common.entity.CategoryEntity">
+  <resultMap id="BaseResultMap" type="com.kunbu.spring.bucks.common.entity.mysql.CategoryEntity">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="category_code" jdbcType="INTEGER" property="categoryCode" />
     <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
@@ -59,7 +59,7 @@
     delete from category
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.kunbu.spring.bucks.common.entity.CategoryEntity">
+  <insert id="insert" parameterType="com.kunbu.spring.bucks.common.entity.mysql.CategoryEntity">
     insert into category (id, category_code, category_name,
       parent_id, `level`, `state`,
       operator_id, version, create_time,
@@ -82,7 +82,7 @@
         #{item.modifyTime,jdbcType=TIMESTAMP})
     </foreach>
   </insert>
-  <insert id="insertSelective" parameterType="com.kunbu.spring.bucks.common.entity.CategoryEntity">
+  <insert id="insertSelective" parameterType="com.kunbu.spring.bucks.common.entity.mysql.CategoryEntity">
     insert into category
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -149,7 +149,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.kunbu.spring.bucks.common.entity.CategoryEntity">
+  <update id="updateByPrimaryKeySelective" parameterType="com.kunbu.spring.bucks.common.entity.mysql.CategoryEntity">
     update category
     <set>
       <if test="categoryCode != null">
@@ -182,7 +182,7 @@
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.kunbu.spring.bucks.common.entity.CategoryEntity">
+  <update id="updateByPrimaryKey" parameterType="com.kunbu.spring.bucks.common.entity.mysql.CategoryEntity">
     update category
     set category_code = #{categoryCode,jdbcType=INTEGER},
       category_name = #{categoryName,jdbcType=VARCHAR},

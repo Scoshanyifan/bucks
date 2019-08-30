@@ -4,7 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Maps;
 import com.kunbu.spring.bucks.common.ApiResult;
 import com.kunbu.spring.bucks.common.ServiceResult;
-import com.kunbu.spring.bucks.common.param.GoodQueryParam;
+import com.kunbu.spring.bucks.common.param.mysql.GoodQueryParam;
 import com.kunbu.spring.bucks.common.vo.GoodInfoVO;
 import com.kunbu.spring.bucks.service.CategoryService;
 import com.kunbu.spring.bucks.service.GoodService;

@@ -1,8 +1,10 @@
 package com.kunbu.spring.bucks.dao.mongodb;
 
 import com.github.pagehelper.PageInfo;
-import com.kunbu.spring.bucks.common.mongo.RequestLog;
-import com.kunbu.spring.bucks.common.param.RequestLogQueryParam;
+import com.kunbu.spring.bucks.common.entity.mongo.OperateLog;
+import com.kunbu.spring.bucks.common.entity.mongo.RequestLog;
+import com.kunbu.spring.bucks.common.param.mongo.OperateLogQueryParam;
+import com.kunbu.spring.bucks.common.param.mongo.RequestLogQueryParam;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,20 +23,20 @@ import java.util.List;
  * @create: 2019-08-26 17:38
  **/
 @Component
-public class RequestLogMongo {
+public class LogMongoDB {
 
-    private static final Logger logger = LoggerFactory.getLogger(RequestLogMongo.class);
+    private static final Logger logger = LoggerFactory.getLogger(LogMongoDB.class);
 
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public RequestLog save(RequestLog log) {
+    public RequestLog saveRequestLog(RequestLog log) {
         RequestLog result = mongoTemplate.save(log);
         return result;
     }
 
-    public PageInfo<List<RequestLog>> list(RequestLogQueryParam param) {
-        logger.info(">>> RequestLogMongo list, param:{}", param);
+    public PageInfo<List<RequestLog>> listRequestLog(RequestLogQueryParam param) {
+        logger.info(">>> LogMongoDB listRequestLog, param:{}", param);
         PageInfo pageInfo = new PageInfo();
         pageInfo.setPages(0);
         pageInfo.setTotal(0);
@@ -80,6 +82,18 @@ public class RequestLogMongo {
             pageInfo.setPages((int) (total / param.getPageSize()));
         }
         return pageInfo;
+    }
+
+    public OperateLog saveOperateLog(OperateLog log) {
+        OperateLog result = mongoTemplate.save(log);
+        return result;
+    }
+
+    public PageInfo<List<OperateLog>> listOperateLog(OperateLogQueryParam param) {
+
+        // TODO
+
+        return null;
     }
 
 }

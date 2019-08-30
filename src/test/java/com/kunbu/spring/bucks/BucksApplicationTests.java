@@ -5,9 +5,9 @@ import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.kunbu.spring.bucks.common.dto.CategoryDTO;
-import com.kunbu.spring.bucks.common.mongo.RequestLog;
-import com.kunbu.spring.bucks.common.param.RequestLogQueryParam;
-import com.kunbu.spring.bucks.dao.mongodb.RequestLogMongo;
+import com.kunbu.spring.bucks.common.entity.mongo.RequestLog;
+import com.kunbu.spring.bucks.common.param.mongo.RequestLogQueryParam;
+import com.kunbu.spring.bucks.dao.mongodb.LogMongoDB;
 import com.kunbu.spring.bucks.dao.redis.RedisManager;
 import com.kunbu.spring.bucks.utils.IDGenerateUtil;
 import org.apache.commons.collections4.CollectionUtils;
@@ -34,7 +34,7 @@ public class BucksApplicationTests {
     private RedisManager redisManager;
 
     @Autowired
-    private RequestLogMongo requestLogMongo;
+    private LogMongoDB logMongoDB;
 
     @Test
     public void testRedis() {
@@ -53,7 +53,7 @@ public class BucksApplicationTests {
         RequestLog log = new RequestLog();
         log.setDescription("mongodb");
         log.setCreateTime(new Date());
-        RequestLog result = requestLogMongo.save(log);
+        RequestLog result = logMongoDB.saveRequestLog(log);
         logger.info(">>> log id:{}", result.getId());
 
         RequestLogQueryParam param = new RequestLogQueryParam();
@@ -61,7 +61,7 @@ public class BucksApplicationTests {
         // 时区问题，spring帮我们做了转换
         param.setStartTime(new Date(nowTime - 1000L * 60 * 10));
         param.setEndTime(new Date());
-        PageInfo pageInfo = requestLogMongo.list(param);
+        PageInfo pageInfo = logMongoDB.listRequestLog(param);
         logger.info(pageInfo.toString());
     }
 

@@ -1,6 +1,6 @@
 package com.kunbu.spring.bucks.dao.mysql;
 
-import com.kunbu.spring.bucks.common.entity.OrderItemEntity;
+import com.kunbu.spring.bucks.common.entity.mysql.OrderItemEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
