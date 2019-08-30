@@ -7,6 +7,7 @@ import com.kunbu.spring.bucks.common.entity.mongo.RequestLog;
 import com.kunbu.spring.bucks.common.entity.redis.UserInfo;
 import com.kunbu.spring.bucks.constant.CommonConstant;
 import com.kunbu.spring.bucks.constant.HttpConstant;
+import com.kunbu.spring.bucks.constant.other.OperateTypeEnum;
 import com.kunbu.spring.bucks.dao.mongodb.LogMongoDB;
 import com.kunbu.spring.bucks.dao.redis.RedisManager;
 import com.kunbu.spring.bucks.utils.IpUtil;
@@ -60,7 +61,6 @@ public class RequestLogUtil {
 
     @Around("pointCut()")
     public Object requestLog(ProceedingJoinPoint joinPoint) {
-
         long startTime = System.currentTimeMillis();
 
         boolean success = false;
@@ -69,7 +69,6 @@ public class RequestLogUtil {
             success = true;
             result = joinPoint.proceed();
         } catch (Throwable e) {
-
             logger.error(">>> RequestLogUtil aop proceed error:", e);
             // TODO 邮件通知
         } finally {
@@ -78,11 +77,18 @@ public class RequestLogUtil {
                 ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
                 HttpServletRequest request = attributes.getRequest();
 
+                Signature signature = joinPoint.getSignature();
+                long timeCost = System.currentTimeMillis() - startTime;
+                if(timeCost >= CommonConstant.CONTROLLER_CONSUMPTION_MILLIONS) {
+                    logger.warn("RequestLogUtil api consume:{} ms, method:{}", timeCost, signature.toShortString());
+                }
+
                 RequestLog log = new RequestLog();
 
                 String ip = IpUtil.getIp(request);
                 String token = request.getHeader(HttpConstant.HTTP_HEADER_TOKEN);
                 String apiNote = getApiNote(joinPoint);
+                String methodName = signature.getName();
                 if (StringUtils.isNotBlank(token)) {
                     //redis取用户信息
                     UserInfo userInfo = (UserInfo) redisManager.getObject(token);
@@ -90,17 +96,12 @@ public class RequestLogUtil {
                     log.setUserId(userInfo.getUid());
                     //身份是admin且执行成功才保存操作日志
                     if (TokenUtil.checkAdmin(token) && success) {
-                        saveOperateLog(ip, startTime, userInfo.getUid(), apiNote);
+                        saveOperateLog(ip, startTime, userInfo.getUid(), methodName, apiNote);
                     }
                 }
 
-                Signature signature = joinPoint.getSignature();
-                long timeCost = System.currentTimeMillis() - startTime;
-                if(timeCost >= CommonConstant.CONTROLLER_CONSUMPTION_MILLIONS) {
-                    logger.warn("RequestLogUtil api consume:{} ms, method:{}", timeCost, signature.toShortString());
-                }
                 log.setClassName(signature.getDeclaringTypeName());
-                log.setMethodName(signature.getName());
+                log.setMethodName(methodName);
                 log.setParameterJson(JSONObject.toJSONString(request.getParameterMap()));
                 log.setUrl(request.getRequestURL().toString());
                 log.setUserAgent(request.getHeader(HttpConstant.HTTP_HEADER_USER_AGENT));
@@ -130,15 +131,16 @@ public class RequestLogUtil {
      * @param ip
      * @param startTime
      * @param operatorId
+     * @param methodName
      * @param note
      */
-    private void saveOperateLog(String ip, long startTime, String operatorId, String note) {
+    private void saveOperateLog(String ip, long startTime, String operatorId, String methodName, String note) {
         OperateLog log = new OperateLog();
         log.setOperateIp(ip);
         log.setOperateTime(new Date(startTime));
         log.setOperatorId(operatorId);
-        log.setOperateType(null);
-        log.setContent(null);
+        log.setContent(note);
+        log.setOperateType(OperateTypeEnum.getOperateType(methodName).name());
         logMongoDB.saveOperateLog(log);
     }
 
@@ -162,4 +164,5 @@ public class RequestLogUtil {
         }
         return null;
     }
+
 }
