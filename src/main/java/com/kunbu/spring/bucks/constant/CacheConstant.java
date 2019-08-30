@@ -9,4 +9,6 @@ public interface CacheConstant {
 
     String CACHE_KEY_CATEGORY_MAP = "key:category:map";
 
+    String CACHE_KEY_TOKEN_PREFIX = "token:";
+
 }

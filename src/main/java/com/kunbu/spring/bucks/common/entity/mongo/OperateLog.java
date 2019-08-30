@@ -3,6 +3,8 @@ package com.kunbu.spring.bucks.common.entity.mongo;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
+
 /**
  * 操作日志
  *
@@ -22,7 +24,7 @@ public class OperateLog {
 
     private String operatorId;
 
-    private String operateTime;
+    private Date operateTime;
 
     private String operateIp;
 
@@ -58,11 +60,11 @@ public class OperateLog {
         this.operatorId = operatorId;
     }
 
-    public String getOperateTime() {
+    public Date getOperateTime() {
         return operateTime;
     }
 
-    public void setOperateTime(String operateTime) {
+    public void setOperateTime(Date operateTime) {
         this.operateTime = operateTime;
     }
 

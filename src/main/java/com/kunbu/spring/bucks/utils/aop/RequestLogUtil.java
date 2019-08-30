@@ -1,11 +1,16 @@
 package com.kunbu.spring.bucks.utils.aop;
 
 import com.alibaba.fastjson.JSONObject;
+import com.kunbu.spring.bucks.annotation.ApiNote;
+import com.kunbu.spring.bucks.common.entity.mongo.OperateLog;
 import com.kunbu.spring.bucks.common.entity.mongo.RequestLog;
+import com.kunbu.spring.bucks.common.entity.redis.UserInfo;
 import com.kunbu.spring.bucks.constant.CommonConstant;
 import com.kunbu.spring.bucks.constant.HttpConstant;
 import com.kunbu.spring.bucks.dao.mongodb.LogMongoDB;
+import com.kunbu.spring.bucks.dao.redis.RedisManager;
 import com.kunbu.spring.bucks.utils.IpUtil;
+import com.kunbu.spring.bucks.utils.TokenUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -20,6 +25,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Method;
 import java.util.Date;
 
 /**
@@ -37,6 +43,9 @@ public class RequestLogUtil {
     @Autowired
     private LogMongoDB logMongoDB;
 
+    @Autowired
+    private RedisManager redisManager;
+
     /**
      * * com.kunbu.spring.controller..*.*(..) 表示controller包以及其下子包中的类，类中的所有方法
      * * com.kunbu.spring.controller.*.*(..)) 则仅表示controller包下的类
@@ -51,21 +60,39 @@ public class RequestLogUtil {
 
     @Around("pointCut()")
     public Object requestLog(ProceedingJoinPoint joinPoint) {
-        RequestLog log = new RequestLog();
-        long startTime = System.currentTimeMillis();
-        log.setCreateTime(new Date(startTime));
 
+        long startTime = System.currentTimeMillis();
+
+        boolean success = false;
         Object result = null;
         try {
+            success = true;
             result = joinPoint.proceed();
         } catch (Throwable e) {
-            log.setHttpStatus(HttpConstant.HTTP_STATUS_ERROR);
+
             logger.error(">>> RequestLogUtil aop proceed error:", e);
             // TODO 邮件通知
         } finally {
+            logger.info(">>> RequestLogUtil response result:{}", JSONObject.toJSONString(result));
             try {
                 ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
                 HttpServletRequest request = attributes.getRequest();
+
+                RequestLog log = new RequestLog();
+
+                String ip = IpUtil.getIp(request);
+                String token = request.getHeader(HttpConstant.HTTP_HEADER_TOKEN);
+                String apiNote = getApiNote(joinPoint);
+                if (StringUtils.isNotBlank(token)) {
+                    //redis取用户信息
+                    UserInfo userInfo = (UserInfo) redisManager.getObject(token);
+                    log.setToken(token);
+                    log.setUserId(userInfo.getUid());
+                    //身份是admin且执行成功才保存操作日志
+                    if (TokenUtil.checkAdmin(token) && success) {
+                        saveOperateLog(ip, startTime, userInfo.getUid(), apiNote);
+                    }
+                }
 
                 Signature signature = joinPoint.getSignature();
                 long timeCost = System.currentTimeMillis() - startTime;
@@ -75,24 +102,21 @@ public class RequestLogUtil {
                 log.setClassName(signature.getDeclaringTypeName());
                 log.setMethodName(signature.getName());
                 log.setParameterJson(JSONObject.toJSONString(request.getParameterMap()));
-                log.setCostTime(timeCost);
-//                fillUpApiNote(log, joinPoint);
-
-                log.setUserAgent(request.getHeader(HttpConstant.HTTP_HEADER_USER_AGENT));
                 log.setUrl(request.getRequestURL().toString());
-                log.setIp(IpUtil.getIp(request));
+                log.setUserAgent(request.getHeader(HttpConstant.HTTP_HEADER_USER_AGENT));
+
+                log.setCostTime(timeCost);
+                log.setDescription(apiNote);
+                log.setCreateTime(new Date(startTime));
+                log.setIp(ip);
                 // GET POST
                 log.setHttpMethod(request.getMethod().toUpperCase());
-                if (log.getHttpStatus() == null) {
+                // 200 500
+                if (success) {
                     log.setHttpStatus(HttpConstant.HTTP_STATUS_OK);
+                } else {
+                    log.setHttpStatus(HttpConstant.HTTP_STATUS_ERROR);
                 }
-                String token = request.getHeader(HttpConstant.HTTP_HEADER_TOKEN);
-                if (StringUtils.isNotBlank(token)) {
-                    log.setToken(token);
-                    //TODO redis取用户信息
-                    log.setUserId(null);
-                }
-                logger.info(">>> RequestLogUtil responseResult:{}", JSONObject.toJSONString(result));
                 logMongoDB.saveRequestLog(log);
             } catch (Exception e) {
                 logger.error(">>> RequestLogUtil aop handle error:", e);
@@ -101,5 +125,41 @@ public class RequestLogUtil {
         return result;
     }
 
+    /**
+     * 保存操作日志
+     * @param ip
+     * @param startTime
+     * @param operatorId
+     * @param note
+     */
+    private void saveOperateLog(String ip, long startTime, String operatorId, String note) {
+        OperateLog log = new OperateLog();
+        log.setOperateIp(ip);
+        log.setOperateTime(new Date(startTime));
+        log.setOperatorId(operatorId);
+        log.setOperateType(null);
+        log.setContent(null);
+        logMongoDB.saveOperateLog(log);
+    }
 
+    /**
+     * 接口功能说明
+     *
+     * @param joinPoint
+     * @author kunbu
+     * @time 2019/8/26 17:41
+     * @return
+     **/
+    private String getApiNote(ProceedingJoinPoint joinPoint) {
+        Method[] ms = joinPoint.getTarget().getClass().getDeclaredMethods();
+        for (Method method : ms) {
+            if (method.getName().equals(joinPoint.getSignature().getName())) {
+                ApiNote apiNote = method.getAnnotation(ApiNote.class);
+                if (apiNote != null) {
+                    return apiNote.value();
+                }
+            }
+        }
+        return null;
+    }
 }
