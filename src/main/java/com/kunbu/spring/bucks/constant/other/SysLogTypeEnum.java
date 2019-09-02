@@ -5,7 +5,7 @@ package com.kunbu.spring.bucks.constant.other;
  * @time: 2019/8/7 11:02
  * @description: 日志类型
  */
-public enum LogTypeEnum {
+public enum SysLogTypeEnum {
 
     //
     EXECUTOR("Executor"),
@@ -13,7 +13,7 @@ public enum LogTypeEnum {
 
     ;
 
-    LogTypeEnum(String name){
+    SysLogTypeEnum(String name){
         this.name = name;
     }
 

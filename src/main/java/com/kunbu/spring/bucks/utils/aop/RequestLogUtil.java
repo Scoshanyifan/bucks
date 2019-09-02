@@ -7,7 +7,6 @@ import com.kunbu.spring.bucks.common.entity.mongo.RequestLog;
 import com.kunbu.spring.bucks.common.entity.redis.UserInfo;
 import com.kunbu.spring.bucks.constant.CommonConstant;
 import com.kunbu.spring.bucks.constant.HttpConstant;
-import com.kunbu.spring.bucks.constant.other.OperateTypeEnum;
 import com.kunbu.spring.bucks.dao.mongodb.LogMongoDB;
 import com.kunbu.spring.bucks.dao.redis.RedisManager;
 import com.kunbu.spring.bucks.utils.IpUtil;
@@ -87,8 +86,8 @@ public class RequestLogUtil {
 
                 String ip = IpUtil.getIp(request);
                 String token = request.getHeader(HttpConstant.HTTP_HEADER_TOKEN);
-                String apiNote = getApiNote(joinPoint);
                 String methodName = signature.getName();
+                ApiNote note = getApiNote(joinPoint);
                 if (StringUtils.isNotBlank(token)) {
                     //redis取用户信息
                     UserInfo userInfo = (UserInfo) redisManager.getObject(token);
@@ -96,7 +95,7 @@ public class RequestLogUtil {
                     log.setUserId(userInfo.getUid());
                     //身份是admin且执行成功才保存操作日志
                     if (TokenUtil.checkAdmin(token) && success) {
-                        saveOperateLog(ip, startTime, userInfo.getUid(), methodName, apiNote);
+                        saveOperateLog(ip, startTime, userInfo.getUid(), getParams(joinPoint), note);
                     }
                 }
 
@@ -107,7 +106,7 @@ public class RequestLogUtil {
                 log.setUserAgent(request.getHeader(HttpConstant.HTTP_HEADER_USER_AGENT));
 
                 log.setCostTime(timeCost);
-                log.setDescription(apiNote);
+                log.setDescription(note != null ? note.value() : null);
                 log.setCreateTime(new Date(startTime));
                 log.setIp(ip);
                 // GET POST
@@ -131,16 +130,19 @@ public class RequestLogUtil {
      * @param ip
      * @param startTime
      * @param operatorId
-     * @param methodName
+     * @param params
      * @param note
      */
-    private void saveOperateLog(String ip, long startTime, String operatorId, String methodName, String note) {
+    private void saveOperateLog(String ip, long startTime, String operatorId, String params, ApiNote note) {
         OperateLog log = new OperateLog();
         log.setOperateIp(ip);
         log.setOperateTime(new Date(startTime));
         log.setOperatorId(operatorId);
-        log.setContent(note);
-        log.setOperateType(OperateTypeEnum.getOperateType(methodName).name());
+        log.setParams(params);
+        if (note != null) {
+            log.setContent(note.value());
+            log.setOperateType(note.type().name());
+        }
         logMongoDB.saveOperateLog(log);
     }
 
@@ -152,17 +154,34 @@ public class RequestLogUtil {
      * @time 2019/8/26 17:41
      * @return
      **/
-    private String getApiNote(ProceedingJoinPoint joinPoint) {
+    private ApiNote getApiNote(ProceedingJoinPoint joinPoint) {
         Method[] ms = joinPoint.getTarget().getClass().getDeclaredMethods();
         for (Method method : ms) {
             if (method.getName().equals(joinPoint.getSignature().getName())) {
                 ApiNote apiNote = method.getAnnotation(ApiNote.class);
                 if (apiNote != null) {
-                    return apiNote.value();
+                    return apiNote;
                 }
             }
         }
         return null;
+    }
+
+    /**
+     * 获取接口参数
+     *
+     * @param joinPoint
+     * @author kunbu
+     * @time 2019/9/2 14:24
+     * @return
+     **/
+    private String getParams(ProceedingJoinPoint joinPoint) {
+        Object[] args = joinPoint.getArgs();
+        StringBuilder str = new StringBuilder();
+        for (int i = 0; i < args.length; i++) {
+            str.append(args[i] + ";");
+        }
+        return str.toString();
     }
 
 }

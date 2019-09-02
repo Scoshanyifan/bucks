@@ -28,6 +28,8 @@ public class OperateLog {
 
     private String operateIp;
 
+    private String params;
+
     public String getId() {
         return id;
     }
@@ -76,6 +78,14 @@ public class OperateLog {
         this.operateIp = operateIp;
     }
 
+    public String getParams() {
+        return params;
+    }
+
+    public void setParams(String params) {
+        this.params = params;
+    }
+
     @Override
     public String toString() {
         return "OperateLog{" +
@@ -83,8 +93,9 @@ public class OperateLog {
                 ", operateType='" + operateType + '\'' +
                 ", content='" + content + '\'' +
                 ", operatorId='" + operatorId + '\'' +
-                ", operateTime='" + operateTime + '\'' +
+                ", operateTime=" + operateTime +
                 ", operateIp='" + operateIp + '\'' +
+                ", params='" + params + '\'' +
                 '}';
     }
 }
