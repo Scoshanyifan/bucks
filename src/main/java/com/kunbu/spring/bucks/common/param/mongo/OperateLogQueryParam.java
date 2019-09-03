@@ -2,6 +2,8 @@ package com.kunbu.spring.bucks.common.param.mongo;
 
 import com.kunbu.spring.bucks.common.param.BaseQueryParam;
 
+import java.util.Date;
+
 /**
  * @program: bucks
  * @description:
@@ -16,9 +18,11 @@ public class OperateLogQueryParam extends BaseQueryParam {
 
     private String operatorId;
 
-    private String operateTimeStart;
+    private String operatorName;
 
-    private String operateTimeEnd;
+    private Date operateTimeStart;
+
+    private Date operateTimeEnd;
 
     public String getOperateType() {
         return operateType;
@@ -44,20 +48,28 @@ public class OperateLogQueryParam extends BaseQueryParam {
         this.operatorId = operatorId;
     }
 
-    public String getOperateTimeStart() {
+    public Date getOperateTimeStart() {
         return operateTimeStart;
     }
 
-    public void setOperateTimeStart(String operateTimeStart) {
+    public void setOperateTimeStart(Date operateTimeStart) {
         this.operateTimeStart = operateTimeStart;
     }
 
-    public String getOperateTimeEnd() {
+    public Date getOperateTimeEnd() {
         return operateTimeEnd;
     }
 
-    public void setOperateTimeEnd(String operateTimeEnd) {
+    public void setOperateTimeEnd(Date operateTimeEnd) {
         this.operateTimeEnd = operateTimeEnd;
+    }
+
+    public String getOperatorName() {
+        return operatorName;
+    }
+
+    public void setOperatorName(String operatorName) {
+        this.operatorName = operatorName;
     }
 
     @Override
@@ -66,6 +78,7 @@ public class OperateLogQueryParam extends BaseQueryParam {
                 "operateType='" + operateType + '\'' +
                 ", content='" + content + '\'' +
                 ", operatorId='" + operatorId + '\'' +
+                ", operatorName='" + operatorName + '\'' +
                 ", operateTimeStart='" + operateTimeStart + '\'' +
                 ", operateTimeEnd='" + operateTimeEnd + '\'' +
                 "} " + super.toString();

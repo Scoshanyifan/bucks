@@ -1,6 +1,8 @@
 package com.kunbu.spring.bucks.common.entity.mongo;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.IndexDirection;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
@@ -24,6 +26,10 @@ public class OperateLog {
 
     private String operatorId;
 
+    /** 冗余操作人名字，便于模糊查询 */
+    private String operatorName;
+
+    @Indexed(direction = IndexDirection.DESCENDING)
     private Date operateTime;
 
     private String operateIp;
@@ -86,6 +92,14 @@ public class OperateLog {
         this.params = params;
     }
 
+    public String getOperatorName() {
+        return operatorName;
+    }
+
+    public void setOperatorName(String operatorName) {
+        this.operatorName = operatorName;
+    }
+
     @Override
     public String toString() {
         return "OperateLog{" +
@@ -93,6 +107,7 @@ public class OperateLog {
                 ", operateType='" + operateType + '\'' +
                 ", content='" + content + '\'' +
                 ", operatorId='" + operatorId + '\'' +
+                ", operatorName='" + operatorName + '\'' +
                 ", operateTime=" + operateTime +
                 ", operateIp='" + operateIp + '\'' +
                 ", params='" + params + '\'' +

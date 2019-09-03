@@ -2,7 +2,6 @@ package com.kunbu.spring.bucks.constant.other;
 
 import com.google.common.collect.Lists;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +41,7 @@ public enum OperateTypeEnum {
         return value;
     }
 
+    @Deprecated
     public static OperateTypeEnum getOperateType(String methodName) {
         String lowMethodName = methodName.toLowerCase();
         for (Map.Entry<OperateTypeEnum, List<String>> en : operateType2MethodName.entrySet()) {

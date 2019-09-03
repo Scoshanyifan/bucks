@@ -92,10 +92,10 @@ public class RequestLogUtil {
                     //redis取用户信息
                     UserInfo userInfo = (UserInfo) redisManager.getObject(token);
                     log.setToken(token);
-                    log.setUserId(userInfo.getUid());
-                    //身份是admin且执行成功才保存操作日志
+                    log.setUserId(userInfo.getUserId());
+                    //身份是admin且方法执行成功才保存操作日志
                     if (TokenUtil.checkAdmin(token) && success) {
-                        saveOperateLog(ip, startTime, userInfo.getUid(), getParams(joinPoint), note);
+                        saveOperateLog(ip, startTime, userInfo.getUserId(), userInfo.getUserName(), getParams(joinPoint), note);
                     }
                 }
 
@@ -117,6 +117,7 @@ public class RequestLogUtil {
                 } else {
                     log.setHttpStatus(HttpConstant.HTTP_STATUS_ERROR);
                 }
+                // 请求日志每次都会保存
                 logMongoDB.saveRequestLog(log);
             } catch (Exception e) {
                 logger.error(">>> RequestLogUtil aop handle error:", e);
@@ -133,17 +134,19 @@ public class RequestLogUtil {
      * @param params
      * @param note
      */
-    private void saveOperateLog(String ip, long startTime, String operatorId, String params, ApiNote note) {
-        OperateLog log = new OperateLog();
-        log.setOperateIp(ip);
-        log.setOperateTime(new Date(startTime));
-        log.setOperatorId(operatorId);
-        log.setParams(params);
+    private void saveOperateLog(String ip, long startTime, String operatorId, String operatorName, String params, ApiNote note) {
+        // 只有标注了ApiNote注解的才保存操作日志（过滤查询等）
         if (note != null) {
+            OperateLog log = new OperateLog();
+            log.setOperateIp(ip);
+            log.setOperateTime(new Date(startTime));
+            log.setOperatorId(operatorId);
+            log.setOperatorName(operatorName);
+            log.setParams(params);
             log.setContent(note.value());
             log.setOperateType(note.type().name());
+            logMongoDB.saveOperateLog(log);
         }
-        logMongoDB.saveOperateLog(log);
     }
 
     /**

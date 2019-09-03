@@ -16,7 +16,13 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ApiNote {
 
+    /**
+     * 操作说明
+     **/
     String value() default "";
 
+    /**
+     * 操作类型
+     **/
     OperateTypeEnum type();
 }

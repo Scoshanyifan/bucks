@@ -9,12 +9,13 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
+ * spring-mongo https://my.oschina.net/u/3452433/blog/2999501
+ *
  * @program: bucks
  * @description:
  * @author: kunbu
  * @create: 2019-08-26 17:10
  **/
-
 @Document("requestlog") //映射到数据库的一个集合（collection为集合名称）
 public class RequestLog implements Serializable {
     /**
@@ -37,9 +38,8 @@ public class RequestLog implements Serializable {
     private String userAgent;
 
     private Long costTime;
-
     /**
-     * //创建单字段索引（默认ASCENDING 升序、DESCENDING 降序）
+     * 创建单字段索引（默认ASCENDING 升序、DESCENDING 降序）
      **/
     @Indexed(direction = IndexDirection.DESCENDING)
     private Date createTime;

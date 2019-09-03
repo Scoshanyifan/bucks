@@ -1,10 +1,10 @@
 package com.kunbu.spring.bucks;
 
 import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.kunbu.spring.bucks.common.dto.CategoryDTO;
+import com.kunbu.spring.bucks.common.PageResult;
 import com.kunbu.spring.bucks.common.entity.mongo.RequestLog;
 import com.kunbu.spring.bucks.common.param.mongo.RequestLogQueryParam;
 import com.kunbu.spring.bucks.dao.mongodb.LogMongoDB;
@@ -61,7 +61,7 @@ public class BucksApplicationTests {
         // 时区问题，spring帮我们做了转换
         param.setStartTime(new Date(nowTime - 1000L * 60 * 10));
         param.setEndTime(new Date());
-        PageInfo pageInfo = logMongoDB.listRequestLog(param);
+        PageResult pageInfo = logMongoDB.listRequestLog(param);
         logger.info(pageInfo.toString());
     }
 
