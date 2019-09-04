@@ -3,12 +3,11 @@ package com.kunbu.spring.bucks;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.kunbu.spring.bucks.common.dto.CategoryDTO;
 import com.kunbu.spring.bucks.common.PageResult;
+import com.kunbu.spring.bucks.common.dto.CategoryDTO;
 import com.kunbu.spring.bucks.common.entity.mongo.RequestLog;
 import com.kunbu.spring.bucks.common.param.mongo.RequestLogQueryParam;
 import com.kunbu.spring.bucks.dao.mongodb.LogMongoDB;
-import com.kunbu.spring.bucks.dao.redis.RedisManager;
 import com.kunbu.spring.bucks.utils.IDGenerateUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
@@ -31,21 +30,7 @@ public class BucksApplicationTests {
     private static final Logger logger = LoggerFactory.getLogger(BucksApplicationTests.class);
 
     @Autowired
-    private RedisManager redisManager;
-
-    @Autowired
     private LogMongoDB logMongoDB;
-
-    @Test
-    public void testRedis() {
-
-        boolean setValue = redisManager.set("name", "kunbu");
-        String strResult = redisManager.getString("name");
-        logger.info(">>> setValue:{}, strResult:{}, objResult:{}", setValue, strResult);
-        boolean incrValue = redisManager.setnx("incrNum", 2L);
-        long incrResult = redisManager.incr("incrNum");
-        logger.info(">>> incrValue:{}, incrResult:{}", incrValue, incrResult);
-    }
 
     @Test
     public void testMongo() {

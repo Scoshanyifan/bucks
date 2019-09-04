@@ -39,7 +39,6 @@ public class LogMongoDB {
     }
 
     public PageResult<List<RequestLog>> listRequestLog(RequestLogQueryParam param) {
-        logger.info(">>> LogMongoDB listRequestLog, param:{}", param);
         PageResult pageResult = PageResult.init(param.getPageNum(), param.getPageSize());
 
         Query query = new Query();
@@ -93,7 +92,6 @@ public class LogMongoDB {
     }
 
     public PageResult<List<OperateLog>> listOperateLog(OperateLogQueryParam param) {
-        logger.info(">>> LogMongoDB listOperateLog, param:{}", param);
         PageResult pageResult = PageResult.init(param.getPageNum(), param.getPageSize());
 
         Query query = new Query();

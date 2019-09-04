@@ -1,7 +1,9 @@
 # https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html#common-application-properties
 spring:
+  # app
   application:
     name: bucks
+
   # db
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
@@ -63,7 +65,6 @@ spring:
         min-idle: 0
 
 
-
 # mybatis
 mybatis:
   mapperLocations: classpath:mapper/*.xml
@@ -76,3 +77,14 @@ logging:
 server:
   port: 9090
 
+# mail
+mail:
+  host: smtp.163.com
+  username: 18806719815@163.com
+  password: syf930628
+  port: 465
+  protocol: smtp
+  smtp.ssl.enable: true
+  smtp.timeout: 2500
+  smtp.socketFactory.fallback: false
+  smtp.socketFactory.class: javax.net.ssl.SSLSocketFactory

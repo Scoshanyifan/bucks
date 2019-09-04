@@ -11,6 +11,7 @@ import com.kunbu.spring.bucks.dao.mongodb.LogMongoDB;
 import com.kunbu.spring.bucks.dao.redis.RedisManager;
 import com.kunbu.spring.bucks.utils.IpUtil;
 import com.kunbu.spring.bucks.utils.TokenUtil;
+import com.kunbu.spring.bucks.utils.mail.ExceptionMailUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -46,6 +47,9 @@ public class RequestLogUtil {
     @Autowired
     private RedisManager redisManager;
 
+    @Autowired
+    private ExceptionMailUtil exceptionMailUtil;
+
     /**
      * * com.kunbu.spring.controller..*.*(..) 表示controller包以及其下子包中的类，类中的所有方法
      * * com.kunbu.spring.controller.*.*(..)) 则仅表示controller包下的类
@@ -61,16 +65,18 @@ public class RequestLogUtil {
     @Around("pointCut()")
     public Object requestLog(ProceedingJoinPoint joinPoint) {
         long startTime = System.currentTimeMillis();
-
-        boolean success = false;
+        //检查是否调用成功
+        boolean success = true;
         Object result = null;
         try {
-            success = true;
             result = joinPoint.proceed();
         } catch (Throwable e) {
+            success = false;
             logger.error(">>> RequestLogUtil aop proceed error:", e);
-            // TODO 邮件通知
+            // 邮件发送异常信息
+            exceptionMailUtil.sendException(e, "请求调用异常", "-");
         } finally {
+            // 调用结果
             logger.info(">>> RequestLogUtil response result:{}", JSONObject.toJSONString(result));
             try {
                 ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -87,13 +93,14 @@ public class RequestLogUtil {
                 String ip = IpUtil.getIp(request);
                 String token = request.getHeader(HttpConstant.HTTP_HEADER_TOKEN);
                 String methodName = signature.getName();
+                //拿到api信息
                 ApiNote note = getApiNote(joinPoint);
                 if (StringUtils.isNotBlank(token)) {
                     //redis取用户信息
                     UserInfo userInfo = (UserInfo) redisManager.getObject(token);
                     log.setToken(token);
                     log.setUserId(userInfo.getUserId());
-                    //身份是admin且方法执行成功才保存操作日志
+                    //身份是admin且调用执行成功才保存操作日志
                     if (TokenUtil.checkAdmin(token) && success) {
                         saveOperateLog(ip, startTime, userInfo.getUserId(), userInfo.getUserName(), getParams(joinPoint), note);
                     }

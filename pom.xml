@@ -23,6 +23,7 @@
         <commons-collections4.version>4.1</commons-collections4.version>
         <com.alibaba.version>1.2.49</com.alibaba.version>
         <druid.spring.boot.version>1.1.9</druid.spring.boot.version>
+        <javax.mail.version>1.4.7</javax.mail.version>
     </properties>
 
     <dependencies>
@@ -109,6 +110,12 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>${com.alibaba.version}</version>
+        </dependency>
+        <!-- mail -->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>${javax.mail.version}</version>
         </dependency>
         <!-- lombok -->
         <dependency>
