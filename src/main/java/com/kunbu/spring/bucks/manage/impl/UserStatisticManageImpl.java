@@ -3,6 +3,7 @@ package com.kunbu.spring.bucks.manage.impl;
 import com.google.common.collect.Maps;
 import com.kunbu.spring.bucks.common.entity.redis.UserInfo;
 import com.kunbu.spring.bucks.constant.CacheConstant;
+import com.kunbu.spring.bucks.constant.CommonConstant;
 import com.kunbu.spring.bucks.dao.redis.RedisManager;
 import com.kunbu.spring.bucks.manage.UserStatisticManage;
 import com.kunbu.spring.bucks.utils.DateFormatUtil;
@@ -43,10 +44,10 @@ public class UserStatisticManageImpl implements UserStatisticManage {
 
         long startLong = start.getTime();
         long endLong = end.getTime();
-        long interval = (endLong - startLong) / 24 / 3600 / 1000L;
+        long interval = (endLong - startLong) / CommonConstant.DAY_LONG_MILLIONS;
         logger.info(">>> statDayActive start:{}, end:{}, interval:{}", start, end, interval);
         for (int i = 0; i < interval; i++) {
-            Date date = new Date(startLong + i * 24 * 3600 * 1000L);
+            Date date = new Date(startLong + i * CommonConstant.DAY_LONG_MILLIONS);
             String day = DateFormatUtil.format(date, DateFormatUtil.DATE_PATTERN_8);
             String dayActiveKey = CacheConstant.CACHE_KEY_STAT_ALL_ACTIVE + day;
             Long count = redisManager.bitCount(dayActiveKey);
@@ -85,7 +86,7 @@ public class UserStatisticManageImpl implements UserStatisticManage {
     @Override
     public Map<String, Object> statUserSign(UserInfo userInfo, Date start, Date end) {
         String userSignKey = CacheConstant.CACHE_KEY_STAT_USER_SIGN + userInfo.getUserId();
-        
+
         return getBitValueMap(userSignKey, start, end);
     }
 
@@ -94,10 +95,10 @@ public class UserStatisticManageImpl implements UserStatisticManage {
 
         long startLong = start.getTime();
         long endLong = end.getTime();
-        long interval = (endLong - startLong) / 24 / 3600 / 1000L;
+        long interval = (endLong - startLong) / CommonConstant.DAY_LONG_MILLIONS;
         logger.info(">>>{}, start:{}, end:{}, interval:{}", key, start, end, interval);
         for (int i = 0; i < interval; i++) {
-            Date date = new Date(startLong + i * 24 * 3600 * 1000L);
+            Date date = new Date(startLong + i * CommonConstant.DAY_LONG_MILLIONS);
             String day = DateFormatUtil.format(date, DateFormatUtil.DATE_PATTERN_8);
             boolean ifActive = redisManager.getBit(key, Integer.parseInt(day));
             if (ifActive) {

@@ -10,4 +10,6 @@ public interface CommonConstant {
     int SERVICE_CONSUMPTION_MILLIONS = 300;
 
     int CONTROLLER_CONSUMPTION_MILLIONS = 300;
+
+    long DAY_LONG_MILLIONS = 24 * 3600 * 1000L;
 }
