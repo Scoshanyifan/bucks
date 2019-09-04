@@ -190,6 +190,12 @@
                 <directory>src/main/source/${profiles.active}</directory>
             </resource>
         </resources>
+        <!-- 单元测试指定main下配置文件 -->
+        <testResources>
+            <testResource>
+                <directory>src/main/source/${profiles.active}</directory>
+            </testResource>
+        </testResources>
     </build>
 
     <profiles>

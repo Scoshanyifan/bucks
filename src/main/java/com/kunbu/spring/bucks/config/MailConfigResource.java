@@ -1,8 +1,7 @@
 package com.kunbu.spring.bucks.config;
 
 import com.kunbu.spring.bucks.utils.mail.MailConfig;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -14,16 +13,12 @@ import java.util.Map;
  * @create: 2019-09-04 10:13
  **/
 @Component
-@PropertySource("classpath:application-context.yml")
+@ConfigurationProperties(prefix = "mail")
 public class MailConfigResource implements MailConfig {
 
-    @Value("${mail.host}")
     private String host;
-    @Value("${mail.username}")
     private String userName;
-    @Value("${mail.password}")
     private String password;
-    @Value("${mail.port}")
     private Integer port;
     /**
      * 属性信息：
@@ -34,9 +29,27 @@ public class MailConfigResource implements MailConfig {
      * mail.smtp.socketFactory.class
      * ... ...
      */
-    @Value("${mail.properties}")
     private HashMap<String, String> properties;
 
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setPort(Integer port) {
+        this.port = port;
+    }
+
+    public void setProperties(HashMap<String, String> properties) {
+        this.properties = properties;
+    }
 
     @Override
     public String getHost() {
@@ -61,5 +74,16 @@ public class MailConfigResource implements MailConfig {
     @Override
     public Map<String, String> getProperties() {
         return properties;
+    }
+
+    @Override
+    public String toString() {
+        return "MailConfigResource{" +
+                "host='" + host + '\'' +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", port=" + port +
+                ", properties=" + properties +
+                '}';
     }
 }

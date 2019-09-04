@@ -25,9 +25,9 @@ import java.util.Set;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class BucksApplicationTests {
+public class BucksApplicationTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(BucksApplicationTests.class);
+    private static final Logger logger = LoggerFactory.getLogger(BucksApplicationTest.class);
 
     @Autowired
     private LogMongoDB logMongoDB;

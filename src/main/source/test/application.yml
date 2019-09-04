@@ -8,10 +8,10 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
-      url: jdbc:mongo://localhost:3306/bucks?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
+      url: jdbc:mysql://localhost:3306/bucks?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
       username: root
       password: # 930628
-      driver-class-name: com.mongo.cj.jdbc.Driver
+      driver-class-name: com.mysql.cj.jdbc.Driver
       # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，wall用于防火墙
       filters: stat
       # 慢SQL日志
@@ -64,7 +64,6 @@ spring:
         max-idle: 10
         min-idle: 0
 
-
 # mybatis
 mybatis:
   mapperLocations: classpath:mapper/*.xml
@@ -84,7 +83,8 @@ mail:
   password: syf930628
   port: 465
   protocol: smtp
-  smtp.ssl.enable: true
-  smtp.timeout: 2500
-  smtp.socketFactory.fallback: false
-  smtp.socketFactory.class: javax.net.ssl.SSLSocketFactory
+  properties:
+    smtp.ssl.enable: true
+    smtp.timeout: 2500
+    smtp.socketFactory.fallback: false
+    smtp.socketFactory.class: javax.net.ssl.SSLSocketFactory

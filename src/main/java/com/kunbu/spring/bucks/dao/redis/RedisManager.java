@@ -55,6 +55,16 @@ public class RedisManager implements CacheManager {
         return redisTemplate.execute((RedisCallback<Long>) con -> con.bitCount(key.getBytes()));
     }
 
+    /**
+     * 返回
+     *
+     * @param key
+     * @param start
+     * @param end
+     * @author kunbu
+     * @time 2019/9/4 13:30
+     * @return
+     **/
     public Long bitCount(String key, int start, int end) {
         return redisTemplate.execute((RedisCallback<Long>) con -> con.bitCount(key.getBytes(), start, end));
     }
