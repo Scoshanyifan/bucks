@@ -3,14 +3,10 @@ package com.kunbu.spring.bucks;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.kunbu.spring.bucks.common.PageResult;
 import com.kunbu.spring.bucks.common.dto.CategoryDTO;
-import com.kunbu.spring.bucks.common.entity.mongo.RequestLog;
-import com.kunbu.spring.bucks.common.param.mongo.RequestLogQueryParam;
 import com.kunbu.spring.bucks.dao.mongodb.LogMongoDB;
 import com.kunbu.spring.bucks.utils.IDGenerateUtil;
 import org.apache.commons.collections4.CollectionUtils;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -31,24 +26,6 @@ public class BucksApplicationTest {
 
     @Autowired
     private LogMongoDB logMongoDB;
-
-    @Test
-    public void testMongo() {
-
-        RequestLog log = new RequestLog();
-        log.setDescription("mongodb");
-        log.setCreateTime(new Date());
-        RequestLog result = logMongoDB.saveRequestLog(log);
-        logger.info(">>> log id:{}", result.getId());
-
-        RequestLogQueryParam param = new RequestLogQueryParam();
-        long nowTime = System.currentTimeMillis();
-        // 时区问题，spring帮我们做了转换
-        param.setStartTime(new Date(nowTime - 1000L * 60 * 10));
-        param.setEndTime(new Date());
-        PageResult pageInfo = logMongoDB.listRequestLog(param);
-        logger.info(pageInfo.toString());
-    }
 
     public static void main(String[] args) {
         CategoryDTO parse = getCategoryTree();

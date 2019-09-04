@@ -33,7 +33,7 @@ public class RedisManager implements CacheManager {
     //================================ bit(opsForXXX底层就是使用execute) ================================
 
     /**
-     * 位图操作
+     * 位图操作 https://blog.csdn.net/u011957758/article/details/74783347
      *
      * @param key
      * @param index  2^32
@@ -56,11 +56,11 @@ public class RedisManager implements CacheManager {
     }
 
     /**
-     * 返回
+     * 返回一个指定key中位的值为1的个数(是以byte为单位不是bit)，需做转换
      *
      * @param key
-     * @param start
-     * @param end
+     * @param start byte
+     * @param end byte
      * @author kunbu
      * @time 2019/9/4 13:30
      * @return

@@ -1,16 +1,38 @@
 package com.kunbu.spring.bucks.common.entity.redis;
 
+import java.util.Date;
+
 public class UserInfo {
 
-    private String userId;
+    private Long userId;
 
     private String userName;
 
-    public String getUserId() {
+    private String phone;
+
+    private Date createTime;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

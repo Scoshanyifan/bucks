@@ -99,10 +99,10 @@ public class RequestLogUtil {
                     //redis取用户信息
                     UserInfo userInfo = (UserInfo) redisManager.getObject(token);
                     log.setToken(token);
-                    log.setUserId(userInfo.getUserId());
+                    log.setUserId(userInfo.getUserId().toString());
                     //身份是admin且调用执行成功才保存操作日志
                     if (TokenUtil.checkAdmin(token) && success) {
-                        saveOperateLog(ip, startTime, userInfo.getUserId(), userInfo.getUserName(), getParams(joinPoint), note);
+                        saveOperateLog(ip, startTime, userInfo.getUserId().toString(), userInfo.getUserName(), getParams(joinPoint), note);
                     }
                 }
 

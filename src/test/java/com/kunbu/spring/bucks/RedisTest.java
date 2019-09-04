@@ -35,14 +35,20 @@ public class RedisTest {
         String date = DateFormatUtil.format(new Date(), DateFormatUtil.DATE_PATTERN_1);
         String bitmapKey = String.format(keyFormat, date);
 
-        Integer uid_1 = 123456001;
-        Integer uid_2 = 123456002;
+        Integer uid_1 = 1;
+        Integer uid_2 = 2;
+        Integer uid_3 = 3;
 
         redisManager.setBit(bitmapKey, uid_1, true);
         redisManager.setBit(bitmapKey, uid_2, true);
+        redisManager.setBit(bitmapKey, uid_3, true);
 
-        Long bitCount = redisManager.bitCount(bitmapKey);
+        Long bitCount = redisManager.bitCount(bitmapKey, 0, 1); // 3
         logger.info(">>> {}: {}", date, bitCount);
+
+        logger.info(">>> null:{}", redisManager.bitCount("null"));
+        logger.info(">>> null:{}", redisManager.getBit("bitmapKey", 2333));
+        logger.info(">>> null:{}", redisManager.getBit("null", 2333));
     }
 
 }

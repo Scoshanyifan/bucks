@@ -1,14 +1,15 @@
 package com.kunbu.spring.bucks.common.entity.mysql;
 
-import com.kunbu.spring.bucks.common.entity.BaseEntity;
-
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * user
  * @author 
  */
-public class UserEntity extends BaseEntity implements Serializable {
+public class UserEntity implements Serializable {
+
+    private Long id;
 
     private String userName;
 
@@ -21,6 +22,9 @@ public class UserEntity extends BaseEntity implements Serializable {
     private String userType;
 
     private String state;
+
+    private Date createTime;
+    private Date modifyTime;
 
     private static final long serialVersionUID = 1L;
 
@@ -72,15 +76,42 @@ public class UserEntity extends BaseEntity implements Serializable {
         this.state = state;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getModifyTime() {
+        return modifyTime;
+    }
+
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
+    }
+
     @Override
     public String toString() {
         return "UserEntity{" +
-                "userName='" + userName + '\'' +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", userType='" + userType + '\'' +
-                ", biz='" + state + '\'' +
-                "} " + super.toString();
+                ", state='" + state + '\'' +
+                ", createTime=" + createTime +
+                ", modifyTime=" + modifyTime +
+                '}';
     }
 }

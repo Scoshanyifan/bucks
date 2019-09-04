@@ -23,6 +23,7 @@ public class DateFormatUtil {
     public static final String DATE_PATTERN_3					        = "yyyy年MM月dd日";
     public static final String DATE_PATTERN_4					        = "yyyy年MM月dd日 HH时mm分ss秒";
     public static final String DATE_PATTERN_7                           = "yyyy-MM-dd HH:mm:ss,SSS";
+    public static final String DATE_PATTERN_8                           = "yyyyMMdd";
 
     public static final String EMPTY_DATE_STR							= "-";
 
