@@ -7,6 +7,8 @@ package com.kunbu.spring.bucks.constant;
  */
 public interface CommonConstant {
 
+    String PLATFOEM_NAME = "BUCKS";
+
     int SERVICE_CONSUMPTION_MILLIONS = 300;
 
     int CONTROLLER_CONSUMPTION_MILLIONS = 300;

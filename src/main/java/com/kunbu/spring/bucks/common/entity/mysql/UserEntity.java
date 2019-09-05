@@ -9,6 +9,7 @@ import java.util.Date;
  */
 public class UserEntity implements Serializable {
 
+    /** time + ip + random */
     private Long id;
 
     private String userName;

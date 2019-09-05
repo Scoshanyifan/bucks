@@ -1,6 +1,7 @@
 package com.kunbu.spring.bucks.constant.other;
 
-public enum TokenTypeEnum {
+public enum PersonTypeEnum {
+    //
 
     USER("普通用户"),
     ADMIN("管理员"),
@@ -10,7 +11,7 @@ public enum TokenTypeEnum {
 
     private String value;
 
-    TokenTypeEnum(String value) {
+    PersonTypeEnum(String value) {
         this.value = value;
     }
 

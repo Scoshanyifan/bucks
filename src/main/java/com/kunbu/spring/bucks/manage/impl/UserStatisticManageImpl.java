@@ -30,6 +30,7 @@ public class UserStatisticManageImpl implements UserStatisticManage {
 
     @Override
     public void saveDayActive(UserInfo userInfo) {
+        //TODO
         String today = DateFormatUtil.format(new Date(), DateFormatUtil.DATE_PATTERN_8);
         String dayActiveKey = CacheConstant.CACHE_KEY_STAT_ALL_ACTIVE + today;
         boolean saveResult = redisManager.setBit(dayActiveKey, userInfo.getUserId().intValue(), true);
