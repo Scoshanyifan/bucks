@@ -130,7 +130,7 @@ public class CategoryServiceImpl implements CategoryService {
                 return "level: " + level;
             }
             //处理id
-            categoryId = IDGenerateUtil.DBUniqueID();
+            categoryId = IDGenerateUtil.UUID();
             dto.setCategoryId(categoryId);
             dto.setParentId(parentId);
             //保存在list中方便之后db
@@ -175,7 +175,7 @@ public class CategoryServiceImpl implements CategoryService {
         } else {
             //新增
             CategoryEntity category = new CategoryEntity();
-            category.setId(IDGenerateUtil.DBUniqueID());
+            category.setId(IDGenerateUtil.UUID());
             category.setCategoryName(categoryName);
             category.setParentId(saveDTO.getParentId());
             category.setLevel((byte) saveDTO.getLevel());
