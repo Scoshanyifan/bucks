@@ -26,7 +26,7 @@ public class RequestLog implements Serializable {
 
     private String className;
     private String methodName;
-    private String parameterJson;
+    private String parameters;
     private String description;
 
     private String httpMethod;
@@ -66,14 +66,6 @@ public class RequestLog implements Serializable {
 
     public void setMethodName(String methodName) {
         this.methodName = methodName;
-    }
-
-    public String getParameterJson() {
-        return parameterJson;
-    }
-
-    public void setParameterJson(String parameterJson) {
-        this.parameterJson = parameterJson;
     }
 
     public String getDescription() {
@@ -156,13 +148,21 @@ public class RequestLog implements Serializable {
         this.createTime = createTime;
     }
 
+    public String getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(String parameters) {
+        this.parameters = parameters;
+    }
+
     @Override
     public String toString() {
         return "RequestLog{" +
                 "id='" + id + '\'' +
                 ", className='" + className + '\'' +
                 ", methodName='" + methodName + '\'' +
-                ", parameterJson='" + parameterJson + '\'' +
+                ", parameters='" + parameters + '\'' +
                 ", description='" + description + '\'' +
                 ", httpMethod='" + httpMethod + '\'' +
                 ", httpStatus='" + httpStatus + '\'' +

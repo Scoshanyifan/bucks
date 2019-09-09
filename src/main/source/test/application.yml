@@ -78,13 +78,16 @@ server:
 
 # mail
 mail:
+#  host: smtp.qq.com
   host: smtp.163.com
   username: 18806719815@163.com
   password: syf930628
   port: 465
-  protocol: smtp
   properties:
-    smtp.ssl.enable: true
-    smtp.timeout: 2500
-    smtp.socketFactory.fallback: false
-    smtp.socketFactory.class: javax.net.ssl.SSLSocketFactory
+#    mail.debug: true
+    mail.smtp.auth: true
+    mail.smtp.ssl.enable: true
+    mail.smtp.starttls.enable: false
+    mail.smtp.timeout: 25000
+    mail.smtp.socketFactory.fallback: false
+    mail.smtp.socketFactory.class: javax.net.ssl.SSLSocketFactory

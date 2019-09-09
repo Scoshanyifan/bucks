@@ -28,6 +28,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * @program: spring-practice
@@ -81,6 +82,7 @@ public class RequestLogUtil {
             try {
                 ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
                 HttpServletRequest request = attributes.getRequest();
+///                HttpRequestPrintUtil.printHttpRequest(request, logger);
 
                 Signature signature = joinPoint.getSignature();
                 long timeCost = System.currentTimeMillis() - startTime;
@@ -102,13 +104,15 @@ public class RequestLogUtil {
                     log.setUserId(userInfo.getUserId().toString());
                     //身份是admin且调用执行成功才保存操作日志
                     if (TokenUtil.checkAdmin(token) && success) {
-                        saveOperateLog(ip, startTime, userInfo.getUserId().toString(), userInfo.getUserName(), getParams(joinPoint), note);
+                        saveOperateLog(ip, startTime, userInfo.getUserId().toString(), userInfo.getUserName(), getParameters(request), note);
                     }
                 }
 
                 log.setClassName(signature.getDeclaringTypeName());
                 log.setMethodName(methodName);
-                log.setParameterJson(JSONObject.toJSONString(request.getParameterMap()));
+                //参数
+///                log.setParameters(JSONObject.toJSONString(request.getParameterMap()));
+                log.setParameters(getParameters(request));
                 log.setUrl(request.getRequestURL().toString());
                 log.setUserAgent(request.getHeader(HttpConstant.HTTP_HEADER_USER_AGENT));
 
@@ -185,6 +189,7 @@ public class RequestLogUtil {
      * @time 2019/9/2 14:24
      * @return
      **/
+    @Deprecated
     private String getParams(ProceedingJoinPoint joinPoint) {
         Object[] args = joinPoint.getArgs();
         StringBuilder str = new StringBuilder();
@@ -193,5 +198,42 @@ public class RequestLogUtil {
         }
         return str.toString();
     }
+
+    /**
+     * 获取请求参数
+     * String[]表示同一参数名有多个值：xxxx?p=101&p=2333
+     *
+     * @param request
+     * @author kunbu
+     * @time 2019/9/9 14:18
+     * @return
+     **/
+    private String getParameters(HttpServletRequest request) {
+        Map<String, String[]> paramMap = request.getParameterMap();
+        StringBuilder str = new StringBuilder();
+        for (Map.Entry<String, String[]> en : paramMap.entrySet()) {
+            str.append(en.getKey()).append(":").append(en.getValue()[0]).append(";");
+        }
+        str.deleteCharAt(str.length() - 1);
+        return str.toString();
+    }
+
+    @Deprecated
+    private String getParams(HttpServletRequest request) {
+        Map<String, String[]> paramMap = request.getParameterMap();
+        StringBuilder str = new StringBuilder();
+        if (paramMap != null && !paramMap.isEmpty()) {
+            for (Map.Entry<String, String[]> en : paramMap.entrySet()) {
+                String[] value = en.getValue();
+                if (value != null && value.length > 0) {
+                    str.append(en.getKey()).append(":").append(value[0]).append(";");
+                }
+            }
+            str.deleteCharAt(str.length() - 1);
+        }
+        return str.toString();
+    }
+
+
 
 }

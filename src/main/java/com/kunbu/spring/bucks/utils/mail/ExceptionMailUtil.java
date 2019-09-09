@@ -42,16 +42,16 @@ public class ExceptionMailUtil {
      **/
     public void sendException(Throwable error, Object title, Object content) {
 
-        String timeStr = DateFormatUtils.format(new Date(), DateFormatUtil.DATE_PATTERN_7);
-
         String[] tos = {"1274462659@qq.com"};
+
+        String timeStr = DateFormatUtils.format(new Date(), DateFormatUtil.DATE_PATTERN_7);
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream(1024);
         error.printStackTrace(new PrintStream(bos));
 
-        String exceptionMsg = String.format(EXCEPTION_FORMAT, title, JSONObject.toJSONString(content), bos.toString());
+        String exceptionMsg = String.format(EXCEPTION_FORMAT, title, JSONObject.toJSONString(content.toString()), bos.toString());
         try {
-            MailSenderUtil.sendTextSimple(tos, "海大产测平台异常" + timeStr, exceptionMsg, mailConfigResource);
+            MailSenderUtil.sendTextSimple(tos, title + timeStr, exceptionMsg, mailConfigResource);
         } catch (Exception e) {
             logger.error(">>> ExceptionMailUtil send mail error.", e);
         }

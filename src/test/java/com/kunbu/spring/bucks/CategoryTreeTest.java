@@ -4,13 +4,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.kunbu.spring.bucks.common.dto.CategoryDTO;
-import com.kunbu.spring.bucks.dao.mongodb.LogMongoDB;
 import com.kunbu.spring.bucks.utils.IDGenerateUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -20,12 +18,9 @@ import java.util.Set;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class BucksApplicationTest {
+public class CategoryTreeTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(BucksApplicationTest.class);
-
-    @Autowired
-    private LogMongoDB logMongoDB;
+    private static final Logger logger = LoggerFactory.getLogger(CategoryTreeTest.class);
 
     public static void main(String[] args) {
         CategoryDTO parse = getCategoryTree();
@@ -112,4 +107,6 @@ public class BucksApplicationTest {
         }
         return checkResult;
     }
+
+
 }
