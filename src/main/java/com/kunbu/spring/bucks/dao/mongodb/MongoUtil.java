@@ -22,9 +22,21 @@ public class MongoUtil {
      * @time 2019/9/3 15:03
      * @return
      **/
-    public static void addCriteria(Criteria criteria, Query query) {
+    public static void insertCriteria(Criteria criteria, Query query) {
         if (criteria != null) {
             query.addCriteria(criteria);
+        }
+    }
+
+    public static void orCriteria(Criteria c1, Criteria c2 ,Query query) {
+        if (c1 != null && c2 != null) {
+            query.addCriteria(c1.orOperator(c2));
+        }
+    }
+
+    public static void andCriteria(Criteria c1, Criteria c2 , Query query) {
+        if (c1 != null && c2 != null) {
+            query.addCriteria(c1.andOperator(c2));
         }
     }
 
