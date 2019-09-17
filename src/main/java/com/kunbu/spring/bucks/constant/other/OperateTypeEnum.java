@@ -21,6 +21,7 @@ public enum OperateTypeEnum {
     OTHER("其他"),
     ;
 
+    @Deprecated
     private static Map<OperateTypeEnum, List<String>> operateType2MethodName;
 
     static {

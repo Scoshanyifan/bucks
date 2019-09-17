@@ -1,22 +1,36 @@
 package com.kunbu.spring.bucks.controller;
 
+import com.kunbu.spring.bucks.common.entity.redis.UserInfo;
 import com.kunbu.spring.bucks.utils.HttpRequestPrintUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 记录 @RequestMapping / @RequestParam / @RequestBody
+ * 记录 @RequestMapping / @RequestParam / @RequestBody / @RequestHeader
  *
  * https://www.oschina.net/translate/using-the-spring-requestmapping-annotation
  * https://www.cnblogs.com/blogtech/p/11172168.html
+ * content-type对照表：http://tool.oschina.net/commons?type=3nDEFAULT_HIGHLIGHT_COLOR
  *
- * 关于GET / POST ，用post参数就不会显示在url上
+ * ps：关于 GET / POST
+ *      用post，参数就不会在url上
+ *      如果是get，url也许会超过某些浏览器与服务器对URL的长度限制
+ *
+ *
+ * 最佳实践：
+ * 1. GET请求：参数才url上，使用@RequestParam
+ * 2. POST请求：如果是json形式，使用@RequestBody，对象实体 或 Map 来接收
+ *             如果是表单形式（form-data或 x-www-form-urlencoded），使用@RequestParam
+ * 3. 文件：使用form-data，用@RequestParam
+ * 4. 不推荐直接进行对象属性赋值（即不用注解）
+ *
  *
  * @project: bucks
  * @author: kunbu
@@ -24,7 +38,7 @@ import java.util.Map;
  **/
 @Controller
 @ResponseBody
-@RequestMapping("/basic")
+@RequestMapping("/request")
 public class RequestController {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestController.class);
@@ -34,45 +48,34 @@ public class RequestController {
      *
      * 可添加多个限定
      *
-     * @param
-     * @author kunbu
-     * @time 2019/9/17 11:25
-     * @return
      **/
     @RequestMapping(
             // 限定URI
-            value = {"/", "/mapping"},
+            value = {"/", "/requestMapping"},
             // 限定请求方式
             method = {RequestMethod.GET, RequestMethod.POST},
             // 限定只处理json和xml
             consumes = {"application/json", "application/XML"},
-            // 生成json响应
+            // 限定生成json响应（如果有@responseBody注解可忽略）
             produces = {"application/json"},
             // 限定只处理特定头的请求
             headers = {},
             // 限定只处理特定参数的请求
             params = {}
     )
-    public Map<String ,Object> mapping( HttpServletRequest request,
-            // 设置了默认值，required将自动设为false（测试带参数和不带参数的区别）
-            @RequestParam(value = "name", defaultValue = "kunbu") String name) {
+    public Map<String, Object> requestMapping(HttpServletRequest request) {
 
         HttpRequestPrintUtil.printHttpRequest(request, logger);
 
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("name", name);
         return resultMap;
     }
 
     /**
      * 动态获取uri上的参数
      *
-     * @param id
-     * @author kunbu
-     * @time 2019/9/17 11:26
-     * @return
      **/
-    @RequestMapping(value = "/value/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/pathVariable/{id}", method = RequestMethod.GET)
     public Map<String, Object> pathVariable(
             @PathVariable(value = "id", required = false) String id) {
 
@@ -82,54 +85,119 @@ public class RequestController {
     }
 
     /**
-     * RequestParam 处理：
-     *  1. url后的?参数
-     *  2. form-data（）
-     *  3. x-www-form-urlencoded
+     * 注解 @RequestParam 获取请求参数
      *
-     * @param request
-     * @author kunbu
-     * @time 2019/9/17 11:03
-     * @return
      **/
-    @RequestMapping(value = "/param", method = {RequestMethod.GET, RequestMethod.POST})
-    public Map<String, Object> requestParam(HttpServletRequest request,
-            // get post 均有效
-            @RequestParam(value = "param", required = false) String param,
-            // get post 均有效
-            @RequestParam(value = "form-data", required = false) String formdata,
-            // post 有效
-            @RequestParam(value = "x-www-form-urlencoded", required = false) String xwwwformurlencoded) {
-
-        HttpRequestPrintUtil.printHttpRequest(request, logger);
+    @RequestMapping(value = "/requestParam", method = RequestMethod.GET)
+    public Map<String, Object> requestParam(
+            // 设置了默认值，required将自动设为false（测试带参数和不带参数的区别）
+            @RequestParam(value = "name", defaultValue = "kunbu") String name,
+            // 默认为必传
+            @RequestParam(value = "age") Integer age,
+            // 默认使用参数名
+            @RequestParam Boolean sex,
+            // 直接进行对象属性赋值（不推荐使用，容易和@ReuqestBody混淆）
+            String address) {
 
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("param", param);
-        resultMap.put("form-data", formdata);
-        resultMap.put("x-www-form-urlencoded", xwwwformurlencoded);
+        resultMap.put("name", name);
+        resultMap.put("age", age);
+        resultMap.put("sex", sex);
         return resultMap;
     }
 
     /**
-     * RequestBody 处理：
-     *  1. Content-Type=application/json
-     *  2. Content-Type=application/xml
-     *  3. Content-Type=text/plain 等等
+     * 注解 @RequestHeader 获取请求头中的信息
      *
-     * @param request
-     * @author kunbu
-     * @time 2019/9/17 11:03
-     * @return
      **/
-    @RequestMapping(value = "/body", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/requestHeader", method = RequestMethod.GET)
+    public Map<String, Object> requestParam(
+            @RequestHeader(value = "content-type") String contentType) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("contentType", contentType);
+        return resultMap;
+    }
+
+    /**
+     * raw格式（只能用 @RequestBody 接收）包括以下：
+     *
+     * 1. Content-Type: application/json
+     * 2. Content-Type: application/xml
+     * 3. Content-Type: text/plain
+     * ... ...
+     *
+     * get post 均有效
+     *
+     **/
+    @RequestMapping(value = "/requestBody", method = {RequestMethod.GET, RequestMethod.POST})
     public Map<String, Object> requestBody(HttpServletRequest request,
-            // get post 均有效
-            @RequestBody Map<String, Object> params) {
+                                           //@RequestBody Map<String, Object> params,
+                                           @RequestBody UserInfo params) {
 
         HttpRequestPrintUtil.printHttpRequest(request, logger);
 
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("params", params);
+        return resultMap;
+    }
+
+    /**
+     * url后的请求参数
+     *
+     * get post 均有效；用 @RequestParam 接收
+     **/
+    @RequestMapping(value = "/urlParam", method = {RequestMethod.GET, RequestMethod.POST})
+    public Map<String, Object> urlParam(HttpServletRequest request,
+                                        @RequestParam(value = "name", required = false) String name) {
+
+        HttpRequestPrintUtil.printHttpRequest(request, logger);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("name", name);
+        return resultMap;
+    }
+
+    /**
+     * Content-Type: multipart/form-data
+     *
+     * 原生表单提交（文件）
+     *
+     * get post 均有效；用 @RequestParam 接收
+     **/
+    @RequestMapping(value = "/formData", method = {RequestMethod.GET, RequestMethod.POST})
+    public Map<String, Object> formData(HttpServletRequest request,
+                                        @RequestParam(value = "name", required = false) String name,
+                                        @RequestParam("file") MultipartFile file,
+                                        @RequestParam(required = false) MultipartFile doc) {
+
+        HttpRequestPrintUtil.printHttpRequest(request, logger);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("name", name);
+        resultMap.put("file", file.getName());
+        if (doc != null) {
+            resultMap.put("docName", doc.getOriginalFilename());
+        }
+        return resultMap;
+    }
+
+    /**
+     * Content-Type: application/x-www-form-urlencoded
+     *
+     * 表单encType默认的提交数据的格式（带百分号 % 形式的）
+     *
+     * 只能是post形式；用 @RequestParam 接收
+     **/
+    @RequestMapping(value = "/xWwwFormUrlencoded", method = {RequestMethod.GET, RequestMethod.POST})
+    public Map<String, Object> xWwwFormUrlencoded(HttpServletRequest request,
+                                                  // post 有效
+                                                  @RequestParam(value = "x-www-form-urlencoded", required = false) String name) {
+
+        HttpRequestPrintUtil.printHttpRequest(request, logger);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("name", name);
         return resultMap;
     }
 

@@ -68,7 +68,7 @@ public class LogMongoDB {
         Criteria costTime = MongoUtil.longCompare("costTime", param.getCostTimeMin(), param.getCostTimeMax());
         MongoUtil.newCriteria(costTime, query);
 
-        // 时区问题，spring帮我们做了转换（虽然mongo数据库中看到的是延后8个小时的数据，但是处理后是正确的）
+        // 时区问题，需要自己做转换
         Criteria createTime = MongoUtil.dateCompare("createTime", param.getStartTime(), param.getEndTime(), true);
         MongoUtil.newCriteria(createTime, query);
 
