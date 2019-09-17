@@ -15,6 +15,8 @@ public class NetTest {
     public static void main(String[] args) {
         long time = 0L;
         try {
+            //测试InetAddress相关   https://blog.csdn.net/tgww88/article/details/8023890
+
             InetAddress address1 = InetAddress.getLocalHost();
             System.out.println("本机地址: " + address1);
             System.out.println("本机名 hostName: " + address1.getHostName());

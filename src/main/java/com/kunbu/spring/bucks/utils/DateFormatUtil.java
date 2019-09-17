@@ -39,7 +39,7 @@ public class DateFormatUtil {
         }
     }
 
-    public static Date parseDefault(String source) throws ParseException {
+    public static Date parseDefault(String source) {
         try {
             return DEFAULT_SDF.get().parse(source);
         } catch (ParseException e) {
@@ -56,7 +56,7 @@ public class DateFormatUtil {
         }
     }
 
-    public static Date parse(String source, String pattern) throws ParseException {
+    public static Date parse(String source, String pattern) {
         try {
             return new SimpleDateFormat(pattern).parse(source);
         } catch (ParseException e) {

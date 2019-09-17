@@ -84,7 +84,7 @@ mail:
   password: syf930628
   port: 465
   properties:
-#    mail.debug: true
+   # mail.debug: true
     mail.smtp.auth: true
     mail.smtp.ssl.enable: true
     mail.smtp.starttls.enable: false

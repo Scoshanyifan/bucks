@@ -214,7 +214,9 @@ public class RequestLogUtil {
         for (Map.Entry<String, String[]> en : paramMap.entrySet()) {
             str.append(en.getKey()).append(":").append(en.getValue()[0]).append(";");
         }
-        str.deleteCharAt(str.length() - 1);
+        if (str.length() > 0) {
+            str.deleteCharAt(str.length() - 1);
+        }
         return str.toString();
     }
 

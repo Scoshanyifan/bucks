@@ -5,6 +5,7 @@ import com.kunbu.spring.bucks.common.entity.mongo.OperateLog;
 import com.kunbu.spring.bucks.common.entity.mongo.RequestLog;
 import com.kunbu.spring.bucks.common.param.mongo.OperateLogQueryParam;
 import com.kunbu.spring.bucks.common.param.mongo.RequestLogQueryParam;
+import com.kunbu.spring.bucks.utils.MongoUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,44 +45,45 @@ public class LogMongoDB {
         Query query = new Query();
 
         Criteria ip = MongoUtil.strRegex("ip", param.getIpRegex());
-        MongoUtil.insertCriteria(ip, query);
+        MongoUtil.newCriteria(ip, query);
 
         Criteria url = MongoUtil.strRegex("url", param.getUrlRegex());
-        MongoUtil.insertCriteria(url, query);
+        MongoUtil.newCriteria(url, query);
 
         Criteria className = MongoUtil.strRegex("className", param.getClassNameRegex());
-        MongoUtil.insertCriteria(className, query);
+        MongoUtil.newCriteria(className, query);
 
         Criteria methodName = MongoUtil.strRegex("methodName", param.getMethodNameRegex());
-        MongoUtil.insertCriteria(methodName, query);
+        MongoUtil.newCriteria(methodName, query);
 
         Criteria httpMethod = MongoUtil.strIs("httpMethod", param.getHttpMethod());
-        MongoUtil.insertCriteria(httpMethod, query);
+        MongoUtil.newCriteria(httpMethod, query);
 
         Criteria httpStatus = MongoUtil.strIs("httpStatus", param.getHttpStatus());
-        MongoUtil.insertCriteria(httpStatus, query);
+        MongoUtil.newCriteria(httpStatus, query);
 
         Criteria userId = MongoUtil.strIs("userId", param.getUserId());
-        MongoUtil.insertCriteria(userId, query);
+        MongoUtil.newCriteria(userId, query);
 
         Criteria costTime = MongoUtil.longCompare("costTime", param.getCostTimeMin(), param.getCostTimeMax());
-        MongoUtil.insertCriteria(costTime, query);
+        MongoUtil.newCriteria(costTime, query);
 
         // 时区问题，spring帮我们做了转换（虽然mongo数据库中看到的是延后8个小时的数据，但是处理后是正确的）
-        Criteria createTime = MongoUtil.dateCompare("createTime", param.getStartTime(), param.getEndTime());
-        MongoUtil.insertCriteria(createTime, query);
+        Criteria createTime = MongoUtil.dateCompare("createTime", param.getStartTime(), param.getEndTime(), true);
+        MongoUtil.newCriteria(createTime, query);
 
         // 先查总数，再分页
         long total = mongoTemplate.count(query, RequestLog.class);
         // 排序
         query.with(Sort.by(Sort.Direction.DESC, "createTime"));
         // 分页查询_1（直接使用skip+limit）
-        query.skip(param.getPageNum()).limit(param.getPageSize());
+        query.skip((param.getPageNum()-1) * param.getPageSize()).limit(param.getPageSize());
+
         List<RequestLog> logList = mongoTemplate.find(query, RequestLog.class);
         if (CollectionUtils.isNotEmpty(logList)) {
             pageResult.setList(logList);
             pageResult.setTotal(total);
-            pageResult.setPages(total / param.getPageSize());
+            pageResult.setPages(total / param.getPageSize() + 1);
         }
         return pageResult;
     }
@@ -97,24 +99,24 @@ public class LogMongoDB {
         Query query = new Query();
 
         Criteria operateType = MongoUtil.strIs("operateType", param.getOperateType());
-        MongoUtil.insertCriteria(operateType, query);
+        MongoUtil.newCriteria(operateType, query);
 
         Criteria content = MongoUtil.strRegex("content", param.getContent());
-        MongoUtil.insertCriteria(content, query);
+        MongoUtil.newCriteria(content, query);
 
         Criteria operatorName = MongoUtil.strRegex("operatorName", param.getOperatorName());
-        MongoUtil.insertCriteria(operatorName, query);
+        MongoUtil.newCriteria(operatorName, query);
 
         Criteria operatorId = MongoUtil.strIs("operatorId", param.getOperatorId());
-        MongoUtil.insertCriteria(operatorId, query);
+        MongoUtil.newCriteria(operatorId, query);
 
-        Criteria operateTime = MongoUtil.dateCompare("operateTime", param.getOperateTimeStart(), param.getOperateTimeEnd());
-        MongoUtil.insertCriteria(operateTime, query);
+        Criteria operateTime = MongoUtil.dateCompare("operateTime", param.getOperateTimeStart(), param.getOperateTimeEnd(), false);
+        MongoUtil.newCriteria(operateTime, query);
 
         long total = mongoTemplate.count(query, OperateLog.class);
         // 分页查询_2（使用Pageable，排序放在一起）
         Pageable pageable = PageRequest.of(
-                param.getPageNum(),
+                (param.getPageNum()-1) * param.getPageSize(),
                 param.getPageSize(),
                 Sort.by(Sort.Direction.DESC, "operateTime"));
         List<OperateLog> operateLogs = mongoTemplate.find(query.with(pageable), OperateLog.class);

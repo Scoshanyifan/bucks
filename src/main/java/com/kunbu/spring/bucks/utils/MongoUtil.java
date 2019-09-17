@@ -1,4 +1,4 @@
-package com.kunbu.spring.bucks.dao.mongodb;
+package com.kunbu.spring.bucks.utils;
 
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -22,21 +22,41 @@ public class MongoUtil {
      * @time 2019/9/3 15:03
      * @return
      **/
-    public static void insertCriteria(Criteria criteria, Query query) {
+    public static void newCriteria(Criteria criteria, Query query) {
         if (criteria != null) {
             query.addCriteria(criteria);
         }
     }
 
+    /**
+     * or
+     * 
+     * @param c1
+     * @param c2
+     * @param query       
+     * @author kunbu
+     * @time 2019/9/16 16:52
+     * @return       
+     **/
     public static void orCriteria(Criteria c1, Criteria c2 ,Query query) {
         if (c1 != null && c2 != null) {
-            query.addCriteria(c1.orOperator(c2));
+            query.addCriteria(new Criteria().orOperator(c1, c2));
         }
     }
 
+    /**
+     * and
+     *
+     * @param c1
+     * @param c2
+     * @param query
+     * @author kunbu
+     * @time 2019/9/16 16:52
+     * @return
+     **/
     public static void andCriteria(Criteria c1, Criteria c2 , Query query) {
         if (c1 != null && c2 != null) {
-            query.addCriteria(c1.andOperator(c2));
+            query.addCriteria(new Criteria().andOperator(c1, c2));
         }
     }
 
@@ -101,9 +121,15 @@ public class MongoUtil {
      * @time 2019/9/3 15:02
      * @return
      **/
-    public static Criteria dateCompare(String name, Date start, Date end) {
+    public static Criteria dateCompare(String name, Date start, Date end, boolean plus8Hours) {
         if (start != null && end != null) {
-            return Criteria.where(name).gte(start).andOperator(Criteria.where(name).lte(end));
+            if (plus8Hours) {
+                return Criteria.where(name).gte(TimeUtil.plusHours(start, 8))
+                        .andOperator(Criteria.where(name).lte(TimeUtil.plusHours(end, 8)));
+            } else {
+                return Criteria.where(name).gte(start)
+                        .andOperator(Criteria.where(name).lte(end));
+            }
         } else {
             return null;
         }
