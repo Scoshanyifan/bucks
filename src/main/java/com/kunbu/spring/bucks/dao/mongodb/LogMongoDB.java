@@ -10,8 +10,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -68,17 +66,17 @@ public class LogMongoDB {
         Criteria costTime = MongoUtil.longCompare("costTime", param.getCostTimeMin(), param.getCostTimeMax());
         MongoUtil.newCriteria(costTime, query);
 
-        // 时区问题，需要自己做转换
-        Criteria createTime = MongoUtil.dateCompare("createTime", param.getStartTime(), param.getEndTime(), true);
+        // 时区问题(springboot帮我们做了转换，入参和结果，数据库存的是0区时刻)
+        Criteria createTime = MongoUtil.dateCompare("createTime", param.getStartTime(), param.getEndTime(), false);
         MongoUtil.newCriteria(createTime, query);
 
-        // 先查总数，再分页
+        // 总数
         long total = mongoTemplate.count(query, RequestLog.class);
         // 排序
         query.with(Sort.by(Sort.Direction.DESC, "createTime"));
-        // 分页查询_1（直接使用skip+limit）
+        // 分页
         query.skip((param.getPageNum()-1) * param.getPageSize()).limit(param.getPageSize());
-
+        logger.info(">>> mongo:{}", query);
         List<RequestLog> logList = mongoTemplate.find(query, RequestLog.class);
         if (CollectionUtils.isNotEmpty(logList)) {
             pageResult.setList(logList);
@@ -114,12 +112,16 @@ public class LogMongoDB {
         MongoUtil.newCriteria(operateTime, query);
 
         long total = mongoTemplate.count(query, OperateLog.class);
-        // 分页查询_2（使用Pageable，排序放在一起）
-        Pageable pageable = PageRequest.of(
-                (param.getPageNum()-1) * param.getPageSize(),
-                param.getPageSize(),
-                Sort.by(Sort.Direction.DESC, "operateTime"));
-        List<OperateLog> operateLogs = mongoTemplate.find(query.with(pageable), OperateLog.class);
+        // 分页
+        query.skip((param.getPageNum()-1) * param.getPageSize()).limit(param.getPageSize());
+
+        // 分页查询（使用Pageable，排序放在一起） 不推荐使用 TODO
+//        Pageable pageable = PageRequest.of(
+//                (param.getPageNum()-1) * param.getPageSize(),
+//                param.getPageSize(),
+//                Sort.by(Sort.Direction.DESC, "operateTime"));
+
+        List<OperateLog> operateLogs = mongoTemplate.find(query, OperateLog.class);
         if (CollectionUtils.isNotEmpty(operateLogs)) {
             pageResult.setList(operateLogs);
             pageResult.setTotal(total);
