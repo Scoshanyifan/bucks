@@ -13,6 +13,8 @@ import java.util.Date;
  **/
 public class MongoUtil {
 
+    public static final long HOURS_8 = 28800000L;
+
     /**
      * 追加条件
      *
@@ -152,4 +154,9 @@ public class MongoUtil {
             return null;
         }
     }
+
+    //--------------------------------------
+
+
+
 }
