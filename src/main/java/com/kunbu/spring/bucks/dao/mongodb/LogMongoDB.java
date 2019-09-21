@@ -5,7 +5,7 @@ import com.kunbu.spring.bucks.common.entity.mongo.OperateLog;
 import com.kunbu.spring.bucks.common.entity.mongo.RequestLog;
 import com.kunbu.spring.bucks.common.param.mongo.OperateLogQueryParam;
 import com.kunbu.spring.bucks.common.param.mongo.RequestLogQueryParam;
-import com.kunbu.spring.bucks.utils.MongoUtil;
+import com.kunbu.spring.bucks.utils.mongo.MongoUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

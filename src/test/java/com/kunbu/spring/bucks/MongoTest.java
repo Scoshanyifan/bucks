@@ -6,7 +6,7 @@ import com.kunbu.spring.bucks.common.entity.mongo.RequestLog;
 import com.kunbu.spring.bucks.common.param.mongo.RequestLogQueryParam;
 import com.kunbu.spring.bucks.dao.mongodb.LogMongoDB;
 import com.kunbu.spring.bucks.utils.DateFormatUtil;
-import com.kunbu.spring.bucks.utils.MongoUtil;
+import com.kunbu.spring.bucks.utils.mongo.MongoUtil;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.AggregateIterable;
 import lombok.AllArgsConstructor;
