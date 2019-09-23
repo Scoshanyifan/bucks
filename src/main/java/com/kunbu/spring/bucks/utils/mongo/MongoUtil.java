@@ -7,8 +7,9 @@ import org.springframework.data.mongodb.core.query.Query;
 import java.util.Date;
 
 /**
+ * spring-data-mongo Criteria下API工具类
+ *
  * @program: bucks
- * @description:
  * @author: kunbu
  * @create: 2019-08-27 17:19
  **/
@@ -20,41 +21,51 @@ public class MongoUtil {
     /**
      * 追加条件
      *
-     * @param criteria
      * @param query
+     * @param criteria
      * @return
      **/
-    public static void newCriteria(Criteria criteria, Query query) {
-        if (criteria != null) {
+    public static void newCriteria(Query query, Criteria criteria) {
+        if (query != null && criteria != null) {
             query.addCriteria(criteria);
         }
     }
 
     /**
      * or
-     * 
-     * @param c1
-     * @param c2
-     * @param query       
+     *
+     * 如果是同一个字段，使用此方法
+     *
+     * 如果是不同字段的or，需要用andOperator把多个orOperator连接起来
+     *
+     * @param cs
      * @return
      **/
-    public static void orCriteria(Criteria c1, Criteria c2 ,Query query) {
-        if (c1 != null && c2 != null) {
-            query.addCriteria(new Criteria().orOperator(c1, c2));
+    public static Criteria or(Criteria... cs) {
+        if (cs != null && cs.length > 0) {
+            return new Criteria().orOperator(cs);
+        } else {
+            return new Criteria();
         }
     }
 
     /**
      * and
      *
-     * @param c1
-     * @param c2
-     * @param query
+     * 如果是同一个字段做组合查询，Criteria.where("field").xxx().and("field).xxx() 写法错误，即不能用同一个Criteria接收
+     *
+     * 会报错：InvalidMongoDbApiUsageException, you can't add a second 'field' expression specified as 'field
+     *
+     * 解决：用两个Criteria接收
+     *
+     * @param cs
      * @return
      **/
-    public static void andCriteria(Criteria c1, Criteria c2 , Query query) {
-        if (c1 != null && c2 != null) {
-            query.addCriteria(new Criteria().andOperator(c1, c2));
+    public static Criteria and(Criteria... cs) {
+        if (cs != null && cs.length > 0) {
+            return new Criteria().andOperator(cs);
+        } else {
+            return new Criteria();
         }
     }
 
@@ -69,7 +80,7 @@ public class MongoUtil {
         if (name != null && regex != null) {
             return Criteria.where(name).regex(regex);
         } else {
-            return null;
+            return new Criteria();
         }
     }
 
@@ -84,7 +95,7 @@ public class MongoUtil {
         if (name != null && value != null) {
             return Criteria.where(name).is(value);
         } else {
-            return null;
+            return new Criteria();
         }
     }
 
@@ -99,7 +110,7 @@ public class MongoUtil {
         if (name != null && value != null) {
             return Criteria.where(name).is(value);
         } else {
-            return null;
+            return new Criteria();
         }
     }
 
@@ -121,7 +132,7 @@ public class MongoUtil {
                         .andOperator(Criteria.where(name).lte(end));
             }
         } else {
-            return null;
+            return new Criteria();
         }
     }
 
@@ -137,7 +148,7 @@ public class MongoUtil {
         if (min != null && max != null) {
             return Criteria.where(name).gte(min).andOperator(Criteria.where(name).lte(max));
         } else {
-            return null;
+            return new Criteria();
         }
     }
 

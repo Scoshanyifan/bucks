@@ -23,6 +23,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.*;
@@ -85,6 +86,12 @@ public class MongoTest {
      **/
     @Test
     public void testAggregation() {
+        Criteria c = Criteria.where("mmm").not().gt("sss").and("mmm").lt("2333");
+        Query query = new Query(c);
+        logger.info(">>> query:{}", query);
+
+
+
 
         Criteria httpMethodCriteria = MongoUtil.strIs("httpMethod", "GET");
         Criteria timeCriteria = MongoUtil.dateCompare("createTime",

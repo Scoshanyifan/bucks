@@ -43,32 +43,32 @@ public class LogMongoDB {
         Query query = new Query();
 
         Criteria ip = MongoUtil.strRegex("ip", param.getIpRegex());
-        MongoUtil.newCriteria(ip, query);
+        MongoUtil.newCriteria(query, ip);
 
         Criteria url = MongoUtil.strRegex("url", param.getUrlRegex());
-        MongoUtil.newCriteria(url, query);
+        MongoUtil.newCriteria(query, url);
 
         Criteria className = MongoUtil.strRegex("className", param.getClassNameRegex());
-        MongoUtil.newCriteria(className, query);
+        MongoUtil.newCriteria(query, className);
 
         Criteria methodName = MongoUtil.strRegex("methodName", param.getMethodNameRegex());
-        MongoUtil.newCriteria(methodName, query);
+        MongoUtil.newCriteria(query, methodName);
 
         Criteria httpMethod = MongoUtil.strIs("httpMethod", param.getHttpMethod());
-        MongoUtil.newCriteria(httpMethod, query);
+        MongoUtil.newCriteria(query, httpMethod);
 
         Criteria httpStatus = MongoUtil.strIs("httpStatus", param.getHttpStatus());
-        MongoUtil.newCriteria(httpStatus, query);
+        MongoUtil.newCriteria(query, httpStatus);
 
         Criteria userId = MongoUtil.strIs("userId", param.getUserId());
-        MongoUtil.newCriteria(userId, query);
+        MongoUtil.newCriteria(query, userId);
 
         Criteria costTime = MongoUtil.longCompare("costTime", param.getCostTimeMin(), param.getCostTimeMax());
-        MongoUtil.newCriteria(costTime, query);
+        MongoUtil.newCriteria(query, costTime);
 
         // 时区问题(springboot帮我们做了转换，入参和结果，数据库存的是0区时刻)
         Criteria createTime = MongoUtil.dateCompare("createTime", param.getStartTime(), param.getEndTime(), false);
-        MongoUtil.newCriteria(createTime, query);
+        MongoUtil.newCriteria(query, createTime);
 
         // 总数
         long total = mongoTemplate.count(query, RequestLog.class);
@@ -97,19 +97,19 @@ public class LogMongoDB {
         Query query = new Query();
 
         Criteria operateType = MongoUtil.strIs("operateType", param.getOperateType());
-        MongoUtil.newCriteria(operateType, query);
+        MongoUtil.newCriteria(query, operateType);
 
         Criteria content = MongoUtil.strRegex("content", param.getContent());
-        MongoUtil.newCriteria(content, query);
+        MongoUtil.newCriteria(query, content);
 
         Criteria operatorName = MongoUtil.strRegex("operatorName", param.getOperatorName());
-        MongoUtil.newCriteria(operatorName, query);
+        MongoUtil.newCriteria(query, operatorName);
 
         Criteria operatorId = MongoUtil.strIs("operatorId", param.getOperatorId());
-        MongoUtil.newCriteria(operatorId, query);
+        MongoUtil.newCriteria(query, operatorId);
 
         Criteria operateTime = MongoUtil.dateCompare("operateTime", param.getOperateTimeStart(), param.getOperateTimeEnd(), false);
-        MongoUtil.newCriteria(operateTime, query);
+        MongoUtil.newCriteria(query, operateTime);
 
         long total = mongoTemplate.count(query, OperateLog.class);
         // 分页

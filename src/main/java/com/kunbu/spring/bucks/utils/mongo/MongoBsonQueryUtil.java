@@ -8,7 +8,6 @@ import java.util.List;
 
 /**
  * 基于spring-data-mongo，bson原生写法（非api）
- * { $match: { query } } 使用
  *
  * http://www.mongoing.com/docs/reference/operator/query.html
  *
@@ -217,11 +216,15 @@ public class MongoBsonQueryUtil {
      *
      * ps：像$lt, $ne等属于比较运算，而$not属于范围运算
      *
-     * @param expression
+     *
+     * db.getCollection('orders').find({$not:{'date':{$gt:'2015-07-02'}}})
+     * 报错：unknown top level operator: $not
+     *
+     * @param expressionWithoutField 没有字段形式的表达式，eg：{ $gt: 1.99 }
      **/
-    public static BasicDBObject not(String field, BasicDBObject expression) {
-        if (field != null && expression != null) {
-            return new BasicDBObject(field, new BasicDBObject("$not", expression));
+    public static BasicDBObject not(String field, BasicDBObject expressionWithoutField) {
+        if (field != null && expressionWithoutField != null) {
+            return new BasicDBObject(field, new BasicDBObject("$not", expressionWithoutField));
         } else {
             return new BasicDBObject();
         }
