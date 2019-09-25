@@ -109,9 +109,9 @@ public class CategoryServiceImpl implements CategoryService {
      * @param cateDTOList
      * @param parentId
      * @param level
+     * @return
      * @author kunbu
      * @time 2019/8/17 10:28
-     * @return
      **/
     private static String checkCategoryTree(CategoryDTO dto, Set<String> cateNameSet, Set<Integer> cateCodeSet,
                                             List<CategoryDTO> cateDTOList, String parentId, int level) {
@@ -210,7 +210,7 @@ public class CategoryServiceImpl implements CategoryService {
             // level -> listRequestLog
             Map<Integer, List<CategoryDTO>> level2cateMap = cateDTOAll.stream().collect(Collectors.groupingBy(CategoryDTO::getLevel));
             logger.info(">>> levels:{}", level2cateMap.keySet());
-            for (int i = 1; i< level2cateMap.size(); i++) {
+            for (int i = 1; i < level2cateMap.size(); i++) {
                 List<CategoryDTO> cateListOne = level2cateMap.get(i);
                 if (i == 1) {
                     //根节点插入level one
@@ -257,9 +257,9 @@ public class CategoryServiceImpl implements CategoryService {
      * 先更新数据库，再删除缓存
      *
      * @param
+     * @return
      * @author kunbu
      * @time 2019/8/28 17:32
-     * @return
      **/
     private void updateCache4CategoryMap() {
         boolean delResult = redisManager.delKey(CacheConstant.CACHE_KEY_CATEGORY_MAP);

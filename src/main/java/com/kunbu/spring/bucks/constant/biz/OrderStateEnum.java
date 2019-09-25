@@ -3,15 +3,12 @@ package com.kunbu.spring.bucks.constant.biz;
 /**
  * @author: KunBu
  * @time: 2019/8/16 13:32
- * @description:
- *
- * 1.1 下单已支付确认：CREATED -> PAYED -> FINISHED
+ * @description: 1.1 下单已支付确认：CREATED -> PAYED -> FINISHED
  * 1.2 下单已支付超时：CREATED -> PAYED -> FINISHED
- *
+ * <p>
  * 2 下单未支付取消：CREATED -> CANCELED
  * 3 下单未支付超时：CREATED -> CLOSED
  * 4 下单已支付已完成退款：CREATED -> PAYED -> FINISHED -> REFUNDED
- *
  */
 public enum OrderStateEnum {
 

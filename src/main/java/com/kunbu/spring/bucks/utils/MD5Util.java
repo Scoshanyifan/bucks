@@ -4,9 +4,9 @@ import java.security.MessageDigest;
 
 /**
  * Message-Digest Algorithm 5：信息-摘要算法5
- *
+ * <p>
  * 用于确保信息传输完整一致
- *
+ * <p>
  * 同类算法：sha-1
  *
  * @project: bucks
@@ -21,9 +21,9 @@ public class MD5Util {
      * 得到MD5
      *
      * @param original
+     * @return
      * @author kunbu
      * @time 2019/9/4 13:21
-     * @return
      **/
     public static String getMD5(String original) {
         String result = null;

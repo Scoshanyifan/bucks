@@ -5,11 +5,14 @@ import java.util.Date;
 
 /**
  * user
- * @author 
+ *
+ * @author
  */
 public class UserEntity implements Serializable {
 
-    /** time + ip + random */
+    /**
+     * time + ip + random
+     */
     private Long id;
 
     private String userName;

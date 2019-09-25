@@ -15,7 +15,9 @@ public interface CacheConstant {
 
     String CACHE_KEY_STAT_USER_ACTIVE = "stat:user:active:";
 
-    /** stat:all:active:20190904 */
+    /**
+     * stat:all:active:20190904
+     */
     String CACHE_KEY_STAT_ALL_ACTIVE = "stat:all:active:";
 
 }

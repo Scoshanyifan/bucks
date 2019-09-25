@@ -23,7 +23,8 @@ public class ServiceResult<T> implements Serializable {
     @Deprecated
     private String msg;
 
-    private ServiceResult() {}
+    private ServiceResult() {
+    }
 
     private static ServiceResult SUCCESS() {
         ServiceResult result = new ServiceResult();

@@ -26,7 +26,9 @@ public class OperateLog {
 
     private String operatorId;
 
-    /** 冗余操作人名字，便于模糊查询 */
+    /**
+     * 冗余操作人名字，便于模糊查询
+     */
     private String operatorName;
 
     @Indexed(direction = IndexDirection.DESCENDING)

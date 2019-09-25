@@ -14,9 +14,9 @@ public interface GoodManage {
      * 查询商品
      *
      * @param query
+     * @return
      * @author kunbu
      * @time 2019/8/23 13:19
-     * @return
      **/
     ApiResult queryGoodByCondition(GoodQueryParam query);
 

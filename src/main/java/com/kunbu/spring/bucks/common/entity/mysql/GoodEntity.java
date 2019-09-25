@@ -6,7 +6,8 @@ import java.io.Serializable;
 
 /**
  * good
- * @author 
+ *
+ * @author
  */
 public class GoodEntity extends BaseEntity implements Serializable {
 

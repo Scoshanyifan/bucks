@@ -14,23 +14,22 @@ import java.util.Map;
 
 /**
  * 记录 @RequestMapping / @RequestParam / @RequestBody / @RequestHeader
- *
+ * <p>
  * https://www.oschina.net/translate/using-the-spring-requestmapping-annotation
  * https://www.cnblogs.com/blogtech/p/11172168.html
  * content-type对照表：http://tool.oschina.net/commons?type=3nDEFAULT_HIGHLIGHT_COLOR
- *
+ * <p>
  * ps：关于 GET / POST
- *      用post，参数就不会在url上
- *      如果是get，url也许会超过某些浏览器与服务器对URL的长度限制
- *
- *
+ * 用post，参数就不会在url上
+ * 如果是get，url也许会超过某些浏览器与服务器对URL的长度限制
+ * <p>
+ * <p>
  * 最佳实践：
  * 1. GET请求：参数才url上，使用@RequestParam
  * 2. POST请求：如果是json形式，使用@RequestBody，对象实体 或 Map 来接收
- *             如果是表单形式（form-data或 x-www-form-urlencoded），使用@RequestParam
+ * 如果是表单形式（form-data或 x-www-form-urlencoded），使用@RequestParam
  * 3. 文件：使用form-data，用@RequestParam
  * 4. 不推荐直接进行对象属性赋值（即不用注解）
- *
  *
  * @project: bucks
  * @author: kunbu
@@ -45,9 +44,8 @@ public class RequestController {
 
     /**
      * 将 HTTP 请求映射到 MVC 和 REST 控制器的处理方法上
-     *
+     * <p>
      * 可添加多个限定
-     *
      **/
     @RequestMapping(
             // 限定URI
@@ -73,7 +71,6 @@ public class RequestController {
 
     /**
      * 动态获取uri上的参数
-     *
      **/
     @RequestMapping(value = "/pathVariable/{id}", method = RequestMethod.GET)
     public Map<String, Object> pathVariable(
@@ -86,7 +83,6 @@ public class RequestController {
 
     /**
      * 注解 @RequestParam 获取请求参数
-     *
      **/
     @RequestMapping(value = "/requestParam", method = RequestMethod.GET)
     public Map<String, Object> requestParam(
@@ -108,7 +104,6 @@ public class RequestController {
 
     /**
      * 注解 @RequestHeader 获取请求头中的信息
-     *
      **/
     @RequestMapping(value = "/requestHeader", method = RequestMethod.GET)
     public Map<String, Object> requestParam(
@@ -121,14 +116,13 @@ public class RequestController {
 
     /**
      * raw格式（只能用 @RequestBody 接收）包括以下：
-     *
+     * <p>
      * 1. Content-Type: application/json
      * 2. Content-Type: application/xml
      * 3. Content-Type: text/plain
      * ... ...
-     *
+     * <p>
      * get post 均有效
-     *
      **/
     @RequestMapping(value = "/requestBody", method = {RequestMethod.GET, RequestMethod.POST})
     public Map<String, Object> requestBody(HttpServletRequest request,
@@ -144,7 +138,7 @@ public class RequestController {
 
     /**
      * url后的请求参数
-     *
+     * <p>
      * get post 均有效；用 @RequestParam 接收
      **/
     @RequestMapping(value = "/urlParam", method = {RequestMethod.GET, RequestMethod.POST})
@@ -160,9 +154,9 @@ public class RequestController {
 
     /**
      * Content-Type: multipart/form-data
-     *
+     * <p>
      * 原生表单提交（文件）
-     *
+     * <p>
      * get post 均有效；用 @RequestParam 接收
      **/
     @RequestMapping(value = "/formData", method = {RequestMethod.GET, RequestMethod.POST})
@@ -184,9 +178,9 @@ public class RequestController {
 
     /**
      * Content-Type: application/x-www-form-urlencoded
-     *
+     * <p>
      * 表单encType默认的提交数据的格式（带百分号 % 形式的）
-     *
+     * <p>
      * 只能是post形式；用 @RequestParam 接收
      **/
     @RequestMapping(value = "/xWwwFormUrlencoded", method = {RequestMethod.GET, RequestMethod.POST})

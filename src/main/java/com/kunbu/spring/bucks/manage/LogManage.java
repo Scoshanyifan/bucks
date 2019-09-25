@@ -15,9 +15,9 @@ public interface LogManage {
      * 操作日志列表
      *
      * @param param
+     * @return
      * @author kunbu
      * @time 2019/9/4 9:09
-     * @return
      **/
     ApiResult queryOperateLog(OperateLogQueryParam param);
 
@@ -25,9 +25,9 @@ public interface LogManage {
      * 请求调用日志列表
      *
      * @param param
+     * @return
      * @author kunbu
      * @time 2019/9/4 9:10
-     * @return
      **/
     ApiResult queryRequestLog(RequestLogQueryParam param);
 

@@ -27,9 +27,9 @@ public class RedisConfig {
      *
      * @param singleConfig
      * @param poolConfig
+     * @return
      * @author kunbu
      * @time 2019/8/27 13:31
-     * @return
      **/
 //    @Bean
     public RedisConnectionFactory redisConnectionFactory(RedisStandaloneConfiguration singleConfig, JedisPoolConfig poolConfig) {
@@ -41,13 +41,13 @@ public class RedisConfig {
     /**
      * 泛型为<String,Object>形式的RedisTemplate
      * https://www.cnblogs.com/zeng1994/p/03303c805731afc9aa9c60dbbd32a323.html
-     *
+     * <p>
      * 需要替换掉默认的 JdkSerializationRedisSerializer（此序列化会给目标加上类型信息，即开头出现\xac\xed\x00\x05t\x00\x04字样）
      *
      * @param factory
+     * @return
      * @author kunbu
      * @time 2019/8/26 18:04
-     * @return
      **/
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {

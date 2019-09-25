@@ -75,7 +75,7 @@ public class LogMongoDB {
         // 排序
         query.with(Sort.by(Sort.Direction.DESC, "createTime"));
         // 分页
-        query.skip((param.getPageNum()-1) * param.getPageSize()).limit(param.getPageSize());
+        query.skip((param.getPageNum() - 1) * param.getPageSize()).limit(param.getPageSize());
         logger.info(">>> mongo:{}", query);
         List<RequestLog> logList = mongoTemplate.find(query, RequestLog.class);
         if (CollectionUtils.isNotEmpty(logList)) {
@@ -113,7 +113,7 @@ public class LogMongoDB {
 
         long total = mongoTemplate.count(query, OperateLog.class);
         // 分页
-        query.skip((param.getPageNum()-1) * param.getPageSize()).limit(param.getPageSize());
+        query.skip((param.getPageNum() - 1) * param.getPageSize()).limit(param.getPageSize());
 
         // 分页查询（使用Pageable，排序放在一起） 不推荐使用 TODO
 //        Pageable pageable = PageRequest.of(

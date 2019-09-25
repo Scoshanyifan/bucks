@@ -22,7 +22,8 @@ public class ApiResult implements Serializable {
     private String errorCode;
     private String errorMsg;
 
-    private ApiResult() {}
+    private ApiResult() {
+    }
 
     public static ApiResult success() {
         ApiResult result = new ApiResult();
@@ -151,7 +152,8 @@ public class ApiResult implements Serializable {
         private long totalCount;
         private Object list;
 
-        private ApiPage() {}
+        private ApiPage() {
+        }
 
         public static ApiPage empty(long pageNum, long pageSize) {
             ApiPage page = new ApiPage();

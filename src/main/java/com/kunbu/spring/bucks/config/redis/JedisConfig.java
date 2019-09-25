@@ -32,7 +32,7 @@ public class JedisConfig {
     @Value("${spring.redis.jedis.pool.min-idle}")
     private Integer minIdle;
 
-//    @Bean
+    //    @Bean
     public JedisPoolConfig jedisPool() {
         JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
         jedisPoolConfig.setMaxIdle(maxIdle);
@@ -46,9 +46,9 @@ public class JedisConfig {
      * 单机模式的redis配置
      *
      * @param
+     * @return
      * @author kunbu
      * @time 2019/8/27 13:12
-     * @return
      **/
 //    @Bean
     public RedisStandaloneConfiguration jedisConfig() {

@@ -14,10 +14,9 @@ import java.util.Map;
 /**
  * @program: spring-practice
  * druid监视器 http://localhost:8080/druid
- *
+ * <p>
  * https://github.com/alibaba/druid/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98
  * https://github.com/alibaba/druid/wiki/DruidDataSource%E9%85%8D%E7%BD%AE%E5%B1%9E%E6%80%A7%E5%88%97%E8%A1%A8
- *
  * @author: kunbu
  * @create: 2019-08-14 17:19
  **/
@@ -33,7 +32,7 @@ public class DruidConfig {
 
     @Bean
     public ServletRegistrationBean druidStatViewServlet() {
-        ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean(new StatViewServlet(),"/druid/*");
+        ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean(new StatViewServlet(), "/druid/*");
         Map<String, String> initParams = new HashMap<>();
         //　可配的属性都在 StatViewServlet 和其父类下
         initParams.put("loginUsername", "admin");

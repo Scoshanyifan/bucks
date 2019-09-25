@@ -54,14 +54,15 @@ public class RequestLogUtil {
     /**
      * * com.kunbu.spring.controller..*.*(..) 表示controller包以及其下子包中的类，类中的所有方法
      * * com.kunbu.spring.controller.*.*(..)) 则仅表示controller包下的类
-     *
+     * <p>
      * 第一个*表示任意返回类型，修饰符可省略
      * ..表示0或多个，即所有，controller后面的..表示到此路径为止
      * ..*.中的*表示一个单词，即任意类，后面的.是包名的.
      * ..*.*(..)中第二个*表示任意方法，(..)表示方法中任意参数
      **/
     @Pointcut("execution(* com.kunbu.spring.bucks.controller..*.*(..))")
-    public void pointCut() {}
+    public void pointCut() {
+    }
 
     @Around("pointCut()")
     public Object requestLog(ProceedingJoinPoint joinPoint) {
@@ -86,7 +87,7 @@ public class RequestLogUtil {
 
                 Signature signature = joinPoint.getSignature();
                 long timeCost = System.currentTimeMillis() - startTime;
-                if(timeCost >= CommonConstant.CONTROLLER_CONSUMPTION_MILLIONS) {
+                if (timeCost >= CommonConstant.CONTROLLER_CONSUMPTION_MILLIONS) {
                     logger.warn("RequestLogUtil api consume:{} ms, method:{}", timeCost, signature.toShortString());
                 }
 
@@ -139,6 +140,7 @@ public class RequestLogUtil {
 
     /**
      * 保存操作日志
+     *
      * @param ip
      * @param startTime
      * @param operatorId
@@ -164,9 +166,9 @@ public class RequestLogUtil {
      * 接口功能说明
      *
      * @param joinPoint
+     * @return
      * @author kunbu
      * @time 2019/8/26 17:41
-     * @return
      **/
     private ApiNote getApiNote(ProceedingJoinPoint joinPoint) {
         Method[] ms = joinPoint.getTarget().getClass().getDeclaredMethods();
@@ -185,9 +187,9 @@ public class RequestLogUtil {
      * 获取接口参数
      *
      * @param joinPoint
+     * @return
      * @author kunbu
      * @time 2019/9/2 14:24
-     * @return
      **/
     @Deprecated
     private String getParams(ProceedingJoinPoint joinPoint) {
@@ -204,9 +206,9 @@ public class RequestLogUtil {
      * String[]表示同一参数名有多个值：xxxx?p=101&p=2333
      *
      * @param request
+     * @return
      * @author kunbu
      * @time 2019/9/9 14:18
-     * @return
      **/
     private String getParameters(HttpServletRequest request) {
         Map<String, String[]> paramMap = request.getParameterMap();
@@ -235,7 +237,6 @@ public class RequestLogUtil {
         }
         return str.toString();
     }
-
 
 
 }

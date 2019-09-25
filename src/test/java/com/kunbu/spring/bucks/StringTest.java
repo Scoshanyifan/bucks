@@ -6,8 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- *
- *
  * @project: bucks
  * @author: kunbu
  * @create: 2019-09-23 16:57
@@ -30,7 +28,6 @@ public class StringTest {
         List<String> tempStrList = Splitter.on("/").splitToList(historyTemp);
         System.out.println("Splitter: " + tempStrList);
     }
-
 
 
 }

@@ -10,16 +10,12 @@ import com.mongodb.BasicDBObject;
  **/
 public class MongoBsonAggregationUtil {
 
-    private static final BasicDBObject EMPTY_DB_OBJECT =  new BasicDBObject();
+    private static final BasicDBObject EMPTY_DB_OBJECT = new BasicDBObject();
 
     private static final String DOLLAR = "$";
 
     /** Pipeline Aggregation Stages */
     // 常用：project, match, limit, skip, unwind, group, sort, bucket
-
-
-
-
 
 
     /** Boolean Operators  */
@@ -45,7 +41,7 @@ public class MongoBsonAggregationUtil {
 
     /**
      * { $not: [ expression ] } >>> { $not: [ { $gt: [ "$price", 2.33 ] } ] }
-     *
+     * <p>
      * ps: 注意和Query下的区别：{ "price": { $not: { $gt: 1.99 } } }
      *
      * @param expression
@@ -59,12 +55,8 @@ public class MongoBsonAggregationUtil {
     }
 
 
-
-
     /** Set Operators */
     // setEquals / setIntersection / setUnion / setDifference / setIsSubset / anyElementTrue / allElementTrue
-
-
 
 
     /** Comparison Operators */
@@ -72,7 +64,7 @@ public class MongoBsonAggregationUtil {
 
     /**
      * { $cmp: [ expression1, expression2 ] } >>> { $project: { compare: { $cmp: [ "$money", 100 ] } } }
-     *
+     * <p>
      * Compares two values and returns:
      * -1 if the first value is less than the second.
      * 1 if the first value is greater than the second.
@@ -161,8 +153,6 @@ public class MongoBsonAggregationUtil {
     }
 
 
-
-
     /** Arithmetic Operators */
     // abs / add / ceil / divide / exp / floor / ln / log / log10 / mod / multiply / pow / sqrt / subtract / trunc
 
@@ -182,8 +172,6 @@ public class MongoBsonAggregationUtil {
     }
 
 
-
-
     /** String Operators */
     // concat / indexOfBytes / indexOfCP / split / strcasecmp / strLenBytes / strLenCP / ...
 
@@ -192,7 +180,7 @@ public class MongoBsonAggregationUtil {
      * { $concat: [ expression1, expression2, ... ] } >>> { $concat: [ "$item", " - ", "$description" ] }
      *
      * @param delimiter 分隔符（可为null）
-     * @param fields 如果是字段，需要自带$
+     * @param fields    如果是字段，需要自带$
      **/
     public static BasicDBObject concat(String delimiter, String... fields) {
         if (fields != null && fields.length > 0) {
@@ -200,7 +188,7 @@ public class MongoBsonAggregationUtil {
                 return new BasicDBObject("$concat", new Object[]{fields});
             } else {
                 BasicDBList dbList = new BasicDBList();
-                for(int i = 0; i < fields.length; i++) {
+                for (int i = 0; i < fields.length; i++) {
                     dbList.add(fields[i]);
                     if (i != fields.length - 1) {
                         dbList.add(delimiter);
@@ -217,7 +205,7 @@ public class MongoBsonAggregationUtil {
      * 字符串拆分
      * { $split: [ string expression, delimiter ] } >>> { $split: [ "June-15-2013", "-" ] }
      *
-     * @param field 如果是字段，需要自带$
+     * @param field     如果是字段，需要自带$
      * @param delimiter 分隔符
      **/
     public static BasicDBObject split(String field, String delimiter) {
@@ -245,58 +233,41 @@ public class MongoBsonAggregationUtil {
     }
 
 
-
-
     /** Text Search Operators */
     // meta
-
-
 
 
     /** Array Operators */
     //
 
 
-
-
     /** Variable Operators */
     // map / let
-
-
 
 
     /** Literal Operators */
     // literal
 
 
-
-
     /** Date Operators */
     // literal
-
-
 
 
     /** Conditional Operators */
     // literal
 
 
-
-
     /** Data Type Operators */
     // literal
 
 
-
-
-    /** Group Accumulator Operators */
+    /**
+     * Group Accumulator Operators
+     */
     // literal
 
 
-
-
     // -----
-
     private static String fillUpDollar(String field) {
         if (field.indexOf(DOLLAR) < 0) {
             return DOLLAR + field;

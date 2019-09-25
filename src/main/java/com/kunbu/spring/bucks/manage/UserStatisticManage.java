@@ -16,9 +16,9 @@ public interface UserStatisticManage {
      * 记录每日活跃用户
      *
      * @param userInfo
+     * @return
      * @author kunbu
      * @time 2019/9/4 16:55
-     * @return
      **/
     void saveDayActive(UserInfo userInfo);
 
@@ -27,9 +27,9 @@ public interface UserStatisticManage {
      *
      * @param start
      * @param end
+     * @return
      * @author kunbu
      * @time 2019/9/4 16:56
-     * @return
      **/
     Map<String, Object> statDayActive(Date start, Date end);
 
@@ -37,18 +37,18 @@ public interface UserStatisticManage {
      * 记录单个用户日活跃
      *
      * @param userInfo
+     * @return
      * @author kunbu
      * @time 2019/9/4 16:54
-     * @return
      **/
     void saveUserDayActive(UserInfo userInfo);
 
     /**
      * 统计单个用户日活跃情况
      *
+     * @return
      * @author kunbu
      * @time 2019/9/4 16:48
-     * @return
      **/
     Map<String, Object> statUserDayActive(UserInfo userInfo, Date start, Date end);
 
@@ -56,9 +56,9 @@ public interface UserStatisticManage {
      * 记录单个用户签到
      *
      * @param userInfo
+     * @return
      * @author kunbu
      * @time 2019/9/4 16:54
-     * @return
      **/
     void saveUserSign(UserInfo userInfo);
 
@@ -68,9 +68,9 @@ public interface UserStatisticManage {
      * @param userInfo
      * @param start
      * @param end
+     * @return
      * @author kunbu
      * @time 2019/9/4 16:53
-     * @return
      **/
     Map<String, Object> statUserSign(UserInfo userInfo, Date start, Date end);
 

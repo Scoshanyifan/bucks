@@ -34,15 +34,15 @@ public class FloorRuleTest {
         System.out.println(JSONObject.toJSON(map));
     }
 
-        /**
-         * 楼层规则转换：
-         * B2,B1,1:6 >>> [B2, B1, 1, 2, 3, 4, 5, 6]
-         *
-         * @param ruleText
-         * @author kunbu
-         * @time 2019/9/3 10:26
-         * @return
-         **/
+    /**
+     * 楼层规则转换：
+     * B2,B1,1:6 >>> [B2, B1, 1, 2, 3, 4, 5, 6]
+     *
+     * @param ruleText
+     * @return
+     * @author kunbu
+     * @time 2019/9/3 10:26
+     **/
     private static List<String> convertFloor(String ruleText) {
         //顺序保存
         List<String> floorNameList = new ArrayList<>();

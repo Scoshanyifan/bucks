@@ -15,7 +15,9 @@ import java.util.Date;
  **/
 public class MongoUtil {
 
-    /** mongodb保存的是0时区时间，查询取值有可能需要转换 */
+    /**
+     * mongodb保存的是0时区时间，查询取值有可能需要转换
+     */
     public static final long HOURS_8 = 28800000L;
 
     /**
@@ -33,9 +35,9 @@ public class MongoUtil {
 
     /**
      * or
-     *
+     * <p>
      * 如果是同一个字段，使用此方法
-     *
+     * <p>
      * 如果是不同字段的or，需要用andOperator把多个orOperator连接起来
      *
      * @param cs
@@ -51,11 +53,11 @@ public class MongoUtil {
 
     /**
      * and
-     *
+     * <p>
      * 如果是同一个字段做组合查询，Criteria.where("field").xxx().and("field).xxx() 写法错误，即不能用同一个Criteria接收
-     *
+     * <p>
      * 会报错：InvalidMongoDbApiUsageException, you can't add a second 'field' expression specified as 'field
-     *
+     * <p>
      * 解决：用两个Criteria接收
      *
      * @param cs
@@ -153,7 +155,6 @@ public class MongoUtil {
     }
 
     //--------------------------------------
-
 
 
 }

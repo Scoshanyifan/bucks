@@ -15,9 +15,9 @@ public interface CacheManager {
      * 获取字符串
      *
      * @param key
+     * @return
      * @author kunbu
      * @time 2019/8/27 14:24
-     * @return
      **/
     String getString(String key);
 
@@ -25,9 +25,9 @@ public interface CacheManager {
      * 获取对象
      *
      * @param key
+     * @return
      * @author kunbu
      * @time 2019/8/27 14:25
-     * @return
      **/
     Object getObject(String key);
 
@@ -46,7 +46,7 @@ public interface CacheManager {
      * @param key
      * @param value
      * @param expire seconds
-     *               @return
+     * @return
      */
     boolean set(String key, Serializable value, long expire);
 
@@ -54,9 +54,9 @@ public interface CacheManager {
      * 判断key是否存在
      *
      * @param key
+     * @return
      * @author kunbu
      * @time 2019/8/27 14:25
-     * @return
      **/
     boolean existKey(String key);
 
@@ -64,9 +64,9 @@ public interface CacheManager {
      * 删除单个key
      *
      * @param key
+     * @return
      * @author kunbu
      * @time 2019/8/27 14:25
-     * @return
      **/
     boolean delKey(String key);
 
@@ -74,9 +74,9 @@ public interface CacheManager {
      * 批量删除keys
      *
      * @param keys
+     * @return
      * @author kunbu
      * @time 2019/8/27 14:25
-     * @return
      **/
     long delKeys(String[] keys);
 
@@ -86,9 +86,9 @@ public interface CacheManager {
      *
      * @param key
      * @param expire
+     * @return
      * @author kunbu
      * @time 2019/8/27 14:26
-     * @return
      **/
     boolean expire(String key, long expire);
 
@@ -96,9 +96,9 @@ public interface CacheManager {
      * 获取key的过期时间
      *
      * @param key
+     * @return
      * @author kunbu
      * @time 2019/8/27 14:26
-     * @return
      **/
     long getExpire(String key);
 
@@ -106,9 +106,9 @@ public interface CacheManager {
      * 递增
      *
      * @param key
+     * @return
      * @author kunbu
      * @time 2019/8/27 14:40
-     * @return
      **/
     long incr(String key);
 
@@ -117,9 +117,9 @@ public interface CacheManager {
      *
      * @param key
      * @param delta
+     * @return
      * @author kunbu
      * @time 2019/8/27 14:42
-     * @return
      **/
     long incr(String key, long delta);
 
@@ -128,9 +128,9 @@ public interface CacheManager {
      *
      * @param key
      * @param delta
+     * @return
      * @author kunbu
      * @time 2019/8/27 14:42
-     * @return
      **/
     long decr(String key, long delta);
 

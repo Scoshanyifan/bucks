@@ -17,17 +17,17 @@ public class DateFormatUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(DateFormatUtils.class);
 
-    public static final String DEFAULT_DATE_PATTERN					    = "yyyy-MM-dd HH:mm:ss";
-    public static final String DATE_PATTERN_1 					        = "yyyy-MM-dd";
-    public static final String DATE_PATTERN_2 					        = "yyyy.MM.dd";
-    public static final String DATE_PATTERN_3					        = "yyyy年MM月dd日";
-    public static final String DATE_PATTERN_4					        = "yyyy年MM月dd日 HH时mm分ss秒";
-    public static final String DATE_PATTERN_7                           = "yyyy-MM-dd HH:mm:ss,SSS";
-    public static final String DATE_PATTERN_8                           = "yyyyMMdd";
+    public static final String DEFAULT_DATE_PATTERN = "yyyy-MM-dd HH:mm:ss";
+    public static final String DATE_PATTERN_1 = "yyyy-MM-dd";
+    public static final String DATE_PATTERN_2 = "yyyy.MM.dd";
+    public static final String DATE_PATTERN_3 = "yyyy年MM月dd日";
+    public static final String DATE_PATTERN_4 = "yyyy年MM月dd日 HH时mm分ss秒";
+    public static final String DATE_PATTERN_7 = "yyyy-MM-dd HH:mm:ss,SSS";
+    public static final String DATE_PATTERN_8 = "yyyyMMdd";
 
-    public static final String EMPTY_DATE_STR							= "-";
+    public static final String EMPTY_DATE_STR = "-";
 
-    private static final ThreadLocal<SimpleDateFormat> DEFAULT_SDF 		= ThreadLocal.withInitial(
+    private static final ThreadLocal<SimpleDateFormat> DEFAULT_SDF = ThreadLocal.withInitial(
             () -> new SimpleDateFormat(DEFAULT_DATE_PATTERN)
     );
 

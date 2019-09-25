@@ -10,32 +10,46 @@ import java.util.regex.Pattern;
  **/
 public class MatchUtil {
 
-    /** 车牌号 */
-    public static final String REGEX_CARNO              = "^[A-Z][A-HJ-NP-Z\\d]{5}$";
+    /**
+     * 车牌号
+     */
+    public static final String REGEX_CARNO = "^[A-Z][A-HJ-NP-Z\\d]{5}$";
 
-    /** 新能源车牌号 */
-    public static final String REGEX_NEWCAR             = "^[A-Z][D,F][\\d]{5}$";
+    /**
+     * 新能源车牌号
+     */
+    public static final String REGEX_NEWCAR = "^[A-Z][D,F][\\d]{5}$";
 
-    /** 身份证 */
-    public static final String REGEX_IDCARD             = "^\\d{15}|^\\d{17}([0-9]|X|x)$";
+    /**
+     * 身份证
+     */
+    public static final String REGEX_IDCARD = "^\\d{15}|^\\d{17}([0-9]|X|x)$";
 
-    /** 手机号 */
-    public static final String REGEX_PHONE              = "^1(3|4|5|7|8)\\d{9}$";
+    /**
+     * 手机号
+     */
+    public static final String REGEX_PHONE = "^1(3|4|5|7|8)\\d{9}$";
 
-    /** 回车空格制表换行 */
-    public static final String REGEX_WHITE_BLANK        = "\"\\\\s*|\\t|\\r|\\n\"";
+    /**
+     * 回车空格制表换行
+     */
+    public static final String REGEX_WHITE_BLANK = "\"\\\\s*|\\t|\\r|\\n\"";
 
-    /** 0-9 a-z A-Z */
-    private static final int ASCII_NUMBER_START         = 48;
-    private static final int ASCII_NUMBER_END           = 57;
-    private static final int ASCII_UPCASE_EN_START      = 65;
-    private static final int ASCII_UPCASE_EN_END        = 90;
-    private static final int ASCII_LOWCASE_EN_START     = 97;
-    private static final int ASCII_LOWCASE_EN_END       = 122;
+    /**
+     * 0-9 a-z A-Z
+     */
+    private static final int ASCII_NUMBER_START = 48;
+    private static final int ASCII_NUMBER_END = 57;
+    private static final int ASCII_UPCASE_EN_START = 65;
+    private static final int ASCII_UPCASE_EN_END = 90;
+    private static final int ASCII_LOWCASE_EN_START = 97;
+    private static final int ASCII_LOWCASE_EN_END = 122;
 
-    /** 中文（2位char） */
-    private static final int CHAR_CN_START              = 19968;
-    private static final int CHAR_CN_END                = 40869;
+    /**
+     * 中文（2位char）
+     */
+    private static final int CHAR_CN_START = 19968;
+    private static final int CHAR_CN_END = 40869;
 
 
     /**
@@ -55,6 +69,7 @@ public class MatchUtil {
 
     /**
      * 验证正则
+     *
      * @param str
      * @param regex
      */
@@ -69,6 +84,7 @@ public class MatchUtil {
 
     /**
      * 检查是否只包含中文或英文
+     *
      * @param str
      */
     public static boolean checkChineseEnglish(String str) {
@@ -93,6 +109,7 @@ public class MatchUtil {
 
     /**
      * 检查字符串长度(中文,空格算2个)
+     *
      * @param in
      * @param limitDown
      * @param limitUp

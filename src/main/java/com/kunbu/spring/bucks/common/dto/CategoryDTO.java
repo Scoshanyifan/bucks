@@ -18,10 +18,13 @@ public class CategoryDTO implements Serializable {
     private int level;
     private List<CategoryDTO> subs;
 
-    /** 根节点，不做业务操作 */
+    /**
+     * 根节点，不做业务操作
+     */
     private boolean root;
 
-    public CategoryDTO() {}
+    public CategoryDTO() {
+    }
 
     public static CategoryDTO of(String categoryId, String categoryName, Integer categoryCode, String parentId, int level) {
         CategoryDTO cate = new CategoryDTO();

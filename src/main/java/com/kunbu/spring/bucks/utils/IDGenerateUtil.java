@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
  * <br/> 2. 第三方ID，如redis和zookeeper（实现复杂，依赖严重）
  * <br/> 3. UUID（体积过大，查询效率低）
  * <br/> 4. Snowflake雪花算法，标准时64bit（即long），普通使用53bit（兼容前端js的最大整形53位，超出会丢失精度）
- *
+ * <p>
  * <br/>
  * https://blog.csdn.net/a724888/article/details/80784533
  * https://www.jianshu.com/p/2fd77375927d
@@ -38,9 +38,9 @@ public class IDGenerateUtil {
      * UUID
      *
      * @param
+     * @return
      * @author kunbu
      * @time 2019/8/23 14:27
-     * @return
      **/
     public static String UUID() {
         return UUID.randomUUID().toString().replace(SPLITTER_MIDDLE, WHITE_CHAR);
@@ -48,21 +48,21 @@ public class IDGenerateUtil {
 
     /**
      * 53 bits unique id:
-     *
+     * <p>
      * |--------|--------|--------|--------|--------|--------|--------|--------|
      * |00000000|00011111|11111111|11111111|11111111|11111111|11111111|11111111|
      * |--------|---xxxxx|xxxxxxxx|xxxxxxxx|xxxxxxxx|xxx-----|--------|--------|
      * |--------|--------|--------|--------|--------|---xxxxx|xxxxxxxx|xxx-----|
      * |--------|--------|--------|--------|--------|--------|--------|---xxxxx|
-     *
+     * <p>
      * Maximum ID = 11111_11111111_11111111_11111111_11111111_11111111_11111111
-     *
+     * <p>
      * Maximum TS = 11111_11111111_11111111_11111111_111
-     *
+     * <p>
      * Maximum NT = ----- -------- -------- -------- ---11111_11111111_111 = 65535
-     *
+     * <p>
      * Maximum SH = ----- -------- -------- -------- -------- -------- ---11111 = 31
-     *
+     * <p>
      * It can generate 64k unique id per IP and up to 2106-02-07T06:28:15Z.
      */
     public static long snowflakeId() {

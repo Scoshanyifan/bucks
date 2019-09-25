@@ -69,7 +69,6 @@ public class MongoTest {
 
     /**
      * https://www.cnblogs.com/woshimrf/p/mongodb-pagenation-performance.html
-     *
      **/
     @Test
     public void testPage() {
@@ -78,21 +77,18 @@ public class MongoTest {
 
     /**
      * Aggregation agg = newAggregation(
-     *     pipelineOP1(),
-     *     pipelineOP2(),
-     *     pipelineOPn()
+     * pipelineOP1(),
+     * pipelineOP2(),
+     * pipelineOPn()
      * );
-     *
+     * <p>
      * 时区的坑：https://blog.csdn.net/zzq900503/article/details/85606222
-     *
      **/
     @Test
     public void testAggregation() {
         Criteria c = Criteria.where("mmm").not().gt("sss").and("mmm").lt("2333");
         Query query = new Query(c);
         logger.info(">>> query:{}", query);
-
-
 
 
         Criteria httpMethodCriteria = MongoUtil.strIs("httpMethod", "GET");
@@ -124,7 +120,7 @@ public class MongoTest {
 
         Aggregation customerAgg = Aggregation.newAggregation(
                 Aggregation
-                        .project("buyerNick","payment","orders","num")
+                        .project("buyerNick", "payment", "orders", "num")
                         .andExpression("sendTime")
                         .plus(MongoUtil.HOURS_8)
                         .extractMonth()
@@ -140,7 +136,7 @@ public class MongoTest {
                 Aggregation.sort(Sort.Direction.DESC, "totalPayment"),
                 Aggregation.skip(100L),
                 Aggregation.limit(10)
-            );
+        );
         logger.info(">>> aggregation:{}", customerAgg);
 
     }
@@ -148,7 +144,6 @@ public class MongoTest {
     /**
      * 非api式写法
      * https://blog.csdn.net/congcong68/article/details/52821159
-     *
      **/
     @Test
     public void testRawAggregation() {
@@ -250,7 +245,6 @@ public class MongoTest {
 
     /**
      * 底层聚合写法
-     *
      **/
     @Test
     public void testSuperRawAggregation() {

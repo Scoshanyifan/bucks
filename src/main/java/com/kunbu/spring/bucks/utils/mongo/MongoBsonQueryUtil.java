@@ -8,9 +8,9 @@ import java.util.List;
 
 /**
  * 基于spring-data-mongo，bson原生写法（非api）
- *
+ * <p>
  * http://www.mongoing.com/docs/reference/operator/query.html
- *
+ * <p>
  * 3.0
  *
  * @project: bucks
@@ -53,7 +53,7 @@ public class MongoBsonQueryUtil {
 
     /**
      * equals
-     *
+     * <p>
      * { field: { $eq: value } } >>> { "age": { $eq: 20 } }
      *
      * @param field
@@ -70,7 +70,7 @@ public class MongoBsonQueryUtil {
 
     /**
      * not equals
-     *
+     * <p>
      * {field: {$ne: value} } >>> { "sex": { $ne: "man" } }
      *
      * @param field
@@ -87,7 +87,7 @@ public class MongoBsonQueryUtil {
 
     /**
      * greater than (equals)
-     *
+     * <p>
      * { field: { $gt: value } } >>> { "age": { $gt: 20 } }
      * { field: { $gte: value } } >>> { "age": { $gte: 22 } }
      *
@@ -110,7 +110,7 @@ public class MongoBsonQueryUtil {
 
     /**
      * less than (equals)
-     *
+     * <p>
      * { field: { $lt: value } } >>> { "age": { $lt: 20 } }
      * { field: { $lte: value } } >>> { "age": { $lte: 22 } }
      *
@@ -148,7 +148,7 @@ public class MongoBsonQueryUtil {
 
     /**
      * not in
-     *
+     * <p>
      * { field: { $nin: [ value1, value2, ... valueN ] } } >>> { "tags": { $nin: ["office", "school"] } }
      *
      * @param field
@@ -170,7 +170,6 @@ public class MongoBsonQueryUtil {
      * { $and: [ expression1, expression2, ... , expressionN ] }
      * >>>
      * { $and: [ { "price": { $ne: 1.99 } }, { "price": { $exists: true } } ] }
-     *
      **/
     public static BasicDBObject and(BasicDBObject... expressions) {
         if (expressions != null && expressions.length > 0) {
@@ -184,7 +183,6 @@ public class MongoBsonQueryUtil {
      * { $or: [ expression1, expression2, ... , expressionN ] }
      * >>>
      * { $or: [ { "quantity": { $lt: 20 } }, { "price": 10 } ] }
-     *
      **/
     public static BasicDBObject or(BasicDBObject... expressions) {
         if (expressions != null && expressions.length > 0) {
@@ -198,7 +196,6 @@ public class MongoBsonQueryUtil {
      * { $nor: [ expression1, expression2, ... }
      * >>>
      * { $nor: [ { "price": 1.99 }, { "qty": { $lt: 20 } }, { "sale": true } ] }
-     *
      **/
     public static BasicDBObject nor(BasicDBObject... expressions) {
         if (expressions != null && expressions.length > 0) {
@@ -211,14 +208,14 @@ public class MongoBsonQueryUtil {
     /**
      * 不推荐使用（会有歧义）：{ field: { $not: expression } }
      * http://www.mongoing.com/docs/reference/operator/aggregation/not.html
-     *
+     * <p>
      * eg：{ "price": { $not: { $gt: 1.99 } } } 含义如下
      * 1. the price field value is less than or equal to 1.99 or
      * 2. the price field does not exist
-     *
+     * <p>
      * ps：像$lt, $ne等属于比较运算，而$not属于范围运算
-     *
-     *
+     * <p>
+     * <p>
      * db.getCollection('orders').find({$not:{'date':{$gt:'2015-07-02'}}})
      * 报错：unknown top level operator: $not
      *
@@ -236,7 +233,7 @@ public class MongoBsonQueryUtil {
 
     /**
      * { field: { $exists: boolean } } >>> { "name": { $exists: false } }
-     *
+     * <p>
      * 查询字段是否存在
      * { "_id" : 900, "name" : null }, { "_id" : 901 } 结果是：{ "_id" : 901 }
      *

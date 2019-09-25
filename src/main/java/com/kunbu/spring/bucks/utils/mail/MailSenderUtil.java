@@ -17,7 +17,7 @@ import java.util.Properties;
  * 邮件工具类（静态版本，实际使用组件模式，避免每次生成邮件发送类）
  * https://blog.csdn.net/mingliangniwo/article/details/54972048
  * https://www.jianshu.com/p/5eb000544dd7 spring下
- *
+ * <p>
  * ps: 如果是从云端获取的流，需要使用MailFileVO的话显示指定MIME TYPE
  *
  * @project: bucks
@@ -38,9 +38,9 @@ public class MailSenderUtil {
      * @param subject
      * @param text
      * @param config
+     * @return
      * @author kunbu
      * @time 2019/9/4 10:31
-     * @return
      **/
     public static void sendTextSimple(String[] tos, String subject, String text, MailConfig config) throws Exception {
         logger.info(">>> start send email");
@@ -103,6 +103,7 @@ public class MailSenderUtil {
     /**
      * 通过自定义文件类MileFile进行发送，其中资源是流的形式，但是这样jar包中就需要找到MIME类型，
      * 所以MileFile中需要指定，不然发送会报错，找不到contentType
+     *
      * @param config
      * @param toMails
      * @param subject
@@ -148,6 +149,7 @@ public class MailSenderUtil {
     /**
      * 使用FileSystemResource进行文件加载处理，jar包会对文件进行解析，特别是后缀，通过后缀找到MIME对应的类型
      * 使用MultipartFile，spring会进行文件加载
+     *
      * @param config
      * @param toMails
      * @param subject
@@ -193,6 +195,7 @@ public class MailSenderUtil {
 
     /**
      * 初始化邮件特性
+     *
      * @param mailMessage
      * @param toMails
      * @param from
@@ -228,6 +231,7 @@ public class MailSenderUtil {
 
     /**
      * 初始化邮件发送类
+     *
      * @param config
      * @return
      */

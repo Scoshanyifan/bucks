@@ -11,7 +11,9 @@ public class MailFileVO {
 
     private InputStream resource;
     private String name;
-    /** MIME type */
+    /**
+     * MIME type
+     */
     private String type;
 
     public MailFileVO(InputStream resource, String name, String type) {
@@ -20,21 +22,27 @@ public class MailFileVO {
         this.name = name;
         this.type = type;
     }
+
     public InputStream getResource() {
         return resource;
     }
+
     public void setResource(InputStream resource) {
         this.resource = resource;
     }
+
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
+
     public String getType() {
         return type;
     }
+
     public void setType(String type) {
         this.type = type;
     }

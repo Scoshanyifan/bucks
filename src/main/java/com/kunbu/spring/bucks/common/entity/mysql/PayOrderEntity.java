@@ -7,7 +7,8 @@ import java.util.Date;
 
 /**
  * pay_order
- * @author 
+ *
+ * @author
  */
 public class PayOrderEntity extends BaseEntity implements Serializable {
 

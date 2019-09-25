@@ -6,7 +6,8 @@ import java.io.Serializable;
 
 /**
  * category
- * @author 
+ *
+ * @author
  */
 public class CategoryEntity extends BaseEntity implements Serializable {
 

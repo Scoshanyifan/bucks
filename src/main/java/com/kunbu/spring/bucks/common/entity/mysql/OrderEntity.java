@@ -6,7 +6,8 @@ import java.io.Serializable;
 
 /**
  * order
- * @author 
+ *
+ * @author
  */
 public class OrderEntity extends BaseEntity implements Serializable {
 

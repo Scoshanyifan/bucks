@@ -10,7 +10,7 @@ spring:
     druid:
       url: jdbc:mysql://localhost:3306/bucks?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
       username: root
-#      password: 930628
+      #      password: 930628
       password:
       driver-class-name: com.mysql.cj.jdbc.Driver
       # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，wall用于防火墙
@@ -36,6 +36,13 @@ spring:
       time-between-eviction-runs-millis: 60000
       # 验证数据库连接的查询语句
       validation-query: SELECT 1
+
+    second:
+      driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+      jdbc-url: jdbc:sqlserver://localhost:1433;DatabaseName=HRMS_YLYTN
+      username: sa
+      password: syf930628
+
 
   # mongodb
   data:
@@ -79,13 +86,13 @@ server:
 
 # mail
 mail:
-#  host: smtp.qq.com
+  #  host: smtp.qq.com
   host: smtp.163.com
   username: 18806719815@163.com
   password: syf930628
   port: 465
   properties:
-   # mail.debug: true
+    # mail.debug: true
     mail.smtp.auth: true
     mail.smtp.ssl.enable: true
     mail.smtp.starttls.enable: false

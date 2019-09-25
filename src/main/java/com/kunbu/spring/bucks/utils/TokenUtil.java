@@ -4,17 +4,21 @@ import com.kunbu.spring.bucks.constant.other.PersonTypeEnum;
 
 public class TokenUtil {
 
-    private static final String TOKEN_SERVICE_TYPE_MANAGE           = "MANAGE";
-    private static final String TOKEN_PERSON_TYPE_ADMIN             = PersonTypeEnum.ADMIN.name();
-    /** MAN_ADMIN_20190809_K07JHU1Y32G84 */
-    public static final String FORMAT_PATTERN_ADMIN                 = "%s_%s_%s_%s";
+    private static final String TOKEN_SERVICE_TYPE_MANAGE = "MANAGE";
+    private static final String TOKEN_PERSON_TYPE_ADMIN = PersonTypeEnum.ADMIN.name();
+    /**
+     * MAN_ADMIN_20190809_K07JHU1Y32G84
+     */
+    public static final String FORMAT_PATTERN_ADMIN = "%s_%s_%s_%s";
 
-    private static final String TOKEN_SERVICE_TYPE_BUSINESS         = "BUSINESS";
-    private static final String TOKEN_PLATFORM_TYPE_WEB             = "WEB";
-    private static final String TOKEN_PLATFORM_TYPE_APP             = "APP";
-    private static final String TOKEN_PERSON_TYPE_USER              = PersonTypeEnum.USER.name();
-    /** BIZ_WEB_USER_2019090501_LN30DI7H8ESF */
-    public static final String FORMAT_PATTERN_USER                  = "%s_%s_%s_%s_%s";
+    private static final String TOKEN_SERVICE_TYPE_BUSINESS = "BUSINESS";
+    private static final String TOKEN_PLATFORM_TYPE_WEB = "WEB";
+    private static final String TOKEN_PLATFORM_TYPE_APP = "APP";
+    private static final String TOKEN_PERSON_TYPE_USER = PersonTypeEnum.USER.name();
+    /**
+     * BIZ_WEB_USER_2019090501_LN30DI7H8ESF
+     */
+    public static final String FORMAT_PATTERN_USER = "%s_%s_%s_%s_%s";
 
     private static final String SPLITTER = "_";
     private static final String WILDCARD = "*";
@@ -22,14 +26,14 @@ public class TokenUtil {
     /**
      * 业务系统中的web端用户token
      * BIZ_WEB_USER_20190905001_J0CXB87H97GH13
-     *
+     * <p>
      * TODO 之后如果需要可在原有基础上追加
      *
      * @param userId
      * @param sessionId
+     * @return
      * @author kunbu
      * @time 2019/9/5 15:51
-     * @return
      **/
     public static String generateUserWebToken(String userId, String sessionId) {
         String BIZ_WEB_USER_TOKEN = String.format(
@@ -48,9 +52,9 @@ public class TokenUtil {
      *
      * @param userId
      * @param sessionId
+     * @return
      * @author kunbu
      * @time 2019/9/5 15:51
-     * @return
      **/
     public static String generateUserAppToken(String userId, String sessionId) {
         String BIZ_APP_USER_TOKEN = String.format(
@@ -68,9 +72,9 @@ public class TokenUtil {
      *
      * @param userId
      * @param sessionId
+     * @return
      * @author kunbu
      * @time 2019/9/5 18:10
-     * @return
      **/
     public static String generateAdminManToken(String userId, String sessionId) {
         String MAN_ADMIN_TOKEN = String.format(
@@ -85,9 +89,9 @@ public class TokenUtil {
     /**
      * 匹配业务系统中web端所有用户
      *
+     * @return
      * @author kunbu
      * @time 2019/9/5 16:08
-     * @return
      **/
     public static String getWildCardBizWeb() {
         StringBuilder builder = new StringBuilder();
@@ -104,9 +108,9 @@ public class TokenUtil {
     /**
      * 匹配业务系统中app端所有用户
      *
+     * @return
      * @author kunbu
      * @time 2019/9/5 16:08
-     * @return
      **/
     public static String getWildCardBizApp() {
         StringBuilder builder = new StringBuilder();
@@ -125,9 +129,9 @@ public class TokenUtil {
      * 是否是admin
      *
      * @param token
+     * @return
      * @author kunbu
      * @time 2019/9/5 18:12
-     * @return
      **/
     public static boolean checkAdmin(String token) {
         if (token != null && token.length() > 0) {

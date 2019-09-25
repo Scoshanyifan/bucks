@@ -16,9 +16,9 @@ public class LoggerUtil {
      * 获取线程池任务的日志管理器
      *
      * @param
+     * @return
      * @author kunbu
      * @time 2019/8/19 10:01
-     * @return
      **/
     public static Logger getExecutorLogger() {
         return LoggerFactory.getLogger(SysLogTypeEnum.EXECUTOR.getName());
@@ -28,9 +28,9 @@ public class LoggerUtil {
      * 获取方法时间统计的日志管理器
      *
      * @param
+     * @return
      * @author kunbu
      * @time 2019/8/19 10:01
-     * @return
      **/
     public static Logger getMethodConsumeLogger() {
         return LoggerFactory.getLogger(SysLogTypeEnum.METHOD_CONSUME.getName());

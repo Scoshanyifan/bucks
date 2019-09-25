@@ -9,18 +9,18 @@ import org.springframework.util.StringUtils;
  */
 public class MimeTypeUtil {
 
-    public static String getExtention(String filename){
+    public static String getExtention(String filename) {
         String ext = null;
         int index = filename.lastIndexOf(".");
-        if(index > 0){
+        if (index > 0) {
             ext = filename.substring(index + 1);
         }
         return ext;
     }
 
-    public static String getContentType(String ext){
+    public static String getContentType(String ext) {
         //default content type is application/octet-stream
-        if(StringUtils.isEmpty(ext)){
+        if (StringUtils.isEmpty(ext)) {
             return "application/octet-stream";
         }
         ext = ext.toLowerCase();

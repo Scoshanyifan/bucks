@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * 日期时间工具类
- *
+ * <p>
  * <br/> 1.Calendar 的 month 从 0 开始，也就是全年 12 个月由 0 ~ 11 进行表示
  * <br/> 2.为了复用calendar，作为参数传入，但多次操作会导致时间错乱，所以需要在每次用完后重置
  * <br/> 3.Calendar.DAY_OF_MONTH 等价于 Calendar.DATE
@@ -45,6 +45,7 @@ public class TimeUtil {
 
     /**
      * 获取指定月份第一天0点（不传year和month获取当前月第一天0点）
+     *
      * @param calendar
      * @param year
      * @param month
@@ -61,7 +62,7 @@ public class TimeUtil {
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND,0);
+        calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
 
         Date begin = calendar.getTime();
@@ -71,6 +72,7 @@ public class TimeUtil {
 
     /**
      * 获取指定月份最后一天24点（不传year和month获取当天24点）
+     *
      * @param calendar
      * @param year
      * @param month
@@ -90,7 +92,7 @@ public class TimeUtil {
         }
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
-        calendar.set(Calendar.SECOND,59);
+        calendar.set(Calendar.SECOND, 59);
         calendar.set(Calendar.MILLISECOND, 999);
 
         Date end = calendar.getTime();
@@ -100,6 +102,7 @@ public class TimeUtil {
 
     /**
      * 按月查询，获取指定月份间隔
+     *
      * @param beginYear
      * @param beginMonth
      * @param endYear
@@ -117,7 +120,7 @@ public class TimeUtil {
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND,0);
+        calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
         dates.add(calendar.getTime());
 
@@ -126,7 +129,7 @@ public class TimeUtil {
         calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
-        calendar.set(Calendar.SECOND,59);
+        calendar.set(Calendar.SECOND, 59);
         calendar.set(Calendar.MILLISECOND, 999);
         dates.add(calendar.getTime());
 
@@ -138,7 +141,7 @@ public class TimeUtil {
      * 获取一天剩余毫秒数（或已用毫秒数）
      *
      * @param nowTime
-     * @param left 是否剩余时间
+     * @param left    是否剩余时间
      * @return
      */
     public static long getDayLeftMillions(Date nowTime, boolean left) {
@@ -161,6 +164,7 @@ public class TimeUtil {
 
     /**
      * 获取当天0点
+     *
      * @param calendar
      * @return
      */
@@ -173,7 +177,7 @@ public class TimeUtil {
         }
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND,0);
+        calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
 
         Date zero = calendar.getTime();

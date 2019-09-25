@@ -23,12 +23,11 @@ public class RedisManager implements CacheManager {
 
     /**
      * template封装了opsForXXX操作类，用于支持hash, listRequestLog, string, set, zset
-     *
      **/
     @Autowired
-    private RedisTemplate<String, Object>           redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
     @Autowired
-    private StringRedisTemplate                     stringRedisTemplate;
+    private StringRedisTemplate stringRedisTemplate;
 
     //================================ bit(opsForXXX底层就是使用execute) ================================
 
@@ -36,11 +35,11 @@ public class RedisManager implements CacheManager {
      * 位图操作 https://blog.csdn.net/u011957758/article/details/74783347
      *
      * @param key
-     * @param index  2^32
-     * @param tag 0 or 1
+     * @param index 2^32
+     * @param tag   0 or 1
+     * @return
      * @author kunbu
      * @time 2019/8/30 13:21
-     * @return
      **/
     public Boolean setBit(String key, Integer index, Boolean tag) {
         RedisCallback<Boolean> action = connection -> connection.setBit(key.getBytes(), index, tag);
@@ -60,10 +59,10 @@ public class RedisManager implements CacheManager {
      *
      * @param key
      * @param start byte
-     * @param end byte
+     * @param end   byte
+     * @return
      * @author kunbu
      * @time 2019/9/4 13:30
-     * @return
      **/
     public Long bitCount(String key, int start, int end) {
         return redisTemplate.execute((RedisCallback<Long>) con -> con.bitCount(key.getBytes(), start, end));
@@ -222,7 +221,7 @@ public class RedisManager implements CacheManager {
     public boolean setnx(String key, String value) {
         return redisTemplate.opsForValue().setIfAbsent(key, value);
     }
-    
+
     @Override
     public String getSet(String key, String value) {
         return (String) redisTemplate.opsForValue().getAndSet(key, value);

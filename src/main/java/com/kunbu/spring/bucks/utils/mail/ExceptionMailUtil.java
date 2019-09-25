@@ -33,12 +33,12 @@ public class ExceptionMailUtil {
     /**
      * 发送异常
      *
-     * @param error 异常信息
-     * @param title 标头
+     * @param error   异常信息
+     * @param title   标头
      * @param content 业务数据
+     * @return
      * @author kunbu
      * @time 2019/9/4 11:04
-     * @return
      **/
     public void sendException(Throwable error, Object title, Object content) {
 

@@ -13,7 +13,7 @@ public enum SysLogTypeEnum {
 
     ;
 
-    SysLogTypeEnum(String name){
+    SysLogTypeEnum(String name) {
         this.name = name;
     }
 
