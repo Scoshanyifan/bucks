@@ -19,6 +19,8 @@ import java.util.List;
  **/
 public class MongoBsonQueryUtil {
 
+    private static final BasicDBObject EMPTY_DB_OBJECT = new BasicDBObject();
+
     public static void main(String[] args) {
         BasicDBObject is = is("sex", "man");
         BasicDBObject eq = eq("age", 18);
@@ -174,7 +176,7 @@ public class MongoBsonQueryUtil {
         if (expressions != null && expressions.length > 0) {
             return new BasicDBObject("$and", expressions);
         } else {
-            return new BasicDBObject();
+            return EMPTY_DB_OBJECT;
         }
     }
 
@@ -188,7 +190,7 @@ public class MongoBsonQueryUtil {
         if (expressions != null && expressions.length > 0) {
             return new BasicDBObject("$or", expressions);
         } else {
-            return new BasicDBObject();
+            return EMPTY_DB_OBJECT;
         }
     }
 
@@ -202,7 +204,7 @@ public class MongoBsonQueryUtil {
         if (expressions != null && expressions.length > 0) {
             return new BasicDBObject("$nor", expressions);
         } else {
-            return new BasicDBObject();
+            return EMPTY_DB_OBJECT;
         }
     }
 
@@ -226,7 +228,7 @@ public class MongoBsonQueryUtil {
         if (field != null && expressionWithoutField != null) {
             return new BasicDBObject(field, new BasicDBObject("$not", expressionWithoutField));
         } else {
-            return new BasicDBObject();
+            return EMPTY_DB_OBJECT;
         }
     }
 
@@ -245,7 +247,7 @@ public class MongoBsonQueryUtil {
         if (field != null) {
             return new BasicDBObject(field, new BasicDBObject("$exists", exists));
         } else {
-            return new BasicDBObject();
+            return EMPTY_DB_OBJECT;
         }
     }
 

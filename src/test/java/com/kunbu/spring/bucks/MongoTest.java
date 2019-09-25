@@ -6,6 +6,8 @@ import com.kunbu.spring.bucks.common.entity.mongo.RequestLog;
 import com.kunbu.spring.bucks.common.param.mongo.RequestLogQueryParam;
 import com.kunbu.spring.bucks.dao.mongodb.LogMongoDB;
 import com.kunbu.spring.bucks.utils.DateFormatUtil;
+import com.kunbu.spring.bucks.utils.mongo.MongoBsonAggregationUtil;
+import com.kunbu.spring.bucks.utils.mongo.MongoBsonQueryUtil;
 import com.kunbu.spring.bucks.utils.mongo.MongoUtil;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.AggregateIterable;
@@ -150,55 +152,90 @@ public class MongoTest {
      **/
     @Test
     public void testRawAggregation() {
-        Set<String> onumberSet=new HashSet<>();
-        onumberSet.add("abcd113");
-        onumberSet.add("adxc332");
-        //过滤条件
-        BasicDBObject queryObject=new BasicDBObject("onumber", new BasicDBObject("$in",onumberSet));
-        BasicDBObject queryMatch=new BasicDBObject("$match",queryObject);
-        logger.info(">>> match:{}", queryMatch);
-        //展开数组
-        BasicDBObject queryUnwind=new BasicDBObject("$unwind","$items");
-        //分组统计
-        BasicDBObject groupObject=new BasicDBObject("_id",new BasicDBObject("ino","$items.ino"));
-        groupObject.put("total", new BasicDBObject("$sum","$items.quantity"));
-        BasicDBObject  queryGroup=new BasicDBObject("$group",groupObject);
-        //过滤条件
-        BasicDBObject finalizeMatch=new BasicDBObject("$match",new BasicDBObject("total",new BasicDBObject("$gt",1)));
+//        Set<String> onumberSet=new HashSet<>();
+//        onumberSet.add("abcd113");
+//        onumberSet.add("adxc332");
+//        //过滤条件
+//        BasicDBObject queryObject=new BasicDBObject("onumber", new BasicDBObject("$in",onumberSet));
+//        BasicDBObject queryMatch=new BasicDBObject("$match",queryObject);
+//        logger.info(">>> match:{}", queryMatch);
+//        //展开数组
+//        BasicDBObject queryUnwind=new BasicDBObject("$unwind","$items");
+//        //分组统计
+//        BasicDBObject groupObject=new BasicDBObject("_id",new BasicDBObject("ino","$items.ino"));
+//        groupObject.put("total", new BasicDBObject("$sum","$items.quantity"));
+//        BasicDBObject  queryGroup=new BasicDBObject("$group",groupObject);
+//        //过滤条件
+//        BasicDBObject finalizeMatch=new BasicDBObject("$match",new BasicDBObject("total",new BasicDBObject("$gt",1)));
+//
+//        List<BasicDBObject> piplelines = Lists.newArrayList(queryMatch,queryUnwind,queryGroup,finalizeMatch);
+//        AggregateIterable<Document> results = mongoTemplate.getCollection("orders").aggregate(piplelines);
+//        for (Document doc : results) {
+//            logger.info(">>> doc:{}", doc);
+//        }
 
-        List<BasicDBObject> piplelines = Lists.newArrayList(queryMatch,queryUnwind,queryGroup,finalizeMatch);
-        AggregateIterable<Document> results = mongoTemplate.getCollection("orders").aggregate(piplelines);
-        for (Document doc : results) {
-            logger.info(">>> doc:{}", doc);
-        }
-
-        //-------------------------------
-
+        /**
+         * db.requestlog.aggregate([
+         *         {$match:{
+         *             createTime:{
+         *                 $gt:ISODate("2019-09-09T16:00:00.000Z"),
+         *                 $lt:ISODate("2019-09-30T18:00:00.000Z")}
+         *             }
+         *         },
+         *         {$group:{
+         *             _id:{
+         *                 methodName:'$methodName'
+         *                 month:{$month:{$add:['$createTime',8]}},
+         *                 day:{$dayOfMonth:{$add:['$createTime',8]}}},
+         *             count:{$sum:1}
+         *             }
+         *         }
+         * ]);
+         *
+         **/
 
         Date start = DateFormatUtil.parse("2019-09-09 16:00:00", DateFormatUtil.DEFAULT_DATE_PATTERN);
-        Date end = DateFormatUtil.parse("2019-09-19 18:04:00", DateFormatUtil.DEFAULT_DATE_PATTERN);
+        Date end = DateFormatUtil.parse("2019-09-30 18:00:00", DateFormatUtil.DEFAULT_DATE_PATTERN);
+
+        // ------- 原生写法 --------
 
         // match
-        BasicDBObject match = new BasicDBObject();
-        BasicDBObject[] timeAnd = new BasicDBObject[]{
-                new BasicDBObject("createTime", new BasicDBObject("$gt", start)),
-                new BasicDBObject("createTime", new BasicDBObject("$lt", end)),
-        };
-        match.put("$and", timeAnd);
-        match.put("httpStatus", "200");
-        //{$and=[{createTime={$gt=2019-09-09T16:00:00.000+0800}}, {createTime={$lt=2019-09-19T18:04:00.000+0800}}], httpStatus=200}
-        logger.info(">>> match:{}", match);
+//        BasicDBObject match = new BasicDBObject();
+//        BasicDBObject[] timeAnd = new BasicDBObject[]{
+//                new BasicDBObject("createTime", new BasicDBObject("$gt", start)),
+//                new BasicDBObject("createTime", new BasicDBObject("$lt", end)),
+//        };
+//        match.put("$and", timeAnd);
+//        match.put("httpStatus", "200");
 
         // group
-        BasicDBObject group = new BasicDBObject();
+//        BasicDBObject _id = new BasicDBObject();
+//        _id.put("methodName", "$methodName");
+//        _id.put("month", new BasicDBObject("$month", new BasicDBObject("$add", new Object[]{"$createTime", 8})));
+//        _id.put("day", new BasicDBObject("$dayOfMonth", new BasicDBObject("$add", new Object[]{"$createTime", 8})));
+
+//        BasicDBObject group = new BasicDBObject();
+//        group.put("_id", _id);
+//        group.put("count", new BasicDBObject("$sum", 1));
+
+
+        //--------- 使用工具类 --------
+
+        BasicDBObject match = MongoBsonQueryUtil
+                .and(MongoBsonQueryUtil.gt("createTime", start, false),
+                        MongoBsonQueryUtil.le("createTime", end, false))
+                .append("httpStatus", "200");
+
         BasicDBObject _id = new BasicDBObject();
-        // month:{$month:{$add:['$createTime',8]}}
         _id.put("methodName", "$methodName");
-        _id.put("month", new BasicDBObject("$month", new BasicDBObject("$add", new Object[]{"$createTime", 8})));
-        _id.put("day", new BasicDBObject("$dayOfMonth", new BasicDBObject("$add", new Object[]{"$createTime", 8})));
+        _id.put("month", new BasicDBObject("$month", MongoBsonAggregationUtil.add("createTime", 8)));
+        _id.put("day", new BasicDBObject("$dayOfMonth", MongoBsonAggregationUtil.add("createTime", 8)));
+
+        BasicDBObject group = new BasicDBObject();
         group.put("_id", _id);
         group.put("count", new BasicDBObject("$sum", 1));
-        //{_id={month={$month={$add=[$createTime, 8]}}, day={$dayOfMonth={$add=[$createTime, 8]}}}, count={$sum=1}}
+
+        logger.info(">>> match:{}", match);
         logger.info(">>> group:{}", group);
 
         List<BasicDBObject> piples = Lists.newArrayList(
