@@ -268,6 +268,7 @@ public class MongoBsonAggregationUtil {
 
 
     // -----
+
     private static String fillUpDollar(String field) {
         if (field.indexOf(DOLLAR) < 0) {
             return DOLLAR + field;

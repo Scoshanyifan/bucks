@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
@@ -16,7 +15,7 @@ import javax.sql.DataSource;
  * @author: kunbu
  * @create: 2019-09-25 13:29
  **/
-@Configuration
+//@Configuration
 public class SqlServerConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(SqlServerConfig.class);

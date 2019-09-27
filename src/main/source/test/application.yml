@@ -37,11 +37,11 @@ spring:
       # 验证数据库连接的查询语句
       validation-query: SELECT 1
 
-    second:
-      driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-      jdbc-url: jdbc:sqlserver://localhost:1433;DatabaseName=HRMS_YLYTN
-      username: sa
-      password: syf930628
+#    second:
+#      driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+#      jdbc-url: jdbc:sqlserver://localhost:1433;DatabaseName=HRMS_YLYTN
+#      username: sa
+#      password: syf930628
 
 
   # mongodb

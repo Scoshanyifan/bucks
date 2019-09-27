@@ -27,21 +27,36 @@ Confiuration:
         pattern: ${LOG.PATTERN}
     # 输出到文件
     RollingFile:
+
     # 普通日志
     - name: ROLLING_FILE
       # 文件名
       fileName: ${LOG_PATH}/app.log
       # 文件格式
-      filePattern: "${LOG_PATH}/farm-%d{yyyy-MM-dd}-%i.log"
+#      filePattern: "${LOG_PATH}/farm-%d{yyyy-MM-dd}-%i.log"
+      filePattern: "${LOG_PATH}/farm-%d{yyyy-MM-dd-HH-mm}-%i.log"
       PatternLayout:
         pattern: ${LOG.PATTERN}
       Policies:
-        # 按天保存
+        # 按时间保存
         TimeBasedTriggeringPolicy:
           modulate: true
+          # 此处代表 1天，因为pattern中item是dd，即天为最小单位
           interval: 1
+      # 正确的使用姿势：定期删除旧的日志（https://logging.apache.org/log4j/2.x/manual/appenders.html#RollingFileAppender）
       DefaultRolloverStrategy:
-        max: 90
+      #  max: 3
+        # 删除 age 所代表的之前的日志（如3分钟）
+        Delete:
+          basePath: ${LOG_PATH}
+          # 日志就在path下，所以deep为1
+          maxDeepth: 1
+          IfFileName:
+            - glob: farm-*.log
+          IfLastModified:
+            # - age: 90d
+            - age: 3m
+
     # 异常日志
     - name: ERROR_FILE
       fileName: ${LOG_ERROR_PATH}/error.log
@@ -52,8 +67,11 @@ Confiuration:
         # 按文件大小保存
         SizeBasedTriggeringPolicy:
           size: "50 MB"
-        DefaultRolloverStrategy:
-          max: 10
+      # 控制某时间段内文件的数目，如果没有控制好，之前的日志塞满后，后面的不会增加（建议不使用）
+      DefaultRolloverStrategy:
+        # 文件最多10
+        max: 10
+
     # 线程池日志
     - name: EXECUTOR_THREAD_FILE
       fileName: ${LOG_ERROR_PATH}/thread.log
@@ -64,8 +82,9 @@ Confiuration:
         # 按文件大小保存
         SizeBasedTriggeringPolicy:
           size: "50 MB"
-        DefaultRolloverStrategy:
-          max: 10
+#        DefaultRolloverStrategy:
+#          max: 10
+
     # 方法耗时日志
     - name: METHOD_CONSUME_FILE
       fileName: ${LOG_ERROR_PATH}/method-consume.log
@@ -76,8 +95,8 @@ Confiuration:
         # 按文件大小保存
         SizeBasedTriggeringPolicy:
           size: "50 MB"
-        DefaultRolloverStrategy:
-          max: 10
+#        DefaultRolloverStrategy:
+#          max: 10
 
   # 路由器（指定日志流向哪个管道，并控制级别）
   Loggers:
