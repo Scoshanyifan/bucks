@@ -11,6 +11,7 @@ public enum CategoryErrorEnum implements MicroServiceError {
 
     //
     CATEGORY_NAME_EXIST("商品类目名已存在"),
+    CATEGORY_CODE_EXIST("商品类目编号已存在"),
     CATEGORY_NULL("商品类目不存在"),
     CATEGORY_SAVE_ERROR("保存类目树失败，原因：%s"),
 
@@ -32,7 +33,7 @@ public enum CategoryErrorEnum implements MicroServiceError {
     }
 
     @Override
-    public String getServieErrorMsg() {
+    public String getServiceErrorMsg() {
         return msg;
     }
 }

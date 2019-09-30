@@ -32,4 +32,6 @@ public interface CategoryMapper {
     int discardCategoryTree(Map<String, Object> params);
 
     List<CategoryEntity> selectAll(String state);
+
+    List<CategoryEntity> selectAllByCodeAsc(String state);
 }

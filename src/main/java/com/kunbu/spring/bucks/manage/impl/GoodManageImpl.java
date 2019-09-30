@@ -6,7 +6,7 @@ import com.kunbu.spring.bucks.common.ApiResult;
 import com.kunbu.spring.bucks.common.ServiceResult;
 import com.kunbu.spring.bucks.common.param.mysql.GoodQueryParam;
 import com.kunbu.spring.bucks.common.vo.GoodInfoVO;
-import com.kunbu.spring.bucks.service.CategoryService;
+import com.kunbu.spring.bucks.service.CategoryBackService;
 import com.kunbu.spring.bucks.service.GoodService;
 import com.kunbu.spring.bucks.manage.GoodManage;
 import org.apache.commons.collections4.CollectionUtils;
@@ -33,7 +33,7 @@ public class GoodManageImpl implements GoodManage {
     private GoodService goodService;
 
     @Autowired
-    private CategoryService categoryService;
+    private CategoryBackService categoryBackService;
 
     @Override
     public ApiResult queryGoodByCondition(GoodQueryParam query) {
@@ -47,11 +47,11 @@ public class GoodManageImpl implements GoodManage {
         List<GoodInfoVO> goodPageList = goodPage.getList();
         if (CollectionUtils.isNotEmpty(goodPageList)) {
             Map<String, String> cateId2NameMap = Maps.newHashMap();
-            ServiceResult<Map<String, String>> categoryMapResult = categoryService.getCategoryMap(true);
+            ServiceResult<Map<String, String>> categoryMapResult = categoryBackService.getCategoryMap(true);
             if (categoryMapResult.ok()) {
                 cateId2NameMap = categoryMapResult.getData();
             } else {
-                logger.error(">>> 获取类目名称失败, msg:{}", categoryMapResult.getServiceError().getServieErrorMsg());
+                logger.error(">>> 获取类目名称失败, msg:{}", categoryMapResult.getServiceError().getServiceErrorMsg());
             }
             //Variable used in lambda expression should be final or effectively final
             Map<String, String> finalCateId2NameMap = cateId2NameMap;

@@ -9,6 +9,6 @@ public interface MicroServiceError {
 
     String getServiceErrorCode();
 
-    String getServieErrorMsg();
+    String getServiceErrorMsg();
 
 }

@@ -68,7 +68,7 @@ public class ApiResult implements Serializable {
         result.setSuccess(false);
         if (serviceError != null) {
             result.setErrorCode(serviceError.getServiceErrorCode());
-            result.setErrorMsg(serviceError.getServieErrorMsg());
+            result.setErrorMsg(serviceError.getServiceErrorMsg());
         }
         return result;
     }
