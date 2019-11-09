@@ -11,6 +11,8 @@ public enum CommonStateEnum {
     USE,
     //已删除
     DELETE,
+    // 禁用
+    STOP,
 
     ;
 

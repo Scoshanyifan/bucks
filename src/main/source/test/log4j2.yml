@@ -45,6 +45,7 @@ Confiuration:
           interval: 1
       # 正确的使用姿势：定期删除旧的日志（https://logging.apache.org/log4j/2.x/manual/appenders.html#RollingFileAppender）
       DefaultRolloverStrategy:
+      # 最大保留文件数
       #  max: 3
         # 删除 age 所代表的之前的日志（如3分钟）
         Delete:
