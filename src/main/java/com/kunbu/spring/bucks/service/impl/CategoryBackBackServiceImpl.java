@@ -11,7 +11,7 @@ import com.kunbu.spring.bucks.constant.CacheConstant;
 import com.kunbu.spring.bucks.dao.mysql.CategoryMapper;
 import com.kunbu.spring.bucks.error.bis.CategoryErrorEnum;
 import com.kunbu.spring.bucks.dao.redis.RedisManager;
-import com.kunbu.spring.bucks.service.CategoryService;
+import com.kunbu.spring.bucks.service.CategoryBackService;
 import com.kunbu.spring.bucks.utils.ExecutorUtil;
 import com.kunbu.spring.bucks.utils.IDGenerateUtil;
 import org.apache.commons.collections4.CollectionUtils;
@@ -32,9 +32,9 @@ import java.util.stream.Collectors;
  * @create: 2019-08-16 16:29
  **/
 @Service
-public class CategoryServiceImpl implements CategoryService {
+public class CategoryBackBackServiceImpl implements CategoryBackService {
 
-    private static final Logger logger = LoggerFactory.getLogger(CategoryServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(CategoryBackBackServiceImpl.class);
 
     @Autowired
     private CategoryMapper categoryMapper;
@@ -157,7 +157,10 @@ public class CategoryServiceImpl implements CategoryService {
         String categoryName = saveDTO.getCategoryName();
         CategoryEntity checkName = categoryMapper.selectByCategoryName(categoryName, CommonStateEnum.USE.name());
         if (checkName != null) {
-            return ServiceResult.ERROR(CategoryErrorEnum.CATEGORY_NAME_EXIST.getMsg());
+            return ServiceResult.ERROR(CategoryErrorEnum.CATEGORY_NAME_EXIST);
+        }
+        if (checkName.getCategoryCode().compareTo(saveDTO.getCategoryCode()) == 0) {
+            return ServiceResult.ERROR(CategoryErrorEnum.CATEGORY_CODE_EXIST);
         }
         String oldId = saveDTO.getCategoryId();
         Date nowTime = new Date();
@@ -165,7 +168,7 @@ public class CategoryServiceImpl implements CategoryService {
             //修改
             CategoryEntity oldCategory = categoryMapper.selectByPrimaryKey(oldId);
             if (oldCategory == null || oldCategory.getState().equals(CommonStateEnum.DELETE.name())) {
-                return ServiceResult.ERROR(CategoryErrorEnum.CATEGORY_NULL.getMsg());
+                return ServiceResult.ERROR(CategoryErrorEnum.CATEGORY_NULL);
             } else {
                 oldCategory.setCategoryName(categoryName);
                 oldCategory.setModifyTime(nowTime);
@@ -272,5 +275,39 @@ public class CategoryServiceImpl implements CategoryService {
 //        if (!updateResult) {
 //            logger.error(">>> updateCache4CategoryMap failure");
 //        }
+    }
+
+    @Override
+    public ServiceResult<List<CategoryEntity>> getCategoryListSort() {
+        List<CategoryEntity> categoryListSort = Lists.newArrayList();
+
+        List<CategoryEntity> allSort = categoryMapper.selectAllByCodeAsc(CommonStateEnum.USE.name());
+        if (CollectionUtils.isNotEmpty(allSort)) {
+            // 一级类目
+            List<CategoryEntity> parentList = allSort
+                    .stream()
+                    .filter(x -> x.getLevel() == 1)
+                    .collect(Collectors.toList());
+            // code > sub
+            Map<Integer, List<CategoryEntity>> code2SubListMap = allSort
+                    .stream()
+                    .filter(x -> x.getLevel() != 1)
+                    .collect(Collectors.groupingBy(CategoryEntity::getCategoryCode));
+            //fillUp
+            fillUpListSort(parentList, code2SubListMap, categoryListSort);
+        }
+        return ServiceResult.SUCCESS(categoryListSort);
+    }
+
+    private void fillUpListSort(List<CategoryEntity> parentList,
+                                Map<Integer, List<CategoryEntity>> code2SubListMap,
+                                List<CategoryEntity> listSort) {
+        for (CategoryEntity parent : parentList) {
+            listSort.add(parent);
+            List<CategoryEntity> subList = code2SubListMap.get(parent.getCategoryCode());
+            if (CollectionUtils.isNotEmpty(subList)) {
+                fillUpListSort(subList, code2SubListMap, listSort);
+            }
+        }
     }
 }

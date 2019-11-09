@@ -278,6 +278,7 @@ public class MongoBsonAggregationUtil {
     }
 
     public static void main(String[] args) {
+
         System.out.println(concat("-", "tom", "jack", "lucy"));
     }
 

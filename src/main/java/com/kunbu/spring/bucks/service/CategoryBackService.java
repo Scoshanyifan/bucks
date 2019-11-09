@@ -4,6 +4,7 @@ import com.kunbu.spring.bucks.common.ServiceResult;
 import com.kunbu.spring.bucks.common.dto.CategoryDTO;
 import com.kunbu.spring.bucks.common.entity.mysql.CategoryEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Map;
  * @time: 2019/8/16 16:23
  * @description:
  */
-public interface CategoryService {
+public interface CategoryBackService {
 
     /**
      * 保存整颗类目树
@@ -36,7 +37,7 @@ public interface CategoryService {
     ServiceResult<CategoryEntity> saveCategory(CategoryDTO saveDTO, String operatorId);
 
     /**
-     * 获取商品类目树
+     * 获取商品类目树（admin）
      *
      * @return
      * @author kunbu
@@ -45,11 +46,17 @@ public interface CategoryService {
     ServiceResult<CategoryDTO> getCategoryTree();
 
     /**
-     * 获取商品类目名称（全部）
+     * 获取商品类目对应名称
      *
      * @return
      * @author kunbu
      * @time 2019/8/16 16:28
      **/
     ServiceResult<Map<String, String>> getCategoryMap(boolean ifCache);
+
+    /**
+     * 商品类目列表，按父子级排序（1 > 101 > 10101）
+     * @return
+     */
+    ServiceResult<List<CategoryEntity>> getCategoryListSort();
 }

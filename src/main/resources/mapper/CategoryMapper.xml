@@ -39,6 +39,14 @@
         order by `level`
     </select>
 
+    <select id="selectAllByCodeAsc" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from category
+        where `state` = #{state}
+        order by category_code
+    </select>
+
     <select id="selectByCategoryName" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>

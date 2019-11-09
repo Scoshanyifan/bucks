@@ -192,9 +192,9 @@ public class MongoTest {
         Date start = DateFormatUtil.parse("2019-09-09 16:00:00", DateFormatUtil.DEFAULT_DATE_PATTERN);
         Date end = DateFormatUtil.parse("2019-09-30 18:00:00", DateFormatUtil.DEFAULT_DATE_PATTERN);
 
-        // ------- 原生写法 --------
+        /** ------- 原生写法 -------- */
 
-        // match
+        // 过滤条件
 //        BasicDBObject match = new BasicDBObject();
 //        BasicDBObject[] timeAnd = new BasicDBObject[]{
 //                new BasicDBObject("createTime", new BasicDBObject("$gt", start)),
@@ -203,18 +203,19 @@ public class MongoTest {
 //        match.put("$and", timeAnd);
 //        match.put("httpStatus", "200");
 
-        // group
+        // 分组统计
+//        BasicDBObject group = new BasicDBObject();
+
 //        BasicDBObject _id = new BasicDBObject();
 //        _id.put("methodName", "$methodName");
 //        _id.put("month", new BasicDBObject("$month", new BasicDBObject("$add", new Object[]{"$createTime", 8})));
 //        _id.put("day", new BasicDBObject("$dayOfMonth", new BasicDBObject("$add", new Object[]{"$createTime", 8})));
-
-//        BasicDBObject group = new BasicDBObject();
 //        group.put("_id", _id);
+
 //        group.put("count", new BasicDBObject("$sum", 1));
 
 
-        //--------- 使用工具类 --------
+        /** --------- 使用工具类 -------- */
 
         BasicDBObject match = MongoBsonQueryUtil
                 .and(MongoBsonQueryUtil.gt("createTime", start, false),
