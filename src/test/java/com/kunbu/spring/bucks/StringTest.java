@@ -1,14 +1,12 @@
 package com.kunbu.spring.bucks;
 
 import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * https://blog.csdn.net/yaerfeng/article/details/7328092
  * https://blog.51cto.com/xiaok007/2174054
  *
  * @project: bucks
@@ -19,13 +17,20 @@ public class StringTest {
 
     public static void main(String[] args) {
 
-        //如果是：//// 然后使用String.split，会有bug，不能正确划分，会出现空数据情况（改用guava的Splitter）
         testSplit("////");
         testSplit("2/-5///");
 
+        System.out.println();
         testStringFormat();
+
+        System.out.println();
+        testMessageFormat();
     }
 
+    /**
+     * 如果是：//// 然后使用String.split，会有bug，不能正确划分，会出现空数据情况（改用guava的Splitter）
+     *
+     **/
     public static void testSplit(String historyTemp) {
         //String.split()
         String[] tempStrArr = historyTemp.split("/");
@@ -36,11 +41,13 @@ public class StringTest {
         System.out.println("Splitter: " + tempStrList);
     }
 
+
     /**
      * 字符串：%s（%[idx]$[m]s，[idx]表示用第一个参数填充，[m]表示此处填充几个空格）
-     *
      * 浮点数：%f（%[index$][标识][最少宽度][.精度]转换方式）
      *
+     *
+     * https://blog.csdn.net/yaerfeng/article/details/7328092
      **/
     public static void testStringFormat() {
         /**
@@ -63,16 +70,25 @@ public class StringTest {
         System.out.println("msg: " + msg);
     }
 
+
+    /**
+     * 单引号''用于忽略特定占位符，比如左花括号{，必须成对出现
+     * MessageFormat.format静态方法每次回创建一个对象，所以为了复用可以用 new MessageFormat(message)
+     *
+     *
+     * https://blog.csdn.net/qq_36538061/article/details/78506758
+     **/
     public static void testMessageFormat() {
 
-        String MESSAGE_FORMAT = "这里展示不同数据类型[{0}]，[{1}]，[{2}]，['{3}']，[{4}]，[{5}]的区别";
-        String MESSAGE_FORMAT_76 = "欢迎使用{0}热水器, 现已使用{1}年，需要更换%s";
+        String format = "这里展示不同数据类型[{0}]，[{1}]，[{2}]，['{3}']，[{4}]，[{5}]的区别";
 
-        List<Object> params = Lists.newArrayList("string", 'c', null, 988, 999);
+        Object[] params = {"string", 'a', null, 988, 999};
+        String message =  MessageFormat.format(format, params);
+        System.out.println("message: " + message);
 
-        String messageFormat =  MessageFormat.format(
-                MESSAGE_FORMAT, params.get(0), params.get(1), params.get(2), params.get(3), params.get(4));
-        System.out.println("messageFormat: " + messageFormat);
-
+        String pattern = "单引号用于忽略特定符号，如左花括号：'{'-}，而双引号需要转义：\"";
+        MessageFormat mf = new MessageFormat(pattern);
+        String messageRes = mf.format(null);
+        System.out.println("messageRes: " + messageRes);
     }
 }
