@@ -3,7 +3,6 @@ package com.kunbu.spring.bucks.utils;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * @author wangdi
  * @date 2018/4/17
  */
 public final class IpUtil {

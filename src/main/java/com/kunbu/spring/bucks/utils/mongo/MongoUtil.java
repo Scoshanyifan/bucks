@@ -21,13 +21,13 @@ public class MongoUtil {
     public static final long HOURS_8 = 28800000L;
 
     /**
-     * 追加条件
+     * 追加条件(and)
      *
      * @param query
      * @param criteria
      * @return
      **/
-    public static void newCriteria(Query query, Criteria criteria) {
+    public static void addCriteria(Query query, Criteria criteria) {
         if (query != null && criteria != null) {
             query.addCriteria(criteria);
         }
@@ -36,9 +36,9 @@ public class MongoUtil {
     /**
      * or
      * <p>
-     * 如果是同一个字段，使用此方法
+     * 1. 如果是同一个字段的或查询，使用此方法
      * <p>
-     * 如果是不同字段的or，需要用andOperator把多个orOperator连接起来
+     * 2. 如果是不同字段的or，需要用andOperator把多个orOperator连接起来
      *
      * @param cs
      * @return
@@ -54,7 +54,7 @@ public class MongoUtil {
     /**
      * and
      * <p>
-     * 如果是同一个字段做组合查询，Criteria.where("field").xxx().and("field).xxx() 写法错误，即不能用同一个Criteria接收
+     * 如果是同一个字段做and查询，Criteria.where("field").xxx().and("field").xxx() 写法错误，即不能用同一个Criteria接收同一字段
      * <p>
      * 会报错：InvalidMongoDbApiUsageException, you can't add a second 'field' expression specified as 'field
      * <p>
@@ -74,13 +74,13 @@ public class MongoUtil {
     /**
      * 字符串模糊查询
      *
-     * @param name
+     * @param field
      * @param regex
      * @return
      **/
-    public static Criteria strRegex(String name, String regex) {
-        if (name != null && regex != null) {
-            return Criteria.where(name).regex(regex);
+    public static Criteria strRegex(String field, String regex) {
+        if (field != null && regex != null) {
+            return Criteria.where(field).regex(regex);
         } else {
             return new Criteria();
         }
@@ -89,13 +89,13 @@ public class MongoUtil {
     /**
      * 字符串精确查询
      *
-     * @param name
+     * @param field
      * @param value
      * @return
      **/
-    public static Criteria strIs(String name, String value) {
-        if (name != null && value != null) {
-            return Criteria.where(name).is(value);
+    public static Criteria strIs(String field, String value) {
+        if (field != null && value != null) {
+            return Criteria.where(field).is(value);
         } else {
             return new Criteria();
         }
@@ -104,13 +104,13 @@ public class MongoUtil {
     /**
      * 对象精确查询
      *
-     * @param name
+     * @param field
      * @param value
      * @return
      **/
-    public static Criteria objectIs(String name, Object value) {
-        if (name != null && value != null) {
-            return Criteria.where(name).is(value);
+    public static Criteria objectIs(String field, Object value) {
+        if (field != null && value != null) {
+            return Criteria.where(field).is(value);
         } else {
             return new Criteria();
         }
@@ -119,19 +119,19 @@ public class MongoUtil {
     /**
      * 时间区间过滤（需要加上8小时）
      *
-     * @param name
+     * @param field
      * @param start
      * @param end
      * @return
      **/
-    public static Criteria dateCompare(String name, Date start, Date end, boolean plus8Hours) {
+    public static Criteria dateCompare(String field, Date start, Date end, boolean plus8Hours) {
         if (start != null && end != null) {
             if (plus8Hours) {
-                return Criteria.where(name).gte(TimeUtil.plusHours(start, 8))
-                        .andOperator(Criteria.where(name).lte(TimeUtil.plusHours(end, 8)));
+                return Criteria.where(field).gte(TimeUtil.plusHours(start, 8))
+                        .andOperator(Criteria.where(field).lte(TimeUtil.plusHours(end, 8)));
             } else {
-                return Criteria.where(name).gte(start)
-                        .andOperator(Criteria.where(name).lte(end));
+                return Criteria.where(field).gte(start)
+                        .andOperator(Criteria.where(field).lte(end));
             }
         } else {
             return new Criteria();

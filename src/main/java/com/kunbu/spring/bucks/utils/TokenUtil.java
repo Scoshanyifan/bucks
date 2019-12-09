@@ -2,6 +2,13 @@ package com.kunbu.spring.bucks.utils;
 
 import com.kunbu.spring.bucks.constant.other.PersonTypeEnum;
 
+/**
+ * token工具类
+ *
+ * @author kunbu
+ * @time 2019/11/20 17:15
+ * @return
+ **/
 public class TokenUtil {
 
     private static final String TOKEN_SERVICE_TYPE_MANAGE = "MANAGE";

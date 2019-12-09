@@ -105,7 +105,8 @@ public class RequestLogUtil {
                     log.setUserId(userInfo.getUserId().toString());
                     //身份是admin且调用执行成功才保存操作日志
                     if (TokenUtil.checkAdmin(token) && success) {
-                        saveOperateLog(ip, startTime, userInfo.getUserId().toString(), userInfo.getUserName(), getParameters(request), note);
+                        saveOperateLog(ip, startTime, userInfo.getUserId().toString(), userInfo.getUserName(),
+                                getParameters(request), note, result);
                     }
                 }
 
@@ -129,6 +130,7 @@ public class RequestLogUtil {
                 } else {
                     log.setHttpStatus(HttpConstant.HTTP_STATUS_ERROR);
                 }
+
                 // 请求日志每次都会保存
                 logMongoDB.saveRequestLog(log);
             } catch (Exception e) {
@@ -147,7 +149,14 @@ public class RequestLogUtil {
      * @param params
      * @param note
      */
-    private void saveOperateLog(String ip, long startTime, String operatorId, String operatorName, String params, ApiNote note) {
+    private void saveOperateLog(String ip,
+                                long startTime,
+                                String operatorId,
+                                String operatorName,
+                                String params,
+                                ApiNote note,
+                                Object result) {
+
         // 只有标注了ApiNote注解的才保存操作日志（过滤查询等）
         if (note != null) {
             OperateLog log = new OperateLog();
@@ -158,6 +167,15 @@ public class RequestLogUtil {
             log.setParams(params);
             log.setContent(note.value());
             log.setOperateType(note.type().name());
+            //对落地的操作进行标记
+            if (result != null) {
+                JSONObject json = (JSONObject) JSONObject.toJSON(result);
+                logger.info(">>> 成功的操作：" + json.toJSONString());
+                Object success = json.get("success");
+                if (success != null && (boolean) success) {
+                    log.setSuccess(true);
+                }
+            }
             logMongoDB.saveOperateLog(log);
         }
     }

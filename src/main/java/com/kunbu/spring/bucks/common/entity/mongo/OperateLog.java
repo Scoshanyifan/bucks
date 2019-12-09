@@ -38,6 +38,8 @@ public class OperateLog {
 
     private String params;
 
+    private boolean success;
+
     public String getId() {
         return id;
     }
@@ -102,6 +104,14 @@ public class OperateLog {
         this.operatorName = operatorName;
     }
 
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+
     @Override
     public String toString() {
         return "OperateLog{" +
@@ -113,6 +123,7 @@ public class OperateLog {
                 ", operateTime=" + operateTime +
                 ", operateIp='" + operateIp + '\'' +
                 ", params='" + params + '\'' +
+                ", success=" + success +
                 '}';
     }
 }
